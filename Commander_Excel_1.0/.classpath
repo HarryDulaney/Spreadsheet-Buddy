@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-4.1.0.jar" sourcepath="C:/Users/JORDAN~1/AppData/Local/Temp/.org.sf.feeling.decompiler1562353160816/source/poi-4.1.0-sources-1562378214464.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-excelant-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-ooxml-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-ooxml-schemas-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-scratchpad-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/ooxml-lib/curvesapi-1.06.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/ooxml-lib/xmlbeans-3.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/commons-collections4-4.3.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/commons-compress-1.18.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/junit-4.12.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
