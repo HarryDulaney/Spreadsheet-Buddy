@@ -1,4 +1,4 @@
-package CommanderObjects;
+package model;
 
 import java.util.ArrayList;
 
