@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="15.0" prefWidth="502.0" text="TASK WIZARD">
+               <font>
+                  <Font name="SansSerif Bold" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="wizardTypeLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="3.0" prefWidth="498.0" text="WORKBOOK">
+               <font>
+                  <Font name="SansSerif Regular" size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <Label alignment="CENTER" layoutX="-2.0" layoutY="100.0" prefHeight="25.0" prefWidth="502.0" text="Workbook Name" />
+      <HBox layoutX="-2.0" layoutY="125.0" prefHeight="42.0" prefWidth="502.0" AnchorPane.topAnchor="125.0">
+         <children>
+            <Pane prefHeight="42.0" prefWidth="104.0" />
+            <TextField alignment="CENTER" prefHeight="28.0" prefWidth="290.0" />
+            <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="30.0" text=".xlsx" />
+         </children>
+      </HBox>
+      <Label alignment="CENTER" layoutY="300.0" prefHeight="25.0" prefWidth="498.0" text="Workbook will save in your project directory" />
+      <Button layoutX="218.0" layoutY="338.0" mnemonicParsing="false" text="Done" />
+      <Label alignment="CENTER" layoutX="-2.0" layoutY="167.0" prefHeight="25.0" prefWidth="502.0" text="Spreadsheet Name" />
+      <TextField alignment="CENTER" layoutX="106.0" layoutY="192.0" prefHeight="28.0" prefWidth="290.0" />
+   </children>
+</AnchorPane>

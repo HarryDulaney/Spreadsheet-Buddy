@@ -5,11 +5,19 @@
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-4.1.0.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="https://poi.apache.org/apidocs/dev/index.html"/>
+			<attribute name="javadoc_location" value="https://poi.apache.org/apidocs/4.1/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-excelant-4.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-ooxml-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-excelant-4.1.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="https://poi.apache.org/apidocs/4.1/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-ooxml-4.1.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="https://poi.apache.org/apidocs/4.1/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-ooxml-schemas-4.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/poi-scratchpad-4.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/ooxml-lib/curvesapi-1.06.jar"/>
@@ -22,5 +30,6 @@
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/commons-compress-1.18.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/commons-csv-1.7-bin/commons-csv-1.7/commons-csv-1.7.jar" sourcepath="C:/Build-Tools/Java/commons-csv-1.7-bin/commons-csv-1.7/commons-csv-1.7-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

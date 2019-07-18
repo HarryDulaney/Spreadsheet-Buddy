@@ -1,4 +1,4 @@
-package control;
+package com.commander.app.model;
 
 import java.io.IOException;
 
@@ -37,6 +37,7 @@ public class PromptBox extends Application {
 		this.hasInput = hasInput;
 		this.buttonText = "Finish";
 	}
+
 	public PromptBox(String message, String buttonText, Boolean hasInput) {
 		this.message = message;
 		this.buttonText = buttonText;
@@ -70,15 +71,14 @@ public class PromptBox extends Application {
 
 				if (this.getUserInput() == null)
 					throw new IOException("Field can not be left blank");
-				
+
 				stage.close();
 
 			} catch (IOException ex) {
-				
+
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setContentText(ex.getMessage());
-				
-				
+
 			}
 
 		});
