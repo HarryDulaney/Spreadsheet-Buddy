@@ -31,5 +31,7 @@
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/commons-csv-1.7-bin/commons-csv-1.7/commons-csv-1.7.jar" sourcepath="C:/Build-Tools/Java/commons-csv-1.7-bin/commons-csv-1.7/commons-csv-1.7-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/commons-codec-1.12.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/opencsv-4.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

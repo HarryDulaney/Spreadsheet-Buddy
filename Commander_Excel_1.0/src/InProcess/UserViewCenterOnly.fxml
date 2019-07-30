@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.control.ComboBox?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.app.ProjectController"
+	prefHeight="661.0" prefWidth="605.0">
+	<children>
+		<VBox layoutX="226.0" layoutY="122.0" prefHeight="582.0"
+			prefWidth="605.0" AnchorPane.bottomAnchor="0.0"
+			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+			AnchorPane.topAnchor="0.0">
+			<children>
+				<HBox>
+					<children>
+						<Pane prefHeight="32.0" prefWidth="172.0">
+							<children>
+								<Line endX="149.0" layoutX="-19.0" layoutY="14.0"
+									startX="19.0" />
+							</children>
+						</Pane>
+						<ComboBox fx:id="comboBox" onAction="#handleComboBox"
+							prefHeight="32.0" prefWidth="350.0"
+							promptText="Select from instant tasks to perform">
+						</ComboBox>
+						<Pane prefHeight="0.0" prefWidth="167.0">
+							<children>
+								<Line endX="77.0" layoutX="44.0" layoutY="14.0"
+									startX="-35.0" />
+							</children>
+						</Pane>
+					</children>
+				</HBox>
+			</children>
+		</VBox>
+	</children>
+</AnchorPane>

@@ -1,8 +1,10 @@
 package com.commander.app;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
-import com.commander.app.model.CommanderTask;
 import com.commander.app.model.Project;
 
 import javafx.application.Application;
@@ -10,23 +12,31 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
- * @author Harry Gingles Dulaney IV
+ * @author HG Dulaney IV
  */
 
 public class MainMenu extends Application {
 
 	private static MainMenu mm;
-	private BorderPane rootPane;
-	private AnchorPane childPane;
+	private AnchorPane rootPane;
 	private Stage primaryStage;
 	private static Project currentProject;
+	private Stage wizardStage;
 	ObservableList<Project> projectData = FXCollections.observableArrayList();
+	ObservableList<String> taskList = FXCollections.observableArrayList();
 
 	public MainMenu() {
 		MainMenu.mm = this;
@@ -42,7 +52,7 @@ public class MainMenu extends Application {
 		initRootLayerShow();
 
 		try {
-			showStartMenu();
+			showProject();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,33 +62,20 @@ public class MainMenu extends Application {
 
 	public void initRootLayerShow() {
 
+		File filePath = new File("C:\\Desktop");
+		Project project = new Project(System.getProperty("user.name"), "TestProject", filePath);
+
+		setCurrentProject(project);
+
 		try {
 
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/RootRoot.fxml"));
-			BorderPane rootPane = (BorderPane) loader.load();
-			setRootPane(rootPane);
-			Scene scene = new Scene(rootPane);
-			setUserAgentStylesheet(STYLESHEET_CASPIAN);
+			rootPane = loader.load();
+
+			Scene scene = new Scene(rootPane, 800, 600);
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public void showStartMenu() throws IOException {
-
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/RootLayout.fxml"));
-			AnchorPane childPane = (AnchorPane) loader.load();
-			/**
-			 * Set modular BorderPane to project logged in com.commander.app.control
-			 */
-			rootPane.setCenter(childPane);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,47 +89,15 @@ public class MainMenu extends Application {
 
 	public void showProject() throws IOException {
 
-		try {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/UserView.fxml"));
+		AnchorPane anchorpane = (AnchorPane) loader.load();
 
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/UserView.fxml"));
-			
-			
+		ProjectController controller = loader.getController();
+		controller.setMainmenu(mm);
 
-			AnchorPane childPane = (AnchorPane) loader.load();
-			setChildPane(childPane);
-
-			rootPane.setCenter(childPane);
-
-			// Give the controller access to the mainMenu application instance.
-			ProjectController controller = loader.getController();
-			controller.setMainmenu(mm);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public void showWorkBookWizard() throws IOException {
-
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/workbookWizard.fxml"));
-			AnchorPane wizPane = (AnchorPane) loader.load();
-
-			Wizardcontroller controller = loader.getController();
-			controller.setMainmenu(mm);
-			/**
-			 * Fills rootLayout center BorderPane with the task dialog wizard
-			 */
-			BorderPane bp = (BorderPane) getSubPane(getChildPane().getScene());
-
-			bp.setCenter(wizPane);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		BorderPane borderpane = (BorderPane) getSubPaneOne(rootPane.getScene());
+		borderpane.setCenter(anchorpane);
 
 	}
 
@@ -141,16 +106,22 @@ public class MainMenu extends Application {
 		return primaryStage;
 	}
 
-	public BorderPane getRootPane() {
-		return rootPane;
+	// public BorderPane getRootPane() {
+	// return this.rootPane;
 
-	}
+	// }
 
-	public Node getSubPane(Scene scene) {
+	public Node getSubPaneTwo(Scene scene) {
 
 		Node bp = scene.lookup("#subChildPane");
 		return bp;
 
+	}
+
+	public Node getSubPaneOne(Scene scene) {
+
+		Node bp = scene.lookup("#borderpane");
+		return bp;
 	}
 
 	public ObservableList<Project> getProjectData() {
@@ -171,28 +142,12 @@ public class MainMenu extends Application {
 		MainMenu.currentProject = currentProject;
 	}
 
-	/**
-	 * @param rootPane the rootPane to set
-	 */
-	public void setRootPane(BorderPane rootPane) {
-		this.rootPane = rootPane;
-	}
-
-	/**
-	 * @return the childPane
-	 */
-	public AnchorPane getChildPane() {
-		return childPane;
-	}
-
-	/**
-	 * @param childPane the childPane to set
-	 */
-	public void setChildPane(AnchorPane childPane) {
-		this.childPane = childPane;
-	}
-
 	public static MainMenu getMainMenu() {
 		return MainMenu.mm;
 	}
+
+	public Stage getWizardStage() {
+		return wizardStage;
+	}
+
 }

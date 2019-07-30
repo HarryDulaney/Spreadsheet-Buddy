@@ -1,5 +1,8 @@
-package com.commander.app;
+package InProcess;
 
+import java.io.IOException;
+
+import com.commander.app.MainMenu;
 import com.commander.app.model.WorkBookmaker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,15 +16,15 @@ import javafx.scene.control.TextField;
 public class Wizardcontroller {
 
 	@FXML
-	public TextField workbookNameInput;
+	private TextField workbookNameInput;
 
 	@FXML
 	private TextField spreadsheetNameInput;
-
-	private MainMenu mainmenu;
-
+	
+	private MainMenu mm;
+	
 	@FXML
-	protected void completeActionButton(ActionEvent event) {
+	protected void completeActionButton(ActionEvent event) throws IOException {
 
 		if (!workbookNameInput.getText().isEmpty() || !spreadsheetNameInput.getText().isEmpty()) {
 			
@@ -34,6 +37,14 @@ public class Wizardcontroller {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			finally {
+				
+			this.mm = getMainMenu();
+			
+			mm.showProject();
+				
+				
+			}
 			
 		} else {
 			Alert a = new Alert(AlertType.WARNING);
@@ -44,22 +55,23 @@ public class Wizardcontroller {
 
 	}
 
-	/**
-	 * @return the mainmenu
-	 */
 
-
-	public void setMainmenu(MainMenu mainmenu) {
-		this.mainmenu = mainmenu;
-
-	}
 
 	public void setWorkBooktoPject(WorkBookmaker wbmaker) {
 
 		MainMenu.getCurrentProject().addProjectTask(wbmaker);
 		
 	}
+	public MainMenu getMainMenu() {
+		return MainMenu.getMainMenu();
+	}
 
+
+
+	public void setMainmenu(MainMenu mm) {
+		this.mm = MainMenu.getMainMenu();
+		
+	}
 	
 		
 	

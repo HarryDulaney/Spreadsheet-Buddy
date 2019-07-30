@@ -4,8 +4,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBContext.*;
@@ -20,7 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -32,12 +29,9 @@ import javafx.stage.Stage;
  * to the root menu heading task bar ie.... Save Project, Close Project
  */
 public class MainMenuController {
-	
 
 	@FXML
 	protected void handleSaveProjectAction(ActionEvent event) {
-
-		Project pject = MainMenu.getCurrentProject();
 
 		try {
 			JAXBContext context = JAXBContext.newInstance(ProjectListWrapper.class);
@@ -45,20 +39,15 @@ public class MainMenuController {
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
 			ProjectListWrapper wrapper = new ProjectListWrapper();
-			wrapper.setProject(pject);
-			
-			if(!MainMenu.getCurrentProject().getProjectTasks().isEmpty()) {
-			wrapper.setTasks(MainMenu.getCurrentProject().getProjectTasks());
-			}
+			wrapper.setProjects(MainMenu.getCurrentProject());
 
-			m.marshal(wrapper, MainMenu.getCurrentProject().getProjectFilepath());
+			m.marshal(wrapper, Project.getProjectFilepath());
 
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
 
 	}
-
 
 	@FXML
 	protected void handleCreateProjectAction(ActionEvent event) throws IOException {
@@ -82,7 +71,7 @@ public class MainMenuController {
 			Project prj = new Project(System.getProperty("user.name"), tId.getResult(), filePath);
 			MainMenu.setCurrentProject(prj);
 
-			//MainMenu.getMainMenu().showProject();
+			MainMenu.getMainMenu().showProject();
 
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Create New Project");
@@ -115,7 +104,7 @@ public class MainMenuController {
 		// MainMenu.setCurrentProject(prj);
 
 		try {
-			//MainMenu.getMainMenu().showProject();
+			MainMenu.getMainMenu().showProject();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -150,8 +139,7 @@ public class MainMenuController {
 	@FXML
 	protected void handleCreateWorkbookAction(ActionEvent event) throws IOException {
 
-		//MainMenu.getMainMenu().showWizard("/com/commander/app/view/WizardDialog.fxml");
+		MainMenu.getMainMenu().showWizard("/com/commander/app/view/WizardDialog.fxml");
 	}
-
 
 }

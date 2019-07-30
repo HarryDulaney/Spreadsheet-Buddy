@@ -4,38 +4,44 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.app.MainMenuController">
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-         <menus>
-            <Menu mnemonicParsing="false" text="Project">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleCreateProjectAction" text="Create New Project" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleSaveProjectAction" text="Save Project" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleCreateProjectAction" text="Close Active Project" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
-                  
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Build">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleCreateWorkbookAction" text="Create New Excel Workbook" />
-                  <MenuItem mnemonicParsing="false" text="Add New Task" />
-                  <MenuItem mnemonicParsing="false" text="Delete A Task" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="How to use Excel SuperCommander 1.0" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleAboutSuperCommander" text="About SuperCommander" />
-               </items>
-            </Menu>
-         </menus>
-         <tooltip>
-            <Tooltip text="Start by creating a new project" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
-         </tooltip>
-      </MenuBar>
-   </top>
-</BorderPane>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.app.MainMenuController">
+   <children>
+      <BorderPane id="borderpane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0">
+         <top>
+            <MenuBar prefWidth="800.0" BorderPane.alignment="CENTER">
+               <menus>
+                  <Menu mnemonicParsing="false" text="Project">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleCreateProjectAction" text="Create New Project" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleSaveProjectAction" text="Save Project" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleCreateProjectAction" text="Close Active Project" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
+                        
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Build">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleCreateWorkbookAction" text="Create New Excel Workbook" />
+                        <MenuItem mnemonicParsing="false" text="Add New Task" />
+                        <MenuItem mnemonicParsing="false" text="Delete A Task" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="How to use Excel SuperCommander 1.0" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleAboutSuperCommander" text="About SuperCommander" />
+                     </items>
+                  </Menu>
+               </menus>
+               <tooltip>
+                  <Tooltip text="Start by creating a new project" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+               </tooltip>
+            </MenuBar>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

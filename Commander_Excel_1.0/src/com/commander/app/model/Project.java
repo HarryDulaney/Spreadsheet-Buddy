@@ -1,10 +1,8 @@
 package com.commander.app.model;
 
+import java.io.File;
 import java.util.ArrayList;
 
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,12 +11,13 @@ import javafx.collections.ObservableList;
  * @author Harry Gingles Dulaney IV
  */
 
-public class Project implements Cloneable, Comparable<Project> {
+public class Project {
 
-	private final SimpleStringProperty curProjFolder;
+	private static String projectName;
 	private final SimpleStringProperty userID;
-	private static ArrayList<CommanderTask> projectTasks;
-	private ObservableList<CommanderTask> observableTasks;
+	private static ArrayList<abstractTask> projectTasks = new ArrayList<>();
+	private ObservableList<abstractTask> observableTasks;
+	private static File projectDirectory;
 
 	/**
 	 * Project default constructor
@@ -28,36 +27,27 @@ public class Project implements Cloneable, Comparable<Project> {
 	 */
 	public Project() {
 
-		this(null, null);
-		Project.projectTasks = new ArrayList<>();
+		this(null, null, null);
 
 	}
 
-	public Project(String userid, String curProjFold) {
+	public Project(String userid, String projectName, File filePath) {
 
 		this.userID = new SimpleStringProperty(userid);
-		this.curProjFolder = new SimpleStringProperty(curProjFold);
-		Project.projectTasks = new ArrayList<>();
+		Project.projectName = projectName;
 
 	}
 
-	public SimpleStringProperty projectFolderProperty() {
-		return curProjFolder;
+	public String projectFolderProperty() {
+		return projectName;
 	}
 
-	public void setProjectFolder(String projectFolder) {
-		this.curProjFolder.set(projectFolder);
-	}
-	public static void addTaskstoProject(CommanderTask task) {
+	public static void addTaskstoProject(abstractTask task) {
 		Project.projectTasks.add(task);
 	}
-	
 
-	/**
-	 * @return the root directory folder assigned or create by the user
-	 */
-	public String getProjectFolder() {
-		return curProjFolder.get();
+	public String getProjectName() {
+		return Project.projectName;
 	}
 
 	/**
@@ -65,11 +55,11 @@ public class Project implements Cloneable, Comparable<Project> {
 	 * @see Project
 	 */
 
-	public ArrayList<CommanderTask> getProjectTasks() {
+	public ArrayList<abstractTask> getProjectTasks() {
 		return projectTasks;
 	}
 
-	public void addProjectTask(CommanderTask task) {
+	public void addProjectTask(abstractTask task) {
 
 		projectTasks.add(task);
 
@@ -88,29 +78,25 @@ public class Project implements Cloneable, Comparable<Project> {
 
 	}
 
-	@Override
-	public int compareTo(Project project) {
-
-		String compareString = project.getProjectFolder();
-
-		if (this.getProjectFolder() != compareString) {
-			return -1;
-		}
-
-		return 0;
-	}
-
-	public ObservableList<CommanderTask> getObservableTasks() {
+	public ObservableList<abstractTask> getObservableTasks() {
 		return observableTasks;
 	}
 
-	public void setObservableTasks(ArrayList<CommanderTask> projectTasks) {
+	public void setObservableTasks(ArrayList<abstractTask> projectTasks) {
 
-		ObservableList<CommanderTask> convertedTasks = FXCollections.observableArrayList();
+		ObservableList<abstractTask> convertedTasks = FXCollections.observableArrayList();
 
 		convertedTasks.addAll(projectTasks);
 
 		this.observableTasks = convertedTasks;
+	}
+
+	public File getProjectFilepath() {
+		return projectDirectory;
+	}
+
+	public void setProjectFilepath(File projectFilepath) {
+		Project.projectDirectory = projectFilepath;
 	}
 
 }
