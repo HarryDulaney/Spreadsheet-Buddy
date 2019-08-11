@@ -3,23 +3,23 @@
 }
 
 .label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
-    -fx-opacity: 0.6;
+    -fx-font-size: 14pt; 
+    -fx-font-family: "Tw Cen MT Condensed";
+    -fx-text-fill: black;
+    -fx-opacity: 0.9;
 }
 
 .label-bright {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-font-size: 14pt;
+    -fx-font-family: "Tw Cen MT Condensed";
+    -fx-text-fill: black;
     -fx-opacity: 1;
 }
 
 .label-header {
-    -fx-font-size: 32pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-font-size: 14pt;
+    -fx-font-family: "Tw Cen MT Condensed";
+    -fx-text-fill: black;
     -fx-opacity: 1;
 }
 
@@ -48,8 +48,8 @@
 
 .table-view .column-header .label {
     -fx-font-size: 20pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-font-family: "Tw Cen MT Condensed";
+    -fx-text-fill: blabk;
     -fx-alignment: center-left;
     -fx-opacity: 1;
 }
@@ -68,16 +68,16 @@
 }
 
 .menu-bar {
-    -fx-background-color: derive(#1d1d1d,20%);
+    -fx-background-color: derive(#1d1d1d,70%);
 }
 
 .context-menu {
-    -fx-background-color: derive(#1d1d1d,50%);
+    -fx-background-color: derive(#1d1d1d,60%);
 }
 
 .menu-bar .label {
     -fx-font-size: 14pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Tw Cen MT Condensed";
     -fx-text-fill: white;
     -fx-opacity: 0.9;
 }
@@ -88,24 +88,21 @@
 
 .text-field {
     -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: "Tw Cen MT Condensed";
 }
 
-/* 
- * Metro style Push Button
- * Author: Pedro Duque Vieira
- * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
- */
+
 .button {
     -fx-padding: 5 22 5 22;   
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
     -fx-background-radius: 0;
     -fx-background-color: #1d1d1d;
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-font-size: 11pt;
+    -fx-font-family: "Tw Cen MT Condensed";
+    -fx-font-size: 13pt;
     -fx-text-fill: #d8d8d8;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
+    
 }
 
 .button:hover {

@@ -5,12 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import junit.framework.TestResult;
 
-public class superCommanderTestcase_1 implements junit.framework.Test{
+public class superCommanderTestcase_1 implements junit.framework.Test {
 
 	@Test
 	public void test() {
-		
-		
+
 		fail("Not yet implemented");
 	}
 
@@ -23,7 +22,7 @@ public class superCommanderTestcase_1 implements junit.framework.Test{
 	@Override
 	public void run(TestResult arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -1,11 +1,8 @@
-package com.commander.app.model;
-
+package InProcess;
 
 import javafx.beans.property.SimpleStringProperty;
 
-
 import java.io.IOException;
-
 
 /*
  * After choosing the task the user wants to add to their excel project, they 
@@ -13,15 +10,13 @@ import java.io.IOException;
  */
 
 /**
- * @author Harry Gingles Dulaney IV
+ * @author H.G. Dulaney IV
  */
 public abstract class abstractTask {
 	/**
 	 * String reference to task
 	 */
 	protected static SimpleStringProperty taskName;
-	
-	
 
 	/**
 	 * Standard input spreadsheet (or other source of input ie. website) assigned to
@@ -41,6 +36,5 @@ public abstract class abstractTask {
 	public String getTaskName() {
 		return taskName.get();
 	}
-
 
 }

@@ -1,166 +1,162 @@
 package com.commander.app;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
-
-import javax.swing.text.DocumentFilter.FilterBypass;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import com.commander.app.model.CSVfilter;
-import com.commander.app.model.CSVfilter.*;
-
 
 /**
- * @author Harry Gingles Dulaney IV
+ * @author H.G. Dulaney IV
  */
 public class CSVFilterController {
-	
+
 	private CSVfilter csVfilter;
-	public ArrayList<String> list = new ArrayList<>();
+	public File file;
+	private MainMenu m;
+	private static Boolean isReady;
+
 	
-
+	@FXML
+	private TextField textfield1;
 
 	@FXML
-	private TextField textField1;
+	private TextField textfield2;
 
 	@FXML
-	private TextField textField2;
+	private TextField textfield3;
 
 	@FXML
-	private TextField textField3;
-
-
-	@FXML
-	private Label Label1;
+	private TextField textfield4;
 
 	@FXML
-	private Label Label2;
+	private TextField textfield5;
 
-	@FXML
-	private Label Label3;
-	
-	
 	@FXML
 	protected void handleSubmitCSVfilter(ActionEvent event) throws Exception {
-		
-		FileChooser choose = new FileChooser();
-		choose.setTitle("Select the location to save your CSV filter result via .xlsx file");
-		File file = choose.showOpenDialog(new Stage(StageStyle.UTILITY));
-		String path = file.getPath();
-		
-		
-		getFilter().extractToXLSX(path,list);
-		
-		
 
-	}
+		ArrayList<String> list = new ArrayList<>();
 
-	public CSVFilterController() {
-		
-	}
+		System.out.println(list.size());
 
-	
-	@FXML
-	public void initialize() {
-		
-	try {
-		CSVfilter csvfilter = new CSVfilter();
-		setFilter(csvfilter);
-	} catch (Exception e) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Exception Dialog");
-		alert.setHeaderText("Something went wrong");
-		alert.setContentText("AN ERROR OCCURED");
-}
-		
-		
-		
-		Label Label1 = new Label("Column One Header");
-		Label Label2 = new Label("Column Two Header");
-		Label Label3 = new Label("Column Three Header");
-		Label Label4 = new Label("Column Four Header");
-
-		
-		
-	}
-
-	public void start() throws Exception {
-		
-		Stage stage = new Stage();
-		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/commander/app/view/CSVfilterWiz.fxml"));
-		try {
-			Parent root = (Parent) loader.load();
-
-			stage.setScene(new Scene(root, 500, 400));
-			stage.showAndWait();
-			
-			
-
-		} catch (Exception e) {
+		if (textfield1.getText().isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Exception Dialog");
-			alert.setHeaderText("Something went wrong");
-			alert.setContentText("Cannot load CSV Wizard");
+			alert.setTitle("Something went wrong");
+			alert.setContentText("The only field you cannot leave blank is header one.");
+			alert.show();
 
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String exceptionText = sw.toString();
+		} else {
+			list.add(textfield1.getText());
 
-			Label label = new Label("The exception stacktrace was:");
+			if (textfield2.getText().isEmpty()) {
 
-			TextArea textArea = new TextArea(exceptionText);
-			textArea.setEditable(false);
-			textArea.setWrapText(true);
+				list.trimToSize();
 
-			textArea.setMaxWidth(Double.MAX_VALUE);
-			textArea.setMaxHeight(Double.MAX_VALUE);
-			GridPane.setVgrow(textArea, Priority.ALWAYS);
-			GridPane.setHgrow(textArea, Priority.ALWAYS);
+				csVfilter.extractToXLSX(list);
 
-			GridPane expContent = new GridPane();
-			expContent.setMaxWidth(Double.MAX_VALUE);
-			expContent.add(label, 0, 0);
-			expContent.add(textArea, 0, 1);
+			} else {
 
-			// Set expandable Exception into the dialog pane.
-			alert.getDialogPane().setExpandableContent(expContent);
+				list.add(textfield2.getText());
 
-			alert.showAndWait();
+				if (textfield3.getText().isEmpty()) {
+					list.trimToSize();
+
+					csVfilter.extractToXLSX(list);
+				} else {
+					list.add(textfield3.getText());
+
+					if (textfield4.getText().isEmpty()) {
+						list.trimToSize();
+
+						csVfilter.extractToXLSX(list);
+
+					} else {
+						list.add(textfield4.getText());
+						{
+
+							if (textfield5.getText().isEmpty()) {
+								list.trimToSize();
+
+								csVfilter.extractToXLSX(list);
+							} else {
+
+								list.add(textfield5.getText());
+
+								list.trimToSize();
+
+								csVfilter.extractToXLSX(list);
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 		}
 
 	}
 
+	public CSVFilterController() {
+		
+		CSVFilterController.setIsReady(false);
+
+	}
+
+	@FXML
+	public void initialize() {
+
+		try {
+			start();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+	}
+
+	public void start() throws Exception {
+
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle("Select the CSV file you want to work with");
+		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".csv", "*.csv"));
+		// chooser.setInitialDirectory(MainMenu.getCurrentProject().getProjectFilepath());
+		file = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+
+		if (file instanceof File) {
+			CSVFilterController.setIsReady(true);
+			CSVfilter csvfilter = new CSVfilter(file);
+			this.csVfilter = csvfilter;
+			
+		}
+
+	}
+
+	public void setMainMenu(MainMenu m) {
+		this.m = m;
+	}
 	/**
-	 * @return the tasker
+	 * @return the isReady
 	 */
-	public CSVfilter getFilter() {
-		return csVfilter;
+	public static Boolean getIsReady() {
+		return isReady;
 	}
 
 	/**
-	 * @param tasker the tasker to set
+	 * @param isReady the isReady to set
 	 */
-	public void setFilter(CSVfilter tasker) {
-		this.csVfilter = tasker;
+	public static void setIsReady(Boolean isReady) {
+		CSVFilterController.isReady = isReady;
 	}
+
 
 }

@@ -25,7 +25,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
- * @author HG Dulaney IV
+ * @author H.G. Dulaney IV
  */
 
 public class MainMenu extends Application {
@@ -48,6 +48,8 @@ public class MainMenu extends Application {
 
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("Welcome to Super Commander for MS Excel");
+		
+		
 
 		initRootLayerShow();
 
@@ -62,10 +64,10 @@ public class MainMenu extends Application {
 
 	public void initRootLayerShow() {
 
-		File filePath = new File("C:\\Desktop");
-		Project project = new Project(System.getProperty("user.name"), "TestProject", filePath);
+		//File filePath = new File("C:\\Desktop");
+		//Project project = new Project(System.getProperty("user.name"), "TestProject", filePath);
 
-		setCurrentProject(project);
+		//setCurrentProject(project);
 
 		try {
 
@@ -74,6 +76,9 @@ public class MainMenu extends Application {
 			rootPane = loader.load();
 
 			Scene scene = new Scene(rootPane, 800, 600);
+			
+			//scene.getStylesheets().add("com/commander/app/view/ThemeOne.css");
+			
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();
 
@@ -106,10 +111,7 @@ public class MainMenu extends Application {
 		return primaryStage;
 	}
 
-	// public BorderPane getRootPane() {
-	// return this.rootPane;
 
-	// }
 
 	public Node getSubPaneTwo(Scene scene) {
 
@@ -119,7 +121,6 @@ public class MainMenu extends Application {
 	}
 
 	public Node getSubPaneOne(Scene scene) {
-
 		Node bp = scene.lookup("#borderpane");
 		return bp;
 	}

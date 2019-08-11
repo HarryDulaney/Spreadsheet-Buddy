@@ -3,12 +3,13 @@ package com.commander.app.model;
 import java.io.File;
 import java.util.ArrayList;
 
+import InProcess.abstractTask;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * @author Harry Gingles Dulaney IV
+ * @author H.G. Dulaney IV
  */
 
 public class Project {

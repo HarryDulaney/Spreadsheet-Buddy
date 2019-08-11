@@ -1,4 +1,4 @@
-package com.commander.app.model;
+package InProcess;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 /**
- * @author Harry Gingles Dulaney IV
+ * @author H.G. Dulaney IV
  */
 
 /**
@@ -39,11 +39,9 @@ public class WorkBookmaker extends abstractTask {
 		this.p1 = new SimpleStringProperty(bookName);
 		this.p2 = new SimpleStringProperty(sheetName);
 		taskName = new SimpleStringProperty("Make New Workbook");
-		
 
 	}
 
-	
 	public void executeTask() throws IOException {
 
 		;
@@ -84,7 +82,7 @@ public class WorkBookmaker extends abstractTask {
 			wb.createSheet("Default");
 			wb.write(fOs);
 			wb.close();
-			
+
 			Alert a = new Alert(AlertType.CONFIRMATION);
 			a.setHeaderText("Successful Operation");
 			a.setContentText("You created a new workbook with one spreadsheet");

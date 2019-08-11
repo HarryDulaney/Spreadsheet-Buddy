@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Connection;
+import com.codoid.products.fillo.Fillo;
+import com.codoid.products.fillo.Recordset;
 
-import com.commander.app.model.WorkBookmaker;
+import InProcess.WorkBookmaker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
- * @author Harry Gingles Dulaney IV
+ * @author H.G. Dulaney IV
  */
 public class WizController {
 
@@ -37,37 +41,12 @@ public class WizController {
 
 	@FXML
 	protected void handleCancelTaskWiz(ActionEvent event) throws Exception {
-		
+
 		MainMenu.getMainMenu().showProject();
 	}
 
 	@FXML
 	protected void handleSubmitNewWB(ActionEvent event) throws IOException {
-
-		if (!textField1.getText().isEmpty() && !textField2.getText().isEmpty()) {
-
-			WorkBookmaker wbook = new WorkBookmaker(textField1.getText(), textField2.getText());
-			setWorkBooktoPject(wbook);
-
-			try {
-				wbook.executeTask();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-
-				this.mm = getMainMenu();
-
-				mm.showProject();
-
-			}
-
-		} else {
-			Alert a = new Alert(AlertType.WARNING);
-			a.setHeaderText("Blank Input Detected");
-			a.setContentText("Please fill in all required text fields");
-			a.showAndWait();
-		}
 
 	}
 
@@ -76,13 +55,38 @@ public class WizController {
 	}
 
 	@FXML
-	public void initialize() {
+	public void initialize() throws FilloException {
+
+		Fillo fillo = new Fillo();
+		Connection connection = null;
+		try {
+			connection = fillo.getConnection("C:\\Test.xlsx");
+		} catch (FilloException e) {
+			
+			e.printStackTrace();
+		}
+		String strQuery = "Select * from Sheet1 where ID=100 and name='John'";
+		Recordset recordset = null;
+		try {
+			recordset = connection.executeQuery(strQuery);
+		} catch (FilloException e) {
+			
+			e.printStackTrace();
+		}
+
+		while (recordset.next()) {
+			try {
+				System.out.println(recordset.getField("Details"));
+			} catch (FilloException e) {
+		
+				e.printStackTrace();
+			}
+		}
+
+		recordset.close();
+		connection.close();
+
 		this.mm = MainMenu.getMainMenu();
-	}
-
-	private void setWorkBooktoPject(WorkBookmaker wb) {
-
-		MainMenu.getCurrentProject().addProjectTask(wb);
 
 	}
 

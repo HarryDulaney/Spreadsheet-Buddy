@@ -16,8 +16,6 @@
                <menus>
                   <Menu mnemonicParsing="false" text="Project">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleCreateProjectAction" text="Create New Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleSaveProjectAction" text="Save Project" />
                         <MenuItem mnemonicParsing="false" onAction="#handleCreateProjectAction" text="Close Active Project" />
                         <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
                         
@@ -26,13 +24,10 @@
                   <Menu mnemonicParsing="false" text="Build">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleCreateWorkbookAction" text="Create New Excel Workbook" />
-                        <MenuItem mnemonicParsing="false" text="Add New Task" />
-                        <MenuItem mnemonicParsing="false" text="Delete A Task" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Help">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="How to use Excel SuperCommander 1.0" />
                         <MenuItem mnemonicParsing="false" onAction="#handleAboutSuperCommander" text="About SuperCommander" />
                      </items>
                   </Menu>
