@@ -1,4 +1,4 @@
-package com.commander.app;
+package com.commander.app.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import javax.script.ScriptException;
  * @author HG Dulaney IV
  */
 
-
 public class JSObj {
 	/**
 	 * JSObj is for creating instances of the Nashorn ScriptEngine
@@ -30,6 +29,26 @@ public class JSObj {
 
 	public JSObj(File scriptFile) {
 		this.scriptFile = scriptFile;
+
+	}
+
+	public void runMSAPI() {
+
+		ScriptEngineManager manage = new ScriptEngineManager();
+		ScriptEngine engine = manage.getEngineByName("nashorn");
+
+		String URL = "https://appsforoffice.microsoft.com/lib/1/hosted/Excel-15.js";
+
+		try {
+			engine.eval("load('" + URL + "')");
+		} catch (ScriptException e) {
+
+			e.printStackTrace();
+		}
+
+		/*
+		 * Then to load your script loadWithNewGlobal('Myscript.js');
+		 */
 
 	}
 
@@ -47,11 +66,12 @@ public class JSObj {
 		Invocable inv = (Invocable) engine;
 		try {
 
-			inv.invokeFunction("**********HERE GOES FUNCTION", "HERE GOES PARAM");
+			inv.invokeFunction("javascript function here", "function parameters here");
 
 		} catch (NoSuchMethodException | ScriptException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	/**

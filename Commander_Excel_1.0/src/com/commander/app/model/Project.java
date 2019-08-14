@@ -2,102 +2,63 @@ package com.commander.app.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import InProcess.abstractTask;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-/**
- * @author H.G. Dulaney IV
- */
-
+@XmlRootElement
 public class Project {
 
-	private static String projectName;
-	private final SimpleStringProperty userID;
-	private static ArrayList<abstractTask> projectTasks = new ArrayList<>();
-	private ObservableList<abstractTask> observableTasks;
-	private static File projectDirectory;
+	private ArrayList<Command> sooperCommands;
 
-	/**
-	 * Project default constructor
-	 * 
-	 * @param userID
-	 * @param projectFolder
-	 */
+	private String projectName;
+	private File xmlFilePath;
+
 	public Project() {
 
-		this(null, null, null);
-
 	}
 
-	public Project(String userid, String projectName, File filePath) {
-
-		this.userID = new SimpleStringProperty(userid);
-		Project.projectName = projectName;
+	public Project(String projectName, File xmlFilePath) {
+		this.projectName = projectName;
+		this.xmlFilePath = xmlFilePath;
 
 	}
+	@XmlElement
+	public ArrayList<Command> getSooperCommands() {
+		return sooperCommands;
+	}
 
-	public String projectFolderProperty() {
+	public void setSooperCommands(ArrayList<Command> sooperCommands) {
+		this.sooperCommands = sooperCommands;
+	}
+
+	@XmlElement(name = "projectName")
+	public String getName() {
 		return projectName;
 	}
 
-	public static void addTaskstoProject(abstractTask task) {
-		Project.projectTasks.add(task);
+	public void setName(String projectName) {
+		this.projectName = projectName;
 	}
 
-	public String getProjectName() {
-		return Project.projectName;
+	@XmlElement(name = "xmlFilePath")
+	public File getProjectFile() {
+		return xmlFilePath;
 	}
 
-	/**
-	 * @return the ArrayList of tasks for the current Project
-	 * @see Project
-	 */
-
-	public ArrayList<abstractTask> getProjectTasks() {
-		return projectTasks;
+	public void setProjectFile(File xmlFilePath) {
+		this.xmlFilePath = xmlFilePath;
 	}
 
-	public void addProjectTask(abstractTask task) {
+	public void addCommand(Command command) {
 
-		projectTasks.add(task);
+		try {
+			if (sooperCommands == null) {
+				sooperCommands = new ArrayList<>();
+			}
+			sooperCommands.add(command);
+		} catch (Exception e) {
 
+			e.printStackTrace();
+		}
 	}
-
-	public SimpleStringProperty userIDProperty() {
-		return userID;
-	}
-
-	public void setUserID(String userID) {
-		this.userID.set(userID);
-	}
-
-	public String getUserID() {
-		return userID.get();
-
-	}
-
-	public ObservableList<abstractTask> getObservableTasks() {
-		return observableTasks;
-	}
-
-	public void setObservableTasks(ArrayList<abstractTask> projectTasks) {
-
-		ObservableList<abstractTask> convertedTasks = FXCollections.observableArrayList();
-
-		convertedTasks.addAll(projectTasks);
-
-		this.observableTasks = convertedTasks;
-	}
-
-	public File getProjectFilepath() {
-		return projectDirectory;
-	}
-
-	public void setProjectFilepath(File projectFilepath) {
-		Project.projectDirectory = projectFilepath;
-	}
-
 }

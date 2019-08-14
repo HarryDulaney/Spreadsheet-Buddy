@@ -1,41 +1,34 @@
 package com.commander.app;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Connection;
+import com.codoid.products.fillo.Fillo;
+import com.codoid.products.fillo.Recordset;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 /**
  * @author HG Dulaney IV
  */
+
 public class ProjectController {
 
-	private MainMenu mm;
+	private MainMenu mainMenu;
+	
 
 	@FXML
 	private Label Label1;
-
-	@FXML
-	protected void handleCSVFilter(ActionEvent event) throws Exception {
-
-		Stage stage = new Stage();
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/CSVfilterWiz.fxml"));
-		Parent root = (Parent) loader.load();
-
-		CSVFilterController controller = loader.getController();
-		controller.setMainMenu(MainMenu.getMainMenu());
-		Scene scene = new Scene(root, 550, 600);
-		// scene.getStylesheets().add("com/commander/app/view/ThemeOne.css");
-
-		stage.setScene(scene);
-		if (CSVFilterController.getIsReady()) {
-			stage.show();
-		}
-	}
 
 	public ProjectController() {
 
@@ -44,12 +37,12 @@ public class ProjectController {
 	@FXML
 	public void initialize() {
 
-		Label1.setText("Hello, " + System.getProperty("user.name") + " and welcome to SuperCommander.");
+		
 
 	}
 
-	public void setMainmenu(MainMenu mm) {
-		this.mm = mm;
+	public void setMainmenu(MainMenu mainMenu) {
+		this.mainMenu = mainMenu;
 
 	}
 

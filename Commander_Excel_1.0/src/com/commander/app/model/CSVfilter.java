@@ -29,13 +29,12 @@ import javafx.stage.StageStyle;
 
 import com.commander.app.model.SpecialObj;
 
-import InProcess.abstractTask;
 
 /**
  * @author H.G. Dulaney IV
  */
 
-public class CSVfilter extends abstractTask {
+public class CSVfilter  {
 
 	private File csvFilePath;
 
@@ -343,7 +342,7 @@ public class CSVfilter extends abstractTask {
 		FileChooser fchooser = new FileChooser();
 		fchooser.setTitle("Name and save your \".xlsx\" file");
 		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".csv", ".csv"));
+		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".csv", "*.csv"));
 		File finishFile = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 
 		if (finishFile != null) {

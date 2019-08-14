@@ -1,27 +1,14 @@
 package com.commander.app;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import com.commander.app.model.Project;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
@@ -30,16 +17,19 @@ import javafx.stage.Stage;
 
 public class MainMenu extends Application {
 
-	private static MainMenu mm;
 	private AnchorPane rootPane;
 	private Stage primaryStage;
-	private static Project currentProject;
-	private Stage wizardStage;
-	ObservableList<Project> projectData = FXCollections.observableArrayList();
-	ObservableList<String> taskList = FXCollections.observableArrayList();
+	private static Project current;
+	private static MainMenu mm;
+
+	/**
+	 * 'current' is used to hold the current project while the user is working in
+	 * the GUI Accessed by using MainMenu.getCurrent() and MainMenu.setCurrent()
+	 */
 
 	public MainMenu() {
-		MainMenu.mm = this;
+		
+		mm = this;
 
 	}
 
@@ -48,13 +38,12 @@ public class MainMenu extends Application {
 
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("Welcome to Super Commander for MS Excel");
-		
-		
 
 		initRootLayerShow();
 
 		try {
-			showProject();
+
+			showStart();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,11 +53,6 @@ public class MainMenu extends Application {
 
 	public void initRootLayerShow() {
 
-		//File filePath = new File("C:\\Desktop");
-		//Project project = new Project(System.getProperty("user.name"), "TestProject", filePath);
-
-		//setCurrentProject(project);
-
 		try {
 
 			FXMLLoader loader = new FXMLLoader();
@@ -76,9 +60,9 @@ public class MainMenu extends Application {
 			rootPane = loader.load();
 
 			Scene scene = new Scene(rootPane, 800, 600);
-			
-			//scene.getStylesheets().add("com/commander/app/view/ThemeOne.css");
-			
+
+			// scene.getStylesheets().add("com/commander/app/view/ThemeOne.css");
+
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();
 
@@ -92,6 +76,19 @@ public class MainMenu extends Application {
 		launch(args);
 	}
 
+	public void showStart() throws IOException {
+
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/StartBlankView.fxml"));
+		AnchorPane anchorpane = (AnchorPane) loader.load();
+		MenuController controller = loader.getController();
+		controller.setMainmenu(this);
+
+		BorderPane borderpane = (BorderPane) getSubPaneOne(rootPane.getScene());
+		borderpane.setCenter(anchorpane);
+
+	}
+
 	public void showProject() throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
@@ -99,7 +96,7 @@ public class MainMenu extends Application {
 		AnchorPane anchorpane = (AnchorPane) loader.load();
 
 		ProjectController controller = loader.getController();
-		controller.setMainmenu(mm);
+		controller.setMainmenu(this);
 
 		BorderPane borderpane = (BorderPane) getSubPaneOne(rootPane.getScene());
 		borderpane.setCenter(anchorpane);
@@ -111,11 +108,9 @@ public class MainMenu extends Application {
 		return primaryStage;
 	}
 
-
-
 	public Node getSubPaneTwo(Scene scene) {
 
-		Node bp = scene.lookup("#subChildPane");
+		Node bp = scene.lookup("#startBlank");
 		return bp;
 
 	}
@@ -125,30 +120,17 @@ public class MainMenu extends Application {
 		return bp;
 	}
 
-	public ObservableList<Project> getProjectData() {
-		return projectData;
+	public static Project getCurrent() {
+		return current;
 	}
 
-	/**
-	 * @return the currentProject
-	 */
-	public static Project getCurrentProject() {
-		return currentProject;
-	}
-
-	/**
-	 * @param currentProject the currentProject to set
-	 */
-	public static void setCurrentProject(Project currentProject) {
-		MainMenu.currentProject = currentProject;
+	public static void setCurrent(Project current) {
+		MainMenu.current = current;
 	}
 
 	public static MainMenu getMainMenu() {
+		
 		return MainMenu.mm;
-	}
-
-	public Stage getWizardStage() {
-		return wizardStage;
 	}
 
 }

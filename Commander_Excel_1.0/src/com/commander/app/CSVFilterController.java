@@ -18,11 +18,9 @@ import com.commander.app.model.CSVfilter;
 public class CSVFilterController {
 
 	private CSVfilter csVfilter;
-	public File file;
+	private File file;
 	private MainMenu m;
-	private static Boolean isReady;
 
-	
 	@FXML
 	private TextField textfield1;
 
@@ -106,8 +104,6 @@ public class CSVFilterController {
 	}
 
 	public CSVFilterController() {
-		
-		CSVFilterController.setIsReady(false);
 
 	}
 
@@ -132,11 +128,10 @@ public class CSVFilterController {
 		// chooser.setInitialDirectory(MainMenu.getCurrentProject().getProjectFilepath());
 		file = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
 
-		if (file instanceof File) {
-			CSVFilterController.setIsReady(true);
+		if (file != null) {
 			CSVfilter csvfilter = new CSVfilter(file);
 			this.csVfilter = csvfilter;
-			
+
 		}
 
 	}
@@ -144,19 +139,12 @@ public class CSVFilterController {
 	public void setMainMenu(MainMenu m) {
 		this.m = m;
 	}
-	/**
-	 * @return the isReady
-	 */
-	public static Boolean getIsReady() {
-		return isReady;
-	}
 
 	/**
-	 * @param isReady the isReady to set
+	 * @return the file
 	 */
-	public static void setIsReady(Boolean isReady) {
-		CSVFilterController.isReady = isReady;
+	public File getFile() {
+		return file;
 	}
-
 
 }
