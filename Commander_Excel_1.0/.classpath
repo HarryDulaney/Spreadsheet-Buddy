@@ -5,7 +5,17 @@
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/poi-bin-4.1.0-20190412/poi-4.1.0/lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/commons-csv-1.7-bin/commons-csv-1.7/commons-csv-1.7.jar" sourcepath="C:/Build-Tools/Java/commons-csv-1.7-bin/commons-csv-1.7/commons-csv-1.7-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Build-Tools/Java/opencsv-4.6.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/OpenCsv/opencsv-4.6.jar"/>
 	<classpathentry kind="lib" path="C:/Build-Tools/Java/Fillo/fillo-1.21.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/GemBox/gembox-spreadsheet.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Build-Tools/Java/GemBox/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/ControlsFx/controlsfx-8.40.15.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="https://controlsfx.bitbucket.io/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

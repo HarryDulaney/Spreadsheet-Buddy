@@ -1,6 +1,9 @@
 package com.commander.app;
 
 import java.io.IOException;
+
+import org.controlsfx.dialog.ExceptionDialog;
+
 import com.commander.app.model.Project;
 
 import javafx.application.Application;
@@ -19,16 +22,11 @@ public class MainMenu extends Application {
 
 	private AnchorPane rootPane;
 	private Stage primaryStage;
-	private static Project current;
 	private static MainMenu mm;
 
-	/**
-	 * 'current' is used to hold the current project while the user is working in
-	 * the GUI Accessed by using MainMenu.getCurrent() and MainMenu.setCurrent()
-	 */
 
 	public MainMenu() {
-		
+
 		mm = this;
 
 	}
@@ -41,14 +39,6 @@ public class MainMenu extends Application {
 
 		initRootLayerShow();
 
-		try {
-
-			showStart();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	public void initRootLayerShow() {
@@ -59,9 +49,10 @@ public class MainMenu extends Application {
 			loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/RootRoot.fxml"));
 			rootPane = loader.load();
 
-			Scene scene = new Scene(rootPane, 800, 600);
+			MenuController controller = loader.getController();
+			controller.setMainmenu(this);
 
-			// scene.getStylesheets().add("com/commander/app/view/ThemeOne.css");
+			Scene scene = new Scene(rootPane);
 
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();
@@ -76,19 +67,6 @@ public class MainMenu extends Application {
 		launch(args);
 	}
 
-	public void showStart() throws IOException {
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/StartBlankView.fxml"));
-		AnchorPane anchorpane = (AnchorPane) loader.load();
-		MenuController controller = loader.getController();
-		controller.setMainmenu(this);
-
-		BorderPane borderpane = (BorderPane) getSubPaneOne(rootPane.getScene());
-		borderpane.setCenter(anchorpane);
-
-	}
-
 	public void showProject() throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
@@ -98,7 +76,7 @@ public class MainMenu extends Application {
 		ProjectController controller = loader.getController();
 		controller.setMainmenu(this);
 
-		BorderPane borderpane = (BorderPane) getSubPaneOne(rootPane.getScene());
+		BorderPane borderpane = (BorderPane) getNestedPane(rootPane.getScene());
 		borderpane.setCenter(anchorpane);
 
 	}
@@ -115,22 +93,24 @@ public class MainMenu extends Application {
 
 	}
 
-	public Node getSubPaneOne(Scene scene) {
+	public Node getNestedPane(Scene scene) {
 		Node bp = scene.lookup("#borderpane");
 		return bp;
 	}
 
-	public static Project getCurrent() {
-		return current;
-	}
-
-	public static void setCurrent(Project current) {
-		MainMenu.current = current;
-	}
-
 	public static MainMenu getMainMenu() {
-		
+
 		return MainMenu.mm;
+	}
+
+	@Override
+	public void init() {
+
+	}
+
+	@Override
+	public void stop() {
+
 	}
 
 }

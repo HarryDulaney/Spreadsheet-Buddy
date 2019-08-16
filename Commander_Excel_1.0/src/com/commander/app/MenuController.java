@@ -14,10 +14,13 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.controlsfx.dialog.ExceptionDialog;
 
 import com.commander.app.model.Project;
+import com.commander.app.model.ProjectBean;
 
 import javafx.fxml.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,6 +31,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sun.security.jca.GetInstance;
 
 /**
  * @author HG Dulaney IV
@@ -38,13 +42,12 @@ import javafx.stage.StageStyle;
  */
 public class MenuController {
 
-	private Project project;
 	private MainMenu mainmenu;
 
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
 
-		if (MainMenu.getCurrent() != null) {
+		if (ProjectBean.getInstance() != null) {
 
 			try {
 				saveProject();
@@ -54,9 +57,8 @@ public class MenuController {
 
 		} else {
 			Alert alrt = new Alert(AlertType.WARNING);
-			alrt.setHeaderText("Please create a projectXml first before saving it");
-			alrt.setContentText(
-					"You must first open or create a new projectXml in order to perform the save projectXml action");
+			alrt.setHeaderText("Hey you can't do that!");
+			alrt.setContentText("You must first open or create a new project in order to perform this action");
 			alrt.show();
 
 		}
@@ -68,18 +70,18 @@ public class MenuController {
 
 		createNewProject();
 
-		if (MainMenu.getCurrent() != null) {
+		if (ProjectBean.getInstance() != null) {
 
 			saveProject();
 
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Create New Project");
 			alert.setHeaderText("Success!");
-			alert.setContentText("You're new project named: " + project.getName() + " was saved at: "
-					+ project.getProjectFile().toString());
+			alert.setContentText("You're new project named: " + ProjectBean.getName() + " was saved at: "
+					+ ProjectBean.getProjectFile().toString());
 			alert.showAndWait();
 
-			openProject(MainMenu.getCurrent().getProjectFile());
+			openProject(ProjectBean.getProjectFile());
 
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -99,19 +101,22 @@ public class MenuController {
 		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
 		File toOpen = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
 
-		try {
-			openProject(toOpen);
+		if (toOpen != null) {
 
-		} catch (Exception e) {
+			try {
+				openProject(toOpen);
 
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Something Went Wrong");
-			alert.setHeaderText("Could not open the file");
-			alert.setContentText("Sorry we were not able to open the selected file, please try again");
-			alert.showAndWait();
+			} catch (Exception e) {
+
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Something Went Wrong");
+				alert.setHeaderText("Could not open the file you selected");
+				alert.setContentText("Sorry we were not able to open the selected file, please try again");
+				alert.showAndWait();
+
+			}
 
 		}
-
 	}
 
 	@FXML
@@ -124,9 +129,9 @@ public class MenuController {
 		Parent root = (Parent) loader.load();
 
 		CSVFilterController controller = loader.getController();
-		controller.setMainMenu(MainMenu.getMainMenu());
+		controller.setMainMenu(mainmenu);
 		Scene scene = new Scene(root, 550, 600);
-		// scene.getStylesheets().add("com/commander/app/view/ThemeOne.css");
+		// scene.getStylesheets().add("com/commander/app/view/style/ThemeOne.css");
 
 		stage.setScene(scene);
 		if (controller.getFile() != null) {
@@ -154,7 +159,8 @@ public class MenuController {
 	@FXML
 	protected void handleExitCommander(ActionEvent event) {
 
-		System.exit(0);
+		Platform.exit();
+		;
 	}
 
 	@FXML
@@ -191,7 +197,7 @@ public class MenuController {
 		}
 	}
 
-	private void createNewProject() {
+	public void createNewProject() {
 
 		TextInputDialog textDialog = new TextInputDialog();
 		textDialog.setHeaderText("Create New SuperCommander Project");
@@ -204,44 +210,46 @@ public class MenuController {
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Create New SuperCommander Project");
 		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
+		chooser.setInitialFileName(projectName);
 		File projectFile = chooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 
-		project = new Project(projectName, projectFile);
-
-		MainMenu.setCurrent(project);
+		ProjectBean.getInstance(projectName, projectFile);
 
 	}
 
-	private void saveProject() throws FileNotFoundException {
+	public void saveProject() throws FileNotFoundException {
 		try {
 
-			JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+			JAXBContext context = JAXBContext.newInstance(Project.class);
 
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			Marshaller jaxbMarshaller = context.createMarshaller();
 
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-			OutputStream output = new FileOutputStream(MainMenu.getCurrent().getProjectFile());
-			jaxbMarshaller.marshal(MainMenu.getCurrent(), output);
+			Project project = new Project(ProjectBean.getName(), ProjectBean.getProjectFile());
+
+			OutputStream output = new FileOutputStream(project.getProjectFile());
+			jaxbMarshaller.marshal(project, output);
 
 		} catch (JAXBException e) {
-			System.out.print("Something went wrong with JAXB content and marshaller");
 			e.printStackTrace();
+
 		}
+
 	}
 
-	private void openProject(File toOpen) {
+	public void openProject(File toOpen) {
 
-		JAXBContext jaxbContext;
+		JAXBContext context;
 
 		try {
-			jaxbContext = JAXBContext.newInstance(Project.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			context = JAXBContext.newInstance(Project.class);
+			Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
 
 			Project project = (Project) jaxbUnmarshaller.unmarshal(toOpen);
-			this.project = project;
-			MainMenu.setCurrent(project);
-			
+
+			ProjectBean.getInstance(project.getName(), project.getProjectFile());
+
 			mainmenu.showProject();
 
 		} catch (Exception e) {
@@ -259,7 +267,6 @@ public class MenuController {
 	@FXML
 	public void initialize() {
 
-		
 	}
 
 	public MainMenu getMainmenu() {

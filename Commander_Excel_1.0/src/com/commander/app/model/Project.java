@@ -8,20 +8,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Project {
 
-	private ArrayList<Command> sooperCommands;
-
+	private ArrayList<Command> sooperCommands = new ArrayList<>();
 	private String projectName;
 	private File xmlFilePath;
 
 	public Project() {
+		
 
 	}
 
 	public Project(String projectName, File xmlFilePath) {
 		this.projectName = projectName;
 		this.xmlFilePath = xmlFilePath;
+		
 
 	}
+	public Project(String projectName,File xmlFilePath,ArrayList<Command>sooperCommands) {
+		this.projectName = projectName;
+		this.xmlFilePath = xmlFilePath;
+		this.sooperCommands = sooperCommands;
+	}
+
 	@XmlElement
 	public ArrayList<Command> getSooperCommands() {
 		return sooperCommands;
@@ -51,14 +58,8 @@ public class Project {
 
 	public void addCommand(Command command) {
 
-		try {
-			if (sooperCommands == null) {
-				sooperCommands = new ArrayList<>();
-			}
-			sooperCommands.add(command);
-		} catch (Exception e) {
+		sooperCommands.add(command);
 
-			e.printStackTrace();
-		}
 	}
+
 }
