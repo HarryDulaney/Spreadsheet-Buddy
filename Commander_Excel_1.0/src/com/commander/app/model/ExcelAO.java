@@ -50,10 +50,12 @@ public class ExcelAO {
 	private File outputFile;
 
 	public ExcelAO() {
+		
+	
 
 	}
 
-	public void handleSelect(String field,File source) {
+	public void handleSelect(String field,File source,Connection connection) {
 
 		try {
 			Fillo fillo = new Fillo();

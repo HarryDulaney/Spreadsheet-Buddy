@@ -1,35 +1,18 @@
 package com.commander.app;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.CookieHandler;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Connection;
-import com.codoid.products.fillo.Fillo;
-import com.codoid.products.fillo.Recordset;
 import com.commander.app.model.Command;
-import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
-
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 
 /**
  * @author HG Dulaney IV
@@ -40,6 +23,9 @@ public class ProjectController implements Initializable {
 	private ObservableList<Command> displayList;
 
 	private MainMenu mainMenu;
+
+	@FXML
+	private Label NoCommandsLabel;
 
 	@FXML
 	private Label Label1;
@@ -64,13 +50,11 @@ public class ProjectController implements Initializable {
 		commandOne.setName("UPDATE");
 		commandOne.setFileIn(new File("C:\\Users\\JordanLightgate"));
 		commandOne.setFileOut(new File("C:\\Users"));
-		
+
 		ProjectBean.addCommand(commandOne);
-		
+
 		displayList = FXCollections.observableArrayList(ProjectBean.getSooperCommands());
 		displayName.setCellValueFactory(cellData -> cellData.getValue().getDisplayName());
-
-		
 
 	}
 
@@ -81,7 +65,7 @@ public class ProjectController implements Initializable {
 
 	public void setMainmenu(MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
-		
+
 		tableView.setItems(displayList);
 
 	}

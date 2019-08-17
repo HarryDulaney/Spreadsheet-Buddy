@@ -159,8 +159,23 @@ public class MenuController {
 	@FXML
 	protected void handleExitCommander(ActionEvent event) {
 
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Action");
+		alert.setHeaderText("Are you sure you want to do that?");
+		alert.setContentText(
+				"You about to exit your project build, if you haven't saved your work hit the CANCEL button "
+						+ "and save your project before exiting");
+		alert.showAndWait();
+
+		try {
+			saveProject();
+		} catch (FileNotFoundException e) {
+			System.out.println("Error Saving the Project in:   MenuController.handleExitCommander");
+			e.printStackTrace();
+		}
+
 		Platform.exit();
-		;
+
 	}
 
 	@FXML
@@ -218,6 +233,9 @@ public class MenuController {
 	}
 
 	public void saveProject() throws FileNotFoundException {
+		
+		if(ProjectBean.getInstance() != null) {
+
 		try {
 
 			JAXBContext context = JAXBContext.newInstance(Project.class);
@@ -226,7 +244,8 @@ public class MenuController {
 
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-			Project project = new Project(ProjectBean.getName(), ProjectBean.getProjectFile());
+			Project project = new Project(ProjectBean.getName(), ProjectBean.getProjectFile(),
+					ProjectBean.getSooperCommands());
 
 			OutputStream output = new FileOutputStream(project.getProjectFile());
 			jaxbMarshaller.marshal(project, output);
@@ -235,7 +254,7 @@ public class MenuController {
 			e.printStackTrace();
 
 		}
-
+		}
 	}
 
 	public void openProject(File toOpen) {

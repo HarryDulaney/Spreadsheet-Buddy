@@ -17,5 +17,10 @@
 			<attribute name="javadoc_location" value="https://controlsfx.bitbucket.io/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/Webcrawl/jsoup-1.12.1.jar" sourcepath="C:/Build-Tools/Java/Webcrawl/jsoup-1.12.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Build-Tools/Java/Webcrawl/jsoup-1.12.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

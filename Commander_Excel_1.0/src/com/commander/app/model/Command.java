@@ -8,16 +8,16 @@ import javafx.beans.property.SimpleStringProperty;
 
 @XmlRootElement
 public class Command {
-	
+
 	private final SimpleStringProperty displayName = new SimpleStringProperty("");
 	private String commName;
 	private int comm_id;
 	private File commFileIn;
 	private File commfileOut;
-	
+
 	public Command() {
 		setName("Command_Name");
-		
+
 	}
 
 	@XmlElement(name = "commandName")
@@ -28,10 +28,11 @@ public class Command {
 	public void setName(String name) {
 		this.commName = name;
 		displayName.set(name);
-		
+
 	}
+
 	public SimpleStringProperty getDisplayName() {
-		
+
 		return displayName;
 	}
 
@@ -61,6 +62,5 @@ public class Command {
 	public void setFileOut(File commfileOut) {
 		this.commfileOut = commfileOut;
 	}
-	
 
 }

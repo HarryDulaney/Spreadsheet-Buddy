@@ -12,6 +12,18 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import com.gembox.spreadsheet.*;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.io.IOException;
 
 public class GemBoxController {
 
@@ -19,8 +31,7 @@ public class GemBoxController {
         SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
     }
 
-    @FXML 
-    public TableView table;
+    @FXML public TableView table;
 
     public void load(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
@@ -66,7 +77,7 @@ public class GemBoxController {
         ExcelFile file = new ExcelFile();
         ExcelWorksheet worksheet = file.addWorksheet("sheet");
         for (int row = 0; row < table.getItems().size(); row++) {
-            ObservableList<?> cells = (ObservableList<?>) table.getItems().get(row);
+            ObservableList cells = (ObservableList) table.getItems().get(row);
             for (int column = 0; column < cells.size(); column++) {
                 if (cells.get(column) != null)
                     worksheet.getCell(row, column).setValue(cells.get(column).toString());

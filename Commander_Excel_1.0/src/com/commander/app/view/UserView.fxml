@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="600.0" maxWidth="800.0"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-	prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.commander.app.ProjectController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.app.ProjectController">
 	<children>
-		<BorderPane id="bPane" prefHeight="600.0" prefWidth="800.0"
-			AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		<BorderPane id="bPane" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 			<top>
 				<HBox prefHeight="37.0" prefWidth="800.0">
 					<children>
-						<ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="37.0"
-							prefWidth="1031.0">
+						<ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="37.0" prefWidth="1031.0">
 							<items>
-								<Pane prefHeight="25.0" prefWidth="324.0" />
-								<Button alignment="CENTER" contentDisplay="CENTER"
-									defaultButton="true" mnemonicParsing="false"
-									onAction="#handleNewSuperCommand" text="New Super-Command">
+								<Button alignment="CENTER" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleNewSuperCommand" text="New Super-Command">
 									<font>
 										<Font name="Tw Cen MT Condensed" size="19.0" />
 									</font>
@@ -46,6 +38,19 @@
 										<ColorAdjust />
 									</effect>
 								</Button>
+                        <Label fx:id="NoCommandsLabel" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="31.0" prefWidth="231.0" text="Get Started With a New SuperCommand! ">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="19.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="27.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../../../SuperCommander_1.0/outline-arrow_forward-black-18/2x/outline_arrow_forward_black_18dp.png" />
+                           </image>
+                        </ImageView>
 							</items>
 							<HBox.margin>
 								<Insets />
@@ -55,12 +60,9 @@
 				</HBox>
 			</top>
 			<bottom>
-				<HBox prefHeight="11.0" prefWidth="800.0"
-					BorderPane.alignment="CENTER">
+				<HBox prefHeight="11.0" prefWidth="800.0" BorderPane.alignment="CENTER">
 					<children>
-						<Label fx:id="Label1" alignment="TOP_CENTER"
-							contentDisplay="TOP" prefHeight="103.0" prefWidth="800.0"
-							text="Label1" textAlignment="CENTER">
+						<Label fx:id="Label1" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="103.0" prefWidth="800.0" text="Label1" textAlignment="CENTER">
 							<font>
 								<Font name="Tw Cen MT Condensed" size="19.0" />
 							</font>
@@ -69,17 +71,26 @@
 				</HBox>
 			</bottom>
 			<right>
-				<VBox prefHeight="563.0" prefWidth="152.0"
-					BorderPane.alignment="CENTER">
+				<VBox prefHeight="563.0" prefWidth="152.0">
 					<children>
-						<TableView fx:id="tableView" editable="true"
-							prefHeight="581.0" prefWidth="152.0">
+						<TableView fx:id="tableView" editable="true" prefHeight="581.0" prefWidth="152.0" VBox.vgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="displayName" prefWidth="151.0"
-									text="SuperCommands" />
+								<TableColumn fx:id="displayName" prefWidth="151.0" text="SuperCommands" />
 							</columns>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
 						</TableView>
 					</children>
+               <BorderPane.margin>
+                  <Insets right="19.0" />
+               </BorderPane.margin>
 				</VBox>
 			</right>
 		</BorderPane>

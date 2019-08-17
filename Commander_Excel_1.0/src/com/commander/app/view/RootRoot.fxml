@@ -22,7 +22,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#handleSaveProject" text="Save Current Project" />
                         <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
                         
-                     </items>
+                                             </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="QuickTasks">
                      <items>
@@ -42,11 +42,15 @@
             </MenuBar>
          </top>
          <center>
-            <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="142.0" prefWidth="414.0" text="Welcome to SuperCommander 1.0! To begin automating Excel tasks, create a new project under the Project tab on the above file menu." textAlignment="CENTER" wrapText="true" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Tw Cen MT Condensed" size="21.0" />
-               </font>
-            </Label>
+            <AnchorPane prefHeight="25000.0" prefWidth="25000.0">
+               <children>
+                  <Label alignment="TOP_CENTER" contentDisplay="TOP" layoutX="293.0" layoutY="215.0" prefHeight="142.0" prefWidth="414.0" text="Welcome to SuperCommander 1.0! To begin automating Excel tasks, create a new project under the Project tab on the above file menu." textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Tw Cen MT Condensed" size="21.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </center>
       </BorderPane>
    </children>
