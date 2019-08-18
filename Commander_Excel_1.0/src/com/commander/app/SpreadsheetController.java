@@ -47,19 +47,13 @@ import javafx.scene.layout.StackPane;
  */
 public class SpreadsheetController {
 
-	
-
-
 	@FXML
 	private SpreadsheetView SSV;
 
 	public SpreadsheetController() {
 
-	
 	}
 
-	
-	
 	private void popView() {
 
 		int rowCount = 15;
@@ -79,6 +73,5 @@ public class SpreadsheetController {
 		SpreadsheetView spv = new SpreadsheetView(grid);
 
 	}
-
 
 }

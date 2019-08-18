@@ -13,6 +13,7 @@ import javafx.fxml.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * @author HG Dulaney IV
@@ -20,9 +21,11 @@ import javafx.scene.control.TableView;
 
 public class ProjectController implements Initializable {
 
-	private ObservableList<Command> displayList;
+	private ObservableList<Command> displayList = null;
 
 	private MainMenu mainMenu;
+
+	private ProjectBean Current_Project = ProjectBean.getInstance();
 
 	@FXML
 	private Label NoCommandsLabel;
@@ -34,7 +37,7 @@ public class ProjectController implements Initializable {
 	private TableView<Command> tableView;
 
 	@FXML
-	private TableColumn<Command, String> displayName;
+	private TableColumn<Command, String> commName;
 
 	public ProjectController() {
 
@@ -42,21 +45,19 @@ public class ProjectController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		
+		NoCommandsLabel.setVisible(false);
+		
+		Label1.setText(Current_Project.getName());
 
-		Label1.setText(ProjectBean.getName());
-
-		Command commandOne = new Command();
-		commandOne.setId(123);
-		commandOne.setName("UPDATE");
-		commandOne.setFileIn(new File("C:\\Users\\JordanLightgate"));
-		commandOne.setFileOut(new File("C:\\Users"));
-
-		ProjectBean.addCommand(commandOne);
-
-		displayList = FXCollections.observableArrayList(ProjectBean.getSooperCommands());
-		displayName.setCellValueFactory(cellData -> cellData.getValue().getDisplayName());
+		commName.setCellValueFactory(new PropertyValueFactory<Command, String>("commName"));
 
 	}
+
+	/*
+	 * private List<Command>commandList parseCommandList() { }
+	 */
 
 	@FXML
 	protected void handleNewSuperCommand(ActionEvent event) {
@@ -65,8 +66,6 @@ public class ProjectController implements Initializable {
 
 	public void setMainmenu(MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
-
-		tableView.setItems(displayList);
 
 	}
 

@@ -13,17 +13,16 @@ public class Project {
 	private File xmlFilePath;
 
 	public Project() {
-		
 
 	}
 
 	public Project(String projectName, File xmlFilePath) {
 		this.projectName = projectName;
 		this.xmlFilePath = xmlFilePath;
-		
 
 	}
-	public Project(String projectName,File xmlFilePath,ArrayList<Command>sooperCommands) {
+
+	public Project(String projectName, File xmlFilePath, ArrayList<Command> sooperCommands) {
 		this.projectName = projectName;
 		this.xmlFilePath = xmlFilePath;
 		this.sooperCommands = sooperCommands;

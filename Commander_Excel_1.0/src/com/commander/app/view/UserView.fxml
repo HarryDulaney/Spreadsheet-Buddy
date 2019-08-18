@@ -75,7 +75,7 @@
 					<children>
 						<TableView fx:id="tableView" editable="true" prefHeight="581.0" prefWidth="152.0" VBox.vgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="displayName" prefWidth="151.0" text="SuperCommands" />
+								<TableColumn fx:id="commName" prefWidth="151.0" text="SuperCommands" />
 							</columns>
                      <opaqueInsets>
                         <Insets />

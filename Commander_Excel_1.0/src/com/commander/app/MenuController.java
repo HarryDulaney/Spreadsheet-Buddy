@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.ArrayList;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -16,6 +18,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.dialog.ExceptionDialog;
 
+import com.commander.app.model.Command;
 import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
 
@@ -26,6 +29,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 
 import javafx.stage.FileChooser;
@@ -41,7 +45,9 @@ import sun.security.jca.GetInstance;
  * to the root menu heading task bar ie.... Save ProjectXml, Close ProjectXml
  */
 public class MenuController {
-
+	
+	
+	private ProjectBean Current_Project;
 	private MainMenu mainmenu;
 
 	@FXML
@@ -77,11 +83,17 @@ public class MenuController {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Create New Project");
 			alert.setHeaderText("Success!");
-			alert.setContentText("You're new project named: " + ProjectBean.getName() + " was saved at: "
-					+ ProjectBean.getProjectFile().toString());
+			alert.setContentText("You're new project named: " + Current_Project.getName() + " was saved at: "
+					+ Current_Project.getProjectFile().toString());
 			alert.showAndWait();
+			
+			try {
+				mainmenu.showProject();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-			openProject(ProjectBean.getProjectFile());
+		
 
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -163,18 +175,31 @@ public class MenuController {
 		alert.setTitle("Confirm Action");
 		alert.setHeaderText("Are you sure you want to do that?");
 		alert.setContentText(
-				"You about to exit your project build, if you haven't saved your work hit the CANCEL button "
-						+ "and save your project before exiting");
+				"Are you sure you want to exit the project build? Hit YES if you wish to exit, your project will save automa"
+						+ "tically. Hit NO if you wish to continue working.");
+
+		alert.getButtonTypes().removeAll(ButtonType.CANCEL, ButtonType.OK);
+		alert.getButtonTypes().add(ButtonType.YES);
+		alert.getButtonTypes().add(ButtonType.NO);
 		alert.showAndWait();
 
-		try {
-			saveProject();
-		} catch (FileNotFoundException e) {
-			System.out.println("Error Saving the Project in:   MenuController.handleExitCommander");
-			e.printStackTrace();
-		}
+		ButtonType result = alert.getResult();
+		if (result == ButtonType.YES) {
 
-		Platform.exit();
+			try {
+				saveProject();
+			} catch (FileNotFoundException e) {
+				System.out.println("Error Saving the Project in:   MenuController.handleExitCommander");
+				e.printStackTrace();
+			}
+
+			ProjectBean.getInstance().closeProject();
+			Platform.exit();
+
+		} else if (result == ButtonType.NO) {
+
+			// DO nothing.... GO Back
+		}
 
 	}
 
@@ -227,33 +252,36 @@ public class MenuController {
 		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
 		chooser.setInitialFileName(projectName);
 		File projectFile = chooser.showSaveDialog(new Stage(StageStyle.UTILITY));
+		
+		ArrayList<Command> commands = new ArrayList<>();
+		commands.add(new Command());
 
-		ProjectBean.getInstance(projectName, projectFile);
+	    Current_Project = ProjectBean.getInstance(projectName, projectFile, commands);
 
 	}
 
 	public void saveProject() throws FileNotFoundException {
-		
-		if(ProjectBean.getInstance() != null) {
 
-		try {
+		if (Current_Project != null) {
 
-			JAXBContext context = JAXBContext.newInstance(Project.class);
+			try {
 
-			Marshaller jaxbMarshaller = context.createMarshaller();
+				JAXBContext context = JAXBContext.newInstance(Project.class);
 
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+				Marshaller jaxbMarshaller = context.createMarshaller();
 
-			Project project = new Project(ProjectBean.getName(), ProjectBean.getProjectFile(),
-					ProjectBean.getSooperCommands());
+				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-			OutputStream output = new FileOutputStream(project.getProjectFile());
-			jaxbMarshaller.marshal(project, output);
+				Project project = new Project(Current_Project.getName(), Current_Project.getProjectFile(),
+						Current_Project.getSooperCommands());
 
-		} catch (JAXBException e) {
-			e.printStackTrace();
+				OutputStream output = new FileOutputStream(project.getProjectFile());
+				jaxbMarshaller.marshal(project, output);
 
-		}
+			} catch (JAXBException e) {
+				e.printStackTrace();
+
+			}
 		}
 	}
 
@@ -267,7 +295,7 @@ public class MenuController {
 
 			Project project = (Project) jaxbUnmarshaller.unmarshal(toOpen);
 
-			ProjectBean.getInstance(project.getName(), project.getProjectFile());
+			ProjectBean.getInstance(project.getName(), project.getProjectFile(),project.getSooperCommands());
 
 			mainmenu.showProject();
 

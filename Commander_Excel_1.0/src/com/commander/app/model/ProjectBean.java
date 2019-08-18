@@ -3,26 +3,21 @@ package com.commander.app.model;
 import java.io.File;
 import java.util.ArrayList;
 
-public final class ProjectBean {
+public class ProjectBean {
 
 	private static ProjectBean instance;
-	private static ArrayList<Command> sooperCommands = new ArrayList<>();
-	private static String projectName;
-	private static File xmlFilePath;
+	private ArrayList<Command> sooperCommands;
+	private String projectName;
+	private File xmlFilePath;
 
 	private ProjectBean() {
 	}
 
 	private ProjectBean(String projectName, File xmlFilePath, ArrayList<Command> sooperCommands) {
-		ProjectBean.projectName = projectName;
-		ProjectBean.xmlFilePath = xmlFilePath;
-		ProjectBean.sooperCommands = sooperCommands;
+		this.projectName = projectName;
+		this.xmlFilePath = xmlFilePath;
+		this.sooperCommands = sooperCommands;
 
-	}
-
-	private ProjectBean(String projectName, File xmlFilePath) {
-		ProjectBean.projectName = projectName;
-		ProjectBean.xmlFilePath = xmlFilePath;
 	}
 
 	public static ProjectBean getInstance(String projectName, File xmlFilePath, ArrayList<Command> sooperCommands) {
@@ -35,54 +30,46 @@ public final class ProjectBean {
 
 	}
 
-	public static ProjectBean getInstance(String projectName, File xmlFilePath) {
-		if (instance == null) {
-
-			instance = new ProjectBean(projectName, xmlFilePath);
-		}
-
-		return instance;
-	}
-
-	public static ArrayList<Command> getSooperCommands() {
-		return sooperCommands;
+	public ArrayList<Command> getSooperCommands() {
+		return this.sooperCommands;
 	}
 
 	public void setSooperCommands(ArrayList<Command> sooperCommands) {
-		ProjectBean.sooperCommands = sooperCommands;
+		this.sooperCommands = sooperCommands;
 	}
 
-	public static String getName() {
-		return projectName;
+	public String getName() {
+		return this.projectName;
 	}
 
 	public void setName(String projectName) {
-		ProjectBean.projectName = projectName;
+		this.projectName = projectName;
 	}
 
-	public static File getProjectFile() {
-		return xmlFilePath;
+	public File getProjectFile() {
+		return this.xmlFilePath;
 	}
 
-	public static void setProjectFile(File xmlFilePath) {
-		ProjectBean.xmlFilePath = xmlFilePath;
+	public void setProjectFile(File xmlFilePath) {
+		this.xmlFilePath = xmlFilePath;
 	}
 
-	public static void addCommand(Command command) {
+	public void addCommand(Command command) {
 
-		ProjectBean.sooperCommands.add(command);
+		this.sooperCommands.add(command);
 
 	}
 
 	public void closeProject() {
-		projectName = "";
-		sooperCommands = null;
-		xmlFilePath = null;
+		this.projectName = "";
+		this.sooperCommands.clear();
+		this.xmlFilePath = null;
 
 	}
-
 	public static ProjectBean getInstance() {
+		
 		return instance;
+		
 	}
 
 }

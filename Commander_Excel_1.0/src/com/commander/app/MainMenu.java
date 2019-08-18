@@ -24,7 +24,6 @@ public class MainMenu extends Application {
 	private Stage primaryStage;
 	private static MainMenu mm;
 
-
 	public MainMenu() {
 
 		mm = this;
