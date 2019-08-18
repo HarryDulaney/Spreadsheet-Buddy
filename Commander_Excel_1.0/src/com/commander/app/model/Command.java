@@ -8,30 +8,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Command {
 
-	
-	private String commName;
+	private String commandName;
 	private int comm_id;
 	private File commFileIn;
 	private File commfileOut;
 
 	public Command() {
-		setName("Empty_Command");
-		comm_id = 0000;
+		commandName = "";
+		comm_id = 0;
 		commFileIn = null;
 		commfileOut = null;
 
 	}
 
 	@XmlElement(name = "commandName")
-	public String getName() {
-		return commName;
+	public String getCommandName() {
+		return commandName;
 	}
 
-	public void setName(String name) {
-		this.commName = name;
+	public void setCommandName(String name) {
+		this.commandName = name;
 
 	}
-
 
 	@XmlElement(name = "command_id")
 	public int getId() {

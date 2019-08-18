@@ -62,7 +62,7 @@
 			<bottom>
 				<HBox prefHeight="11.0" prefWidth="800.0" BorderPane.alignment="CENTER">
 					<children>
-						<Label fx:id="Label1" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="103.0" prefWidth="800.0" text="Label1" textAlignment="CENTER">
+						<Label fx:id="label1" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="103.0" prefWidth="800.0" text="Label1" textAlignment="CENTER">
 							<font>
 								<Font name="Tw Cen MT Condensed" size="19.0" />
 							</font>
@@ -75,7 +75,7 @@
 					<children>
 						<TableView fx:id="tableView" editable="true" prefHeight="581.0" prefWidth="152.0" VBox.vgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="commName" prefWidth="151.0" text="SuperCommands" />
+								<TableColumn fx:id="commandName" prefWidth="151.0" text="SuperCommands" />
 							</columns>
                      <opaqueInsets>
                         <Insets />

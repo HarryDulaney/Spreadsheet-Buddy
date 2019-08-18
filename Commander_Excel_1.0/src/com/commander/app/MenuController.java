@@ -45,9 +45,7 @@ import sun.security.jca.GetInstance;
  * to the root menu heading task bar ie.... Save ProjectXml, Close ProjectXml
  */
 public class MenuController {
-	
-	
-	private ProjectBean Current_Project;
+
 	private MainMenu mainmenu;
 
 	@FXML
@@ -83,17 +81,15 @@ public class MenuController {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Create New Project");
 			alert.setHeaderText("Success!");
-			alert.setContentText("You're new project named: " + Current_Project.getName() + " was saved at: "
-					+ Current_Project.getProjectFile().toString());
+			alert.setContentText("You're new project named: " + ProjectBean.getInstance().getName() + " was saved at: "
+					+ ProjectBean.getInstance().getProjectFile().toString());
 			alert.showAndWait();
-			
+
 			try {
 				mainmenu.showProject();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-		
 
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -254,15 +250,14 @@ public class MenuController {
 		File projectFile = chooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 		
 		ArrayList<Command> commands = new ArrayList<>();
-		commands.add(new Command());
 
-	    Current_Project = ProjectBean.getInstance(projectName, projectFile, commands);
+		ProjectBean.getInstance(projectName, projectFile, commands);
 
 	}
 
 	public void saveProject() throws FileNotFoundException {
 
-		if (Current_Project != null) {
+		if (ProjectBean.getInstance() != null) {
 
 			try {
 
@@ -272,8 +267,8 @@ public class MenuController {
 
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-				Project project = new Project(Current_Project.getName(), Current_Project.getProjectFile(),
-						Current_Project.getSooperCommands());
+				Project project = new Project(ProjectBean.getInstance().getName(),
+						ProjectBean.getInstance().getProjectFile(), ProjectBean.getInstance().getSooperCommands());
 
 				OutputStream output = new FileOutputStream(project.getProjectFile());
 				jaxbMarshaller.marshal(project, output);
@@ -295,7 +290,7 @@ public class MenuController {
 
 			Project project = (Project) jaxbUnmarshaller.unmarshal(toOpen);
 
-			ProjectBean.getInstance(project.getName(), project.getProjectFile(),project.getSooperCommands());
+			ProjectBean.getInstance(project.getName(), project.getProjectFile(), project.getSooperCommands());
 
 			mainmenu.showProject();
 

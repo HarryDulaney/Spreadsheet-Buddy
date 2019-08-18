@@ -21,23 +21,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ProjectController implements Initializable {
 
-	private ObservableList<Command> displayList = null;
-
 	private MainMenu mainMenu;
-
-	private ProjectBean Current_Project = ProjectBean.getInstance();
 
 	@FXML
 	private Label NoCommandsLabel;
 
 	@FXML
-	private Label Label1;
+	private Label label1;
 
 	@FXML
 	private TableView<Command> tableView;
 
 	@FXML
-	private TableColumn<Command, String> commName;
+	private TableColumn<Command, String> commandName;
 
 	public ProjectController() {
 
@@ -45,13 +41,21 @@ public class ProjectController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		
-		NoCommandsLabel.setVisible(false);
-		
-		Label1.setText(Current_Project.getName());
 
-		commName.setCellValueFactory(new PropertyValueFactory<Command, String>("commName"));
+		if (ProjectBean.getInstance().getSooperCommands().isEmpty()) {
+			NoCommandsLabel.setVisible(true);
+		} else {
+			NoCommandsLabel.setVisible(false);
+
+		}
+		ObservableList<Command> commandList = FXCollections
+				.observableArrayList(ProjectBean.getInstance().getSooperCommands());
+
+		commandName.setCellValueFactory(new PropertyValueFactory<Command, String>("commandName"));
+
+		tableView.setItems(commandList);
+
+		label1.setText(ProjectBean.getInstance().getName());
 
 	}
 

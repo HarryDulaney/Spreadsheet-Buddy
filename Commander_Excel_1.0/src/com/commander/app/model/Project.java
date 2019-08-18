@@ -8,17 +8,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Project {
 
-	private ArrayList<Command> sooperCommands = new ArrayList<>();
+	private ArrayList<Command> sooperCommands;
 	private String projectName;
 	private File xmlFilePath;
 
 	public Project() {
-
-	}
-
-	public Project(String projectName, File xmlFilePath) {
-		this.projectName = projectName;
-		this.xmlFilePath = xmlFilePath;
 
 	}
 
