@@ -11,9 +11,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.commander.app.MenuController">
    <children>
-      <BorderPane id="borderpane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0">
+      <BorderPane id="borderpane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <MenuBar maxWidth="-Infinity" prefWidth="2000.0">
+            <MenuBar cache="true" depthTest="DISABLE">
                <menus>
                   <Menu mnemonicParsing="false" text="Project">
                      <items>
@@ -22,7 +22,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#handleSaveProject" text="Save Current Project" />
                         <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
                         
-                                             </items>
+                                                               </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="QuickTasks">
                      <items>
@@ -44,10 +44,13 @@
          <center>
             <AnchorPane prefHeight="25000.0" prefWidth="25000.0">
                <children>
-                  <Label alignment="TOP_CENTER" contentDisplay="TOP" layoutX="293.0" layoutY="215.0" prefHeight="142.0" prefWidth="414.0" text="Welcome to SuperCommander 1.0! To begin automating Excel tasks, create a new project under the Project tab on the above file menu." textAlignment="CENTER" wrapText="true">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="293.0" layoutY="-4.0" prefHeight="575.0" prefWidth="1000.0" text="Welcome to SuperCommander 1.0! To begin automating Excel tasks, create a new project under the Project tab on the above file menu." textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font name="Tw Cen MT Condensed" size="21.0" />
                      </font>
+                     <tooltip>
+                        <Tooltip text="Start by creating a new project" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                     </tooltip>
                   </Label>
                </children>
             </AnchorPane>

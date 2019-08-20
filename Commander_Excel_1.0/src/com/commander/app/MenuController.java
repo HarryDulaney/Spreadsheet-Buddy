@@ -61,7 +61,6 @@ public class MenuController {
 
 		} else {
 			Alert alrt = new Alert(AlertType.WARNING);
-			alrt.setHeaderText("Hey you can't do that!");
 			alrt.setContentText("You must first open or create a new project in order to perform this action");
 			alrt.show();
 
@@ -79,8 +78,6 @@ public class MenuController {
 			saveProject();
 
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Create New Project");
-			alert.setHeaderText("Success!");
 			alert.setContentText("You're new project named: " + ProjectBean.getInstance().getName() + " was saved at: "
 					+ ProjectBean.getInstance().getProjectFile().toString());
 			alert.showAndWait();
@@ -93,8 +90,6 @@ public class MenuController {
 
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("Something Went Wrong");
 			alert.setContentText("Please try again to create a new project");
 			alert.showAndWait();
 		}
@@ -117,8 +112,6 @@ public class MenuController {
 			} catch (Exception e) {
 
 				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Something Went Wrong");
-				alert.setHeaderText("Could not open the file you selected");
 				alert.setContentText("Sorry we were not able to open the selected file, please try again");
 				alert.showAndWait();
 
@@ -139,7 +132,6 @@ public class MenuController {
 		CSVFilterController controller = loader.getController();
 		controller.setMainMenu(mainmenu);
 		Scene scene = new Scene(root, 550, 600);
-		// scene.getStylesheets().add("com/commander/app/view/style/ThemeOne.css");
 
 		stage.setScene(scene);
 		if (controller.getFile() != null) {
@@ -157,7 +149,6 @@ public class MenuController {
 
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Something went wrong");
 			alert.setContentText("We were unable to open the weblink to the about me document you requested");
 			alert.show();
 		}
@@ -188,8 +179,10 @@ public class MenuController {
 				System.out.println("Error Saving the Project in:   MenuController.handleExitCommander");
 				e.printStackTrace();
 			}
+			if (ProjectBean.getInstance() != null) {
+				ProjectBean.getInstance().closeProject();
+			}
 
-			ProjectBean.getInstance().closeProject();
 			Platform.exit();
 
 		} else if (result == ButtonType.NO) {
@@ -218,7 +211,6 @@ public class MenuController {
 					wb.close();
 
 					Alert a = new Alert(AlertType.CONFIRMATION);
-					a.setHeaderText("Successful Operation");
 					a.setContentText("You created a new workbook with one spreadsheet");
 					a.show();
 
@@ -248,7 +240,7 @@ public class MenuController {
 		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
 		chooser.setInitialFileName(projectName);
 		File projectFile = chooser.showSaveDialog(new Stage(StageStyle.UTILITY));
-		
+
 		ArrayList<Command> commands = new ArrayList<>();
 
 		ProjectBean.getInstance(projectName, projectFile, commands);
@@ -298,8 +290,6 @@ public class MenuController {
 
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Cannot open project");
-			alert.setHeaderText("Something Went Wrong");
 			alert.setContentText("Please double check you are attempting to open the correct file and try again");
 			alert.showAndWait();
 

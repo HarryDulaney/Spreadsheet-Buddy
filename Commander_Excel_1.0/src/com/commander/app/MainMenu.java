@@ -20,7 +20,8 @@ import javafx.stage.Stage;
 
 public class MainMenu extends Application {
 
-	private AnchorPane rootPane;
+	private static AnchorPane rootPane;
+
 	private Stage primaryStage;
 	private static MainMenu mm;
 
@@ -101,15 +102,9 @@ public class MainMenu extends Application {
 
 		return MainMenu.mm;
 	}
-
-	@Override
-	public void init() {
-
+	public static AnchorPane getRootPane() {
+		return rootPane;
 	}
 
-	@Override
-	public void stop() {
-
-	}
 
 }

@@ -61,16 +61,18 @@ public class ProjectBean {
 	}
 
 	public void closeProject() {
+
 		this.projectName = "";
 		this.sooperCommands.clear();
 		this.xmlFilePath = null;
 		instance = null;
 
 	}
+
 	public static ProjectBean getInstance() {
-		
+
 		return instance;
-		
+
 	}
 
 }

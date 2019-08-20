@@ -12,12 +12,9 @@ public class Command {
 	private int comm_id;
 	private File commFileIn;
 	private File commfileOut;
+	private JsoupObj scrapeFunc;
 
 	public Command() {
-		commandName = "";
-		comm_id = 0;
-		commFileIn = null;
-		commfileOut = null;
 
 	}
 
@@ -56,6 +53,15 @@ public class Command {
 
 	public void setFileOut(File commfileOut) {
 		this.commfileOut = commfileOut;
+	}
+	
+	@XmlElement
+	public JsoupObj getScrapeFunc() {
+		return scrapeFunc;
+	}
+
+	public void setScrapeFunc(JsoupObj scrapeFunc) {
+		this.scrapeFunc = scrapeFunc;
 	}
 
 }

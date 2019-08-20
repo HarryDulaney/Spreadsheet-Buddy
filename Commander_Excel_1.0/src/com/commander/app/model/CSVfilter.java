@@ -361,7 +361,6 @@ public class CSVfilter  {
 
 				} catch (IOException e) {
 					Alert alr = new Alert(AlertType.ERROR);
-					alr.setHeaderText("Error writing file");
 					alr.setContentText(
 							"Something went wrong creating your file. " + "This error usually results from choosing"
 									+ "location to save your finished file that's protected by security software. "
@@ -388,7 +387,6 @@ public class CSVfilter  {
 						csvWriter.writeNext(ws.getStrings());
 					}
 					Alert alr = new Alert(AlertType.INFORMATION);
-					alr.setHeaderText("Task Completed");
 					alr.setContentText(
 							"Your spreadsheet was created successfully. It can be found at: "
 									+ finishFile.getAbsolutePath());

@@ -125,7 +125,6 @@ public class CSVFilterController {
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Select the CSV file you want to work with");
 		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".csv", "*.csv"));
-		// chooser.setInitialDirectory(MainMenu.getCurrentProject().getProjectFilepath());
 		file = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
 
 		if (file != null) {

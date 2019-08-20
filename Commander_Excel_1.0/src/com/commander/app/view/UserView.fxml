@@ -38,7 +38,7 @@
 										<ColorAdjust />
 									</effect>
 								</Button>
-                        <Label fx:id="NoCommandsLabel" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="31.0" prefWidth="231.0" text="Get Started With a New SuperCommand! ">
+                        <Label fx:id="label2" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="31.0" prefWidth="231.0" text="Get Started With a New SuperCommand! ">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -46,7 +46,7 @@
                               <Font name="Tw Cen MT Condensed" size="19.0" />
                            </font>
                         </Label>
-                        <ImageView fitHeight="27.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="arrowImage" fitHeight="27.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../../../../../../../SuperCommander_1.0/outline-arrow_forward-black-18/2x/outline_arrow_forward_black_18dp.png" />
                            </image>
