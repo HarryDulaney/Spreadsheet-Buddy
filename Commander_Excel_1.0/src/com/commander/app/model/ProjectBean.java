@@ -6,21 +6,21 @@ import java.util.ArrayList;
 public class ProjectBean {
 
 	private static ProjectBean instance;
-	private ArrayList<Command> sooperCommands;
+	private ArrayList<SuperCommand> sooperCommands;
 	private String projectName;
 	private File xmlFilePath;
 
 	private ProjectBean() {
 	}
 
-	private ProjectBean(String projectName, File xmlFilePath, ArrayList<Command> sooperCommands) {
+	private ProjectBean(String projectName, File xmlFilePath, ArrayList<SuperCommand> sooperCommands) {
 		this.projectName = projectName;
 		this.xmlFilePath = xmlFilePath;
 		this.sooperCommands = sooperCommands;
 
 	}
 
-	public static ProjectBean getInstance(String projectName, File xmlFilePath, ArrayList<Command> sooperCommands) {
+	public static ProjectBean getInstance(String projectName, File xmlFilePath, ArrayList<SuperCommand> sooperCommands) {
 		if (instance == null) {
 
 			instance = new ProjectBean(projectName, xmlFilePath, sooperCommands);
@@ -30,11 +30,11 @@ public class ProjectBean {
 
 	}
 
-	public ArrayList<Command> getSooperCommands() {
+	public ArrayList<SuperCommand> getSooperCommands() {
 		return this.sooperCommands;
 	}
 
-	public void setSooperCommands(ArrayList<Command> sooperCommands) {
+	public void setSooperCommands(ArrayList<SuperCommand> sooperCommands) {
 		this.sooperCommands = sooperCommands;
 	}
 
@@ -54,9 +54,9 @@ public class ProjectBean {
 		this.xmlFilePath = xmlFilePath;
 	}
 
-	public void addCommand(Command command) {
+	public void addCommand(SuperCommand supercommand) {
 
-		this.sooperCommands.add(command);
+		this.sooperCommands.add(supercommand);
 
 	}
 

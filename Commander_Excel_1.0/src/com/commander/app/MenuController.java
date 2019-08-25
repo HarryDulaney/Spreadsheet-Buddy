@@ -18,9 +18,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.dialog.ExceptionDialog;
 
-import com.commander.app.model.Command;
 import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
+import com.commander.app.model.SuperCommand;
+import com.sun.glass.ui.MenuItem;
+import com.sun.glass.ui.MenuItem.Callback;
 
 import javafx.fxml.*;
 import javafx.application.Platform;
@@ -35,7 +37,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sun.security.jca.GetInstance;
 
 /**
  * @author HG Dulaney IV
@@ -47,6 +48,9 @@ import sun.security.jca.GetInstance;
 public class MenuController {
 
 	private MainMenu mainmenu;
+
+	@FXML
+	private javafx.scene.control.MenuItem projectSaveMenuItem;
 
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
@@ -84,6 +88,8 @@ public class MenuController {
 
 			try {
 				mainmenu.showProject();
+				projectSaveMenuItem.setDisable(false);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -93,6 +99,11 @@ public class MenuController {
 			alert.setContentText("Please try again to create a new project");
 			alert.showAndWait();
 		}
+
+	}
+
+	@FXML
+	protected void handleConsolidateWorkbooks(ActionEvent event) {
 
 	}
 
@@ -108,6 +119,7 @@ public class MenuController {
 
 			try {
 				openProject(toOpen);
+				projectSaveMenuItem.setDisable(false);
 
 			} catch (Exception e) {
 
@@ -132,6 +144,8 @@ public class MenuController {
 		CSVFilterController controller = loader.getController();
 		controller.setMainMenu(mainmenu);
 		Scene scene = new Scene(root, 550, 600);
+
+		scene.getStylesheets().add("/com/commander/app/view/CommanderStyle1.css");
 
 		stage.setScene(scene);
 		if (controller.getFile() != null) {
@@ -158,37 +172,59 @@ public class MenuController {
 	@FXML
 	protected void handleExitCommander(ActionEvent event) {
 
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirm Action");
-		alert.setHeaderText("Are you sure you want to do that?");
-		alert.setContentText(
-				"Are you sure you want to exit the project build? Hit YES if you wish to exit, your project will save automa"
-						+ "tically. Hit NO if you wish to continue working.");
-
-		alert.getButtonTypes().removeAll(ButtonType.CANCEL, ButtonType.OK);
-		alert.getButtonTypes().add(ButtonType.YES);
-		alert.getButtonTypes().add(ButtonType.NO);
-		alert.showAndWait();
-
-		ButtonType result = alert.getResult();
-		if (result == ButtonType.YES) {
-
-			try {
-				saveProject();
-			} catch (FileNotFoundException e) {
-				System.out.println("Error Saving the Project in:   MenuController.handleExitCommander");
-				e.printStackTrace();
-			}
-			if (ProjectBean.getInstance() != null) {
-				ProjectBean.getInstance().closeProject();
-			}
-
+		if (ProjectBean.getInstance() == null) {
 			Platform.exit();
+		} else {
 
-		} else if (result == ButtonType.NO) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Confirm Action");
+			alert.setHeaderText("Are you sure you want to do that?");
+			alert.setContentText(
+					"Are you sure you want to exit the project build? Hit YES if you wish to exit, your project will save automa"
+							+ "tically. Hit NO if you wish to continue working.");
 
-			// DO nothing.... GO Back
+			alert.getButtonTypes().removeAll(ButtonType.CANCEL, ButtonType.OK);
+			alert.getButtonTypes().add(ButtonType.YES);
+			alert.getButtonTypes().add(ButtonType.NO);
+			alert.showAndWait();
+
+			ButtonType result = alert.getResult();
+			if (result == ButtonType.YES) {
+
+				try {
+					saveProject();
+				} catch (FileNotFoundException e) {
+					System.out.println("Error Saving the Project in:   MenuController.handleExitCommander");
+					e.printStackTrace();
+				}
+				if (ProjectBean.getInstance() != null) {
+					ProjectBean.getInstance().closeProject();
+				}
+
+				Platform.exit();
+
+			} else if (result == ButtonType.NO) {
+
+				// DO nothing.... GO Back
+			}
 		}
+	}
+
+	@FXML
+	protected void handleLaunchWebScrapper() throws Exception {
+
+		Stage stage = new Stage();
+
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/WebScrapeDefine.fxml"));
+		Parent root = (Parent) loader.load();
+
+		ProjectController.setInitCounter(1);
+
+		Scene scene = new Scene(root, 550, 600);
+		scene.getStylesheets().add("/com/commander/app/view/CommanderStyle1.css");
+		stage.setScene(scene);
+		stage.show();
 
 	}
 
@@ -241,13 +277,15 @@ public class MenuController {
 		chooser.setInitialFileName(projectName);
 		File projectFile = chooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 
-		ArrayList<Command> commands = new ArrayList<>();
+		if (projectFile != null) {
 
-		ProjectBean.getInstance(projectName, projectFile, commands);
+			ArrayList<SuperCommand> commands = new ArrayList<>();
 
+			ProjectBean.getInstance(projectName, projectFile, commands);
+		}
 	}
 
-	public void saveProject() throws FileNotFoundException {
+	public static void saveProject() throws FileNotFoundException {
 
 		if (ProjectBean.getInstance() != null) {
 
@@ -272,7 +310,7 @@ public class MenuController {
 		}
 	}
 
-	public void openProject(File toOpen) {
+	public void openProject(File file) {
 
 		JAXBContext context;
 
@@ -280,7 +318,7 @@ public class MenuController {
 			context = JAXBContext.newInstance(Project.class);
 			Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
 
-			Project project = (Project) jaxbUnmarshaller.unmarshal(toOpen);
+			Project project = (Project) jaxbUnmarshaller.unmarshal(file);
 
 			ProjectBean.getInstance(project.getName(), project.getProjectFile(), project.getSooperCommands());
 

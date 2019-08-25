@@ -22,5 +22,7 @@
 			<attribute name="javadoc_location" value="jar:file:/C:/Build-Tools/Java/Webcrawl/jsoup-1.12.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/Webcrawl/selenium-server-standalone-3.141.59.jar"/>
+	<classpathentry kind="lib" path="C:/Build-Tools/Java/jackson-databind-2.10.0.pr1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

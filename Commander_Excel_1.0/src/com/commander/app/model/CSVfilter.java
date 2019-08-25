@@ -29,12 +29,11 @@ import javafx.stage.StageStyle;
 
 import com.commander.app.model.SpecialObj;
 
-
 /**
  * @author H.G. Dulaney IV
  */
 
-public class CSVfilter  {
+public class CSVfilter extends MyTask{
 
 	private File csvFilePath;
 
@@ -92,8 +91,8 @@ public class CSVfilter  {
 
 			TextInputDialog inDialog = new TextInputDialog();
 			inDialog.setHeaderText("Information Requested");
-			inDialog.setContentText("Input a name for your new spreadsheet. "
-					 			+ 	"Don't forget to select a .csv or .xlsx output format");
+			inDialog.setContentText(
+					"Input a name for your new spreadsheet. " + "Don't forget to select a .csv or .xlsx output format");
 			inDialog.setHeight(150);
 			inDialog.setWidth(235);
 			inDialog.showAndWait();
@@ -136,8 +135,8 @@ public class CSVfilter  {
 			}
 
 			TextInputDialog inDialog = new TextInputDialog();
-			inDialog.setContentText("Input a name for your new spreadsheet. "
-		 			+ 	"Don't forget to select a .csv or .xlsx output format");
+			inDialog.setContentText(
+					"Input a name for your new spreadsheet. " + "Don't forget to select a .csv or .xlsx output format");
 			inDialog.setHeaderText("Information Requested");
 			inDialog.setHeight(150);
 			inDialog.setWidth(235);
@@ -185,8 +184,8 @@ public class CSVfilter  {
 			}
 
 			TextInputDialog inDialog = new TextInputDialog();
-			inDialog.setContentText("Input a name for your new spreadsheet. "
-		 			+ 	"Don't forget to select a .csv or .xlsx output format");
+			inDialog.setContentText(
+					"Input a name for your new spreadsheet. " + "Don't forget to select a .csv or .xlsx output format");
 			inDialog.setHeaderText("Information Requested");
 			inDialog.setHeight(150);
 			inDialog.setWidth(235);
@@ -238,8 +237,8 @@ public class CSVfilter  {
 			}
 
 			TextInputDialog inDialog = new TextInputDialog();
-			inDialog.setContentText("Input a name for your new spreadsheet. "
-		 			+ 	"Don't forget to select a .csv or .xlsx output format");
+			inDialog.setContentText(
+					"Input a name for your new spreadsheet. " + "Don't forget to select a .csv or .xlsx output format");
 			inDialog.setHeaderText("Information Requested");
 			inDialog.setHeight(150);
 			inDialog.setWidth(235);
@@ -296,8 +295,8 @@ public class CSVfilter  {
 			}
 
 			TextInputDialog inDialog = new TextInputDialog();
-			inDialog.setContentText("Input a name for your new spreadsheet. "
-		 			+ 	"Don't forget to select a .csv or .xlsx output format");
+			inDialog.setContentText(
+					"Input a name for your new spreadsheet. " + "Don't forget to select a .csv or .xlsx output format");
 			inDialog.setHeaderText("Information Requested");
 			inDialog.setHeight(150);
 			inDialog.setWidth(235);
@@ -354,9 +353,8 @@ public class CSVfilter  {
 
 					Alert alrt = new Alert(AlertType.CONFIRMATION);
 					alrt.setHeaderText("Task Completed");
-					alrt.setContentText(
-							"Your spreadsheet was created successfully. It can be found at: "
-									+ finishFile.getAbsolutePath());
+					alrt.setContentText("Your spreadsheet was created successfully. It can be found at: "
+							+ finishFile.getAbsolutePath());
 					alrt.showAndWait();
 
 				} catch (IOException e) {
@@ -387,9 +385,8 @@ public class CSVfilter  {
 						csvWriter.writeNext(ws.getStrings());
 					}
 					Alert alr = new Alert(AlertType.INFORMATION);
-					alr.setContentText(
-							"Your spreadsheet was created successfully. It can be found at: "
-									+ finishFile.getAbsolutePath());
+					alr.setContentText("Your spreadsheet was created successfully. It can be found at: "
+							+ finishFile.getAbsolutePath());
 					alr.showAndWait();
 				}
 

@@ -1,4 +1,4 @@
-package com.commander.app.model;
+package com.commander.app.JSResources;
 
 import java.io.File;
 import java.io.IOException;

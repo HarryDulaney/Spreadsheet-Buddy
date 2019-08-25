@@ -53,6 +53,7 @@ public class MainMenu extends Application {
 			controller.setMainmenu(this);
 
 			Scene scene = new Scene(rootPane);
+			scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
 
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();
@@ -102,9 +103,9 @@ public class MainMenu extends Application {
 
 		return MainMenu.mm;
 	}
+
 	public static AnchorPane getRootPane() {
 		return rootPane;
 	}
-
 
 }

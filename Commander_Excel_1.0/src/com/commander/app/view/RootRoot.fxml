@@ -13,13 +13,13 @@
    <children>
       <BorderPane id="borderpane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <MenuBar cache="true" depthTest="DISABLE">
+            <MenuBar>
                <menus>
                   <Menu mnemonicParsing="false" text="Project">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleNewProject" text="New Project (Blank)" />
                         <MenuItem mnemonicParsing="false" onAction="#handleOpenProject" text="Open Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleSaveProject" text="Save Current Project" />
+                        <MenuItem fx:id="projectSaveMenuItem" disable="true" mnemonicParsing="false" onAction="#handleSaveProject" text="Save Current Project" />
                         <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
                         
                                                                </items>
@@ -28,6 +28,9 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleBlankWorkbook" text="New Blank Excel Workbook" />
                         <MenuItem mnemonicParsing="false" onAction="#handleCSVFilter" text="CSV Filter Columns" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleLaunchWebScrapper" text="Launch Web Scrapper" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleConsolidateWorkbooks" text="Consolidate Workbooks" />
+                        <MenuItem disable="true" mnemonicParsing="false" onAction="#handleConsolidateWorkbooks" text="New Fast Tasks" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Help">
@@ -36,9 +39,6 @@
                      </items>
                   </Menu>
                </menus>
-               <tooltip>
-                  <Tooltip text="Start by creating a new project" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
-               </tooltip>
             </MenuBar>
          </top>
          <center>

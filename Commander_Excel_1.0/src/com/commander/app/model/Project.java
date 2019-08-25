@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Project {
 
-	private ArrayList<Command> sooperCommands;
+	private ArrayList<SuperCommand> sooperCommands;
 	private String projectName;
 	private File xmlFilePath;
 
@@ -16,18 +16,18 @@ public class Project {
 
 	}
 
-	public Project(String projectName, File xmlFilePath, ArrayList<Command> sooperCommands) {
+	public Project(String projectName, File xmlFilePath, ArrayList<SuperCommand> sooperCommands) {
 		this.projectName = projectName;
 		this.xmlFilePath = xmlFilePath;
 		this.sooperCommands = sooperCommands;
 	}
 
 	@XmlElement
-	public ArrayList<Command> getSooperCommands() {
+	public ArrayList<SuperCommand> getSooperCommands() {
 		return sooperCommands;
 	}
 
-	public void setSooperCommands(ArrayList<Command> sooperCommands) {
+	public void setSooperCommands(ArrayList<SuperCommand> sooperCommands) {
 		this.sooperCommands = sooperCommands;
 	}
 
@@ -49,7 +49,7 @@ public class Project {
 		this.xmlFilePath = xmlFilePath;
 	}
 
-	public void addCommand(Command command) {
+	public void addSuperCommand(SuperCommand command) {
 
 		sooperCommands.add(command);
 

@@ -3,6 +3,9 @@ package com.commander.app.model;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.Connection;
@@ -17,30 +20,33 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
-public class ExcelAO {
+@XmlRootElement
+public class ExcelAO extends MyTask{
 	/**
-	 * Like a DB object this is an "Excel Access Object" which contains the my
+	 * Like a DB object this is an "Excel Access Object" which contains my
 	 * implementation of the Fillo API
 	 */
-	
-	
-	/*WHERE CLAUSE EXAMPLES:
+
+	/*
+	 * WHERE CLAUSE EXAMPLES:
 	 * 
-	 * This is an enhancement in Fillo-1.11, now you can mention multiple conditions in a query as shown below.
-	 * Recordset recordset=connection.executeQuery("Select * from Sheet1 where column1=value1 and column2=value2 and column3=value3");
+	 * This is an enhancement in Fillo-1.11, now you can mention multiple conditions
+	 * in a query as shown below. Recordset recordset=connection.
+	 * executeQuery("Select * from Sheet1 where column1=value1 and column2=value2 and column3=value3"
+	 * );
 	 * 
 	 * WHERE METHOD EXAMPLES:
 	 * 
-	 * Recordset recordset=connection.executeQuery("Select * from Sheet1").where("ID=100").where("name='John'");
+	 * Recordset
+	 * recordset=connection.executeQuery("Select * from Sheet1").where("ID=100").
+	 * where("name='John'");
 	 * 
-	 * USING THE LIKE OPERATOR
-	 * Recordset recordset=connection.executeQuery("Select * from Sheet1 where Name like 'Cod%'");
+	 * USING THE LIKE OPERATOR Recordset recordset=connection.
+	 * executeQuery("Select * from Sheet1 where Name like 'Cod%'");
 	 * 
-	 * //Now you can set table start row and column
-	 * System.setProperty("ROW", "5");//Table start row
-	 * System.setProperty("COLUMN", "3");//Table start column
-	 * Fillo fillo=new Fillo();
-	 * Connection connection=fillo.getConnection(strFile);
+	 * //Now you can set table start row and column System.setProperty("ROW",
+	 * "5");//Table start row System.setProperty("COLUMN", "3");//Table start column
+	 * Fillo fillo=new Fillo(); Connection connection=fillo.getConnection(strFile);
 	 * 
 	 * 
 	 */
@@ -48,82 +54,42 @@ public class ExcelAO {
 	private File sourceFile;
 	private String strQuery;
 	private File outputFile;
+	private List<String> sheets;
 
 	public ExcelAO() {
-		
-	
 
 	}
 
-	public void handleSelect(String field,File source,Connection connection) {
+	public ExcelAO(File sourceFile) {
+		this.sourceFile = sourceFile;
+	}
+
+	public static void handleSelectMatcher(File source, String sheetName, String rowID, String rowVal, String colID,
+			String colVal, String field) {
+
+		Recordset recordset = null;
+		Connection connection = null;
 
 		try {
 			Fillo fillo = new Fillo();
 			connection = fillo.getConnection(source.getAbsolutePath());
 
-		} catch (Exception e) {
+		} catch (FilloException e) {
 
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Exception Dialog");
-			alert.setHeaderText("Something went wrong");
-			alert.setContentText("File Error");
-
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String exceptionText = sw.toString();
-
-			Label label = new Label("The exception stacktrace was:");
-
-			TextArea textArea = new TextArea(exceptionText);
-			textArea.setEditable(false);
-			textArea.setWrapText(true);
-
-			textArea.setMaxWidth(Double.MAX_VALUE);
-			textArea.setMaxHeight(Double.MAX_VALUE);
-			GridPane.setVgrow(textArea, Priority.ALWAYS);
-			GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-			GridPane expContent = new GridPane();
-			expContent.setMaxWidth(Double.MAX_VALUE);
-			expContent.add(label, 0, 0);
-			expContent.add(textArea, 0, 1);
-
-			alert.getDialogPane().setExpandableContent(expContent);
+			ExcelAO.showAlert("Fillo Exception: Trying to connect to File source.", e);
 
 		}
+
 		try {
-			String strQuery = "Select * from Sheet1 where ID=100 and name='John'";
+			String strQuery = "Select * from " + sheetName + " where " + rowID + " = " + rowVal + " and " + colID
+					+ " = " + "\'" + colVal + "\'";
+
 			recordset = connection.executeQuery(strQuery);
 
-		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Exception Dialog");
-			alert.setHeaderText("Something went wrong");
-			alert.setContentText("This is probably a syntax error in the query string");
+		} catch (FilloException e) {
 
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String exceptionText = sw.toString();
+			showAlert("Fillo Exception: Trying to executeQuery on \"strQuery\"", e);
 
-			Label label = new Label("The exception stacktrace was:");
-
-			TextArea textArea = new TextArea(exceptionText);
-			textArea.setEditable(false);
-			textArea.setWrapText(true);
-
-			textArea.setMaxWidth(Double.MAX_VALUE);
-			textArea.setMaxHeight(Double.MAX_VALUE);
-			GridPane.setVgrow(textArea, Priority.ALWAYS);
-			GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-			GridPane expContent = new GridPane();
-			expContent.setMaxWidth(Double.MAX_VALUE);
-			expContent.add(label, 0, 0);
-			expContent.add(textArea, 0, 1);
-
-			alert.getDialogPane().setExpandableContent(expContent);
 		}
 
 		try {
@@ -131,33 +97,7 @@ public class ExcelAO {
 				System.out.println(recordset.getField(field));
 			}
 		} catch (FilloException e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Exception Dialog");
-			alert.setHeaderText("Something went wrong");
-			alert.setContentText("Cannot load CSV Wizard");
-
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String exceptionText = sw.toString();
-
-			Label label = new Label("The exception stacktrace was:");
-
-			TextArea textArea = new TextArea(exceptionText);
-			textArea.setEditable(false);
-			textArea.setWrapText(true);
-
-			textArea.setMaxWidth(Double.MAX_VALUE);
-			textArea.setMaxHeight(Double.MAX_VALUE);
-			GridPane.setVgrow(textArea, Priority.ALWAYS);
-			GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-			GridPane expContent = new GridPane();
-			expContent.setMaxWidth(Double.MAX_VALUE);
-			expContent.add(label, 0, 0);
-			expContent.add(textArea, 0, 1);
-
-			alert.getDialogPane().setExpandableContent(expContent);
+			showAlert("Fillo Exception: on recordset return loop.", e);
 
 		}
 
@@ -165,203 +105,120 @@ public class ExcelAO {
 		connection.close();
 	}
 
-	public void handleUpdate(File source) {
+	public static void handleUpdate(File source, String sheetName, String field, String fieldDetail, String rowID,
+			String rowVal, String colID, String colVal) {
+
 		Fillo fillo = new Fillo();
+		Connection connection = null;
+
 		try {
 			connection = fillo.getConnection(source.getAbsolutePath());
 		} catch (FilloException e) {
-			e.printStackTrace();
+
+			ExcelAO.showAlert("Fillo Exception: Trying to connect to File source.", e);
 		}
-		String strQuery = "Update Sheet1 Set Country='US' where ID=100 and name='John'";
-		//These queries will be customized via the method variable inputs
+		String strQuery = "Update " + sheetName + " Set " + field + " = " + "\'" + "fieldDetail" + "\'" + " where "
+				+ rowID + " = " + rowVal + " and " + colID + " = " + "\'" + colVal + "\'";
 
 		try {
 			connection.executeUpdate(strQuery);
 		} catch (FilloException e) {
 
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Exception Dialog");
-			alert.setHeaderText("Something went wrong");
-			alert.setContentText("Cannot load CSV Wizard");
-
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String exceptionText = sw.toString();
-
-			Label label = new Label("The exception stacktrace was:");
-
-			TextArea textArea = new TextArea(exceptionText);
-			textArea.setEditable(false);
-			textArea.setWrapText(true);
-
-			textArea.setMaxWidth(Double.MAX_VALUE);
-			textArea.setMaxHeight(Double.MAX_VALUE);
-			GridPane.setVgrow(textArea, Priority.ALWAYS);
-			GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-			GridPane expContent = new GridPane();
-			expContent.setMaxWidth(Double.MAX_VALUE);
-			expContent.add(label, 0, 0);
-			expContent.add(textArea, 0, 1);
-
-			alert.getDialogPane().setExpandableContent(expContent);
+			showAlert("Fillo Exception: Trying to executeQuery on \"strQuery\"", e);
 
 		}
 
 		connection.close();
 
 	}
-	
-	
-	public void handleInsert(File source) {
-		Fillo fillo=new Fillo();
-		
-		
+
+	public static void handleInsert(File source, String sheetName) {
+
+		Fillo fillo = new Fillo();
+		Connection connection = null;
+
 		try {
 			connection = fillo.getConnection("C:\\Test.xlsx");
-		} catch (FilloException e) {
+		} catch (FilloException e) { 
+			ExcelAO.showAlert("Fillo Exception: Trying to connect to File source.", e);
 
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Exception Dialog");
-			alert.setHeaderText("Something went wrong");
-			alert.setContentText("Cannot load CSV Wizard");
-
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String exceptionText = sw.toString();
-
-			Label label = new Label("The exception stacktrace was:");
-
-			TextArea textArea = new TextArea(exceptionText);
-			textArea.setEditable(false);
-			textArea.setWrapText(true);
-
-			textArea.setMaxWidth(Double.MAX_VALUE);
-			textArea.setMaxHeight(Double.MAX_VALUE);
-			GridPane.setVgrow(textArea, Priority.ALWAYS);
-			GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-			GridPane expContent = new GridPane();
-			expContent.setMaxWidth(Double.MAX_VALUE);
-			expContent.add(label, 0, 0);
-			expContent.add(textArea, 0, 1);
-
-			
-			alert.getDialogPane().setExpandableContent(expContent);
 		}
-		String strQuery="INSERT INTO sheet4(Name,Country) VALUES('Peter','UK')";
+		String strQuery = "INSERT INTO " + sheetName + "(Name,Country) VALUES('Peter','UK')";
 
 		try {
 			connection.executeUpdate(strQuery);
 		} catch (FilloException e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Exception Dialog");
-			alert.setHeaderText("Something went wrong");
-			alert.setContentText("Cannot load CSV Wizard");
 
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String exceptionText = sw.toString();
+			showAlert("Fillo Exception: Trying to executeQuery on \"strQuery\"", e);
 
-			Label label = new Label("The exception stacktrace was:");
-
-			TextArea textArea = new TextArea(exceptionText);
-			textArea.setEditable(false);
-			textArea.setWrapText(true);
-
-			textArea.setMaxWidth(Double.MAX_VALUE);
-			textArea.setMaxHeight(Double.MAX_VALUE);
-			GridPane.setVgrow(textArea, Priority.ALWAYS);
-			GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-			GridPane expContent = new GridPane();
-			expContent.setMaxWidth(Double.MAX_VALUE);
-			expContent.add(label, 0, 0);
-			expContent.add(textArea, 0, 1);
-
-			
-			alert.getDialogPane().setExpandableContent(expContent);
 		}
 
 		connection.close();
-		
+
 	}
 
-	private Recordset recordset;
+	public static void showAlert(String contentText, Exception e) {
 
-	/**
-	 * @return the recordset
-	 */
-	public Recordset getRecordset() {
-		return recordset;
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Exception Dialog");
+		alert.setHeaderText("Something went wrong");
+		alert.setContentText(contentText);
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		String exceptionText = sw.toString();
+
+		Label label = new Label("The exception stacktrace was:");
+
+		TextArea textArea = new TextArea(exceptionText);
+		textArea.setEditable(false);
+		textArea.setWrapText(true);
+
+		textArea.setMaxWidth(Double.MAX_VALUE);
+		textArea.setMaxHeight(Double.MAX_VALUE);
+		GridPane.setVgrow(textArea, Priority.ALWAYS);
+		GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+		GridPane expContent = new GridPane();
+		expContent.setMaxWidth(Double.MAX_VALUE);
+		expContent.add(label, 0, 0);
+		expContent.add(textArea, 0, 1);
+
+		alert.getDialogPane().setExpandableContent(expContent);
+
 	}
 
-	/**
-	 * @param recordset the recordset to set
-	 */
-	public void setRecordset(Recordset recordset) {
-		this.recordset = recordset;
-	}
-
-	/**
-	 * @return the connection
-	 */
 	public Connection getConnection() {
 		return connection;
 	}
 
-	/**
-	 * @param connection the connection to set
-	 */
 	public void setConnection(Connection connection) {
 		this.connection = connection;
 	}
 
-	/**
-	 * @return the sourceFile
-	 */
 	public File getSourceFile() {
 		return sourceFile;
 	}
 
-	/**
-	 * @param sourceFile the sourceFile to set
-	 */
 	public void setSourceFile(File sourceFile) {
 		this.sourceFile = sourceFile;
 	}
 
-	/**
-	 * @return the strQuery
-	 */
 	public String getStrQuery() {
 		return strQuery;
 	}
 
-	/**
-	 * @param strQuery the strQuery to set
-	 */
 	public void setStrQuery(String strQuery) {
 		this.strQuery = strQuery;
 	}
 
-	/**
-	 * @return the outputFile
-	 */
 	public File getOutputFile() {
 		return outputFile;
 	}
 
-	/**
-	 * @param outputFile the outputFile to set
-	 */
 	public void setOutputFile(File outputFile) {
 		this.outputFile = outputFile;
 	}
-
 
 
 }
