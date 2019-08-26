@@ -31,6 +31,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 
@@ -259,6 +260,20 @@ public class MenuController {
 
 			}
 		}
+	}
+
+	@FXML
+	protected void handleOpenSpreadsheet(ActionEvent event) throws IOException {
+
+		FXMLLoader loadSheet = new FXMLLoader();
+		loadSheet.setLocation(MainMenu.class.getResource("/com/commander/app/view/GemBoxView.fxml"));
+		AnchorPane anPane = (AnchorPane) loadSheet.load();
+
+		Stage stage = new Stage();
+		stage.setScene(new Scene(anPane));
+
+		stage.show();
+
 	}
 
 	public void createNewProject() {

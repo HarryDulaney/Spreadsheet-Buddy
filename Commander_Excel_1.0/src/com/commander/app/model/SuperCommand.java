@@ -36,7 +36,7 @@ public class SuperCommand {
 		return superCommandName;
 	}
 
-	public void setCommandName(String name) {
+	public void setSuperCommandName(String name) {
 		this.superCommandName = name;
 
 	}

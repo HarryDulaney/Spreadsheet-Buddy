@@ -40,7 +40,7 @@ public class ProjectController implements Initializable {
 	private MainMenu mainMenu;
 	private static int initCounter = 1;
 	private ObservableList<String> cBox = FXCollections.observableArrayList("CSS Link Selectors", "HTML Elements");
-	private SuperCommand command;
+	private SuperCommand currentCommand;
 
 	@FXML
 	private Label commandN;
@@ -152,25 +152,6 @@ public class ProjectController implements Initializable {
 
 	@FXML
 	protected void handleNewSuperCommand(ActionEvent event) throws IOException {
-		command = new SuperCommand();
-
-		label2.setVisible(false);
-		arrowImage.setVisible(false);
-		sidePaneVbox.setVisible(true);
-		
-
-	}
-
-	@FXML
-	protected void handleOpenFile(ActionEvent event) {
-
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose File To pull data from");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".csv", "*.csv"),
-				new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		File userFile = fileChooser.showOpenDialog(new Stage(StageStyle.TRANSPARENT));
-
-		command.setFileIn(userFile);
 
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("SuperCommand Builder");
@@ -179,15 +160,35 @@ public class ProjectController implements Initializable {
 				+ "how you recall the command in the future.");
 		dialog.showAndWait();
 
-		command.setCommandName(dialog.getResult());
+		currentCommand = new SuperCommand();
 
-		ProjectBean.getInstance().addCommand(command);
+		currentCommand.setSuperCommandName(dialog.getResult());
+
+		ProjectBean.getInstance().addCommand(currentCommand);
+
+		label2.setVisible(false);
+		arrowImage.setVisible(false);
+		sidePaneVbox.setVisible(true);
+
+	}
+
+	@FXML
+	protected void handleOpenFile(ActionEvent event) throws IOException {
+
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choose File To pull data from");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".csv", "*.csv"),
+				new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
+		File userFile = fileChooser.showOpenDialog(new Stage(StageStyle.TRANSPARENT));
+
+		currentCommand.setFileIn(userFile);
+
 		try {
 			MenuController.saveProject();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		commandN.setText(command.getSuperCommandName());
+		commandN.setText(currentCommand.getSuperCommandName());
 		commandN.setVisible(true);
 
 	}
