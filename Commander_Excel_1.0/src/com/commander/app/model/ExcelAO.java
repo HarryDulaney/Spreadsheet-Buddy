@@ -3,6 +3,7 @@ package com.commander.app.model;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,12 +17,13 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 @XmlRootElement
-public class ExcelAO extends MyTask{
+public class ExcelAO extends MyTask {
 	/**
 	 * Like a DB object this is an "Excel Access Object" which contains my
 	 * implementation of the Fillo API
@@ -35,33 +37,33 @@ public class ExcelAO extends MyTask{
 	 * executeQuery("Select * from Sheet1 where column1=value1 and column2=value2 and column3=value3"
 	 * );
 	 * 
-	 * WHERE METHOD EXAMPLES:
-	 * 
-	 * Recordset
-	 * recordset=connection.executeQuery("Select * from Sheet1").where("ID=100").
-	 * where("name='John'");
-	 * 
-	 * USING THE LIKE OPERATOR Recordset recordset=connection.
-	 * executeQuery("Select * from Sheet1 where Name like 'Cod%'");
-	 * 
-	 * //Now you can set table start row and column System.setProperty("ROW",
-	 * "5");//Table start row System.setProperty("COLUMN", "3");//Table start column
-	 * Fillo fillo=new Fillo(); Connection connection=fillo.getConnection(strFile);
-	 * 
 	 * 
 	 */
-	private Connection connection;
-	private File sourceFile;
-	private String strQuery;
-	private File outputFile;
-	private List<String> sheets;
 
 	public ExcelAO() {
 
 	}
 
-	public ExcelAO(File sourceFile) {
-		this.sourceFile = sourceFile;
+	public static ArrayList<String> getColumn(File file, String colValue, String sheetname) throws FilloException {
+
+		ArrayList<String> colList = new ArrayList<>();
+
+		Fillo fillo = new Fillo();
+
+		Connection connection = fillo.getConnection(file.getAbsolutePath());
+
+		Recordset recordset = connection.executeQuery("Select * From " + sheetname);
+
+		while (recordset.next()) {
+
+			String temp = recordset.getField(colValue);
+
+			colList.add(temp);
+
+		}
+
+		return colList;
+
 	}
 
 	public static void handleSelectMatcher(File source, String sheetName, String rowID, String rowVal, String colID,
@@ -139,7 +141,7 @@ public class ExcelAO extends MyTask{
 
 		try {
 			connection = fillo.getConnection("C:\\Test.xlsx");
-		} catch (FilloException e) { 
+		} catch (FilloException e) {
 			ExcelAO.showAlert("Fillo Exception: Trying to connect to File source.", e);
 
 		}
@@ -187,38 +189,5 @@ public class ExcelAO extends MyTask{
 		alert.getDialogPane().setExpandableContent(expContent);
 
 	}
-
-	public Connection getConnection() {
-		return connection;
-	}
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-
-	public File getSourceFile() {
-		return sourceFile;
-	}
-
-	public void setSourceFile(File sourceFile) {
-		this.sourceFile = sourceFile;
-	}
-
-	public String getStrQuery() {
-		return strQuery;
-	}
-
-	public void setStrQuery(String strQuery) {
-		this.strQuery = strQuery;
-	}
-
-	public File getOutputFile() {
-		return outputFile;
-	}
-
-	public void setOutputFile(File outputFile) {
-		this.outputFile = outputFile;
-	}
-
 
 }

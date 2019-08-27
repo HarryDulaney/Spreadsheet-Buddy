@@ -16,13 +16,12 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.controlsfx.dialog.ExceptionDialog;
 
+import com.codoid.products.exception.FilloException;
 import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
-import com.sun.glass.ui.MenuItem;
-import com.sun.glass.ui.MenuItem.Callback;
+import com.commander.app.model.tasks.DuplicateChecker;
 
 import javafx.fxml.*;
 import javafx.application.Platform;
@@ -33,6 +32,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 
 import javafx.stage.FileChooser;
@@ -51,7 +52,10 @@ public class MenuController {
 	private MainMenu mainmenu;
 
 	@FXML
-	private javafx.scene.control.MenuItem projectSaveMenuItem;
+	private Menu buildMenu;
+
+	@FXML
+	private MenuItem projectSaveMenuItem;
 
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
@@ -82,6 +86,8 @@ public class MenuController {
 
 			saveProject();
 
+			buildMenu.setDisable(false);
+
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setContentText("You're new project named: " + ProjectBean.getInstance().getName() + " was saved at: "
 					+ ProjectBean.getInstance().getProjectFile().toString());
@@ -105,6 +111,54 @@ public class MenuController {
 
 	@FXML
 	protected void handleConsolidateWorkbooks(ActionEvent event) {
+
+	}
+
+	@FXML
+	protected void handleCompareDuplicates(ActionEvent event) {
+
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle("Choose the file containing the first spreadsheet");
+		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
+		File fileOne = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+
+		if (fileOne != null) {
+
+			FileChooser chooser2 = new FileChooser();
+			chooser2.setTitle("Choose the file containing the second spreadsheet to compare to the first.");
+			chooser2.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
+			File fileTwo = chooser2.showOpenDialog(new Stage(StageStyle.UTILITY));
+
+			if (fileTwo != null) {
+
+				TextInputDialog dialog = new TextInputDialog();
+				dialog.setTitle("Compare For Duplicates Task ");
+				dialog.setHeaderText("Task data requested...");
+				dialog.setContentText("Please enter the header for the column to check for duplicate values "
+						+ "For Example: Email or Client ID Number: ");
+				dialog.showAndWait();
+
+				if (dialog.getResult() != null) {
+
+					DuplicateChecker dupCheck = new DuplicateChecker(fileOne, fileTwo, dialog.getResult());
+
+					ArrayList<String> dupes = null;
+					try {
+						dupes = dupCheck.checkForDuplicates();
+					} catch (FilloException e) {
+						e.printStackTrace();
+					}
+					
+					for (String dupe : dupes) {
+						
+						System.out.print("Duplicates: ");
+
+						System.out.println(dupe);
+
+					}
+				}
+			}
+		}
 
 	}
 

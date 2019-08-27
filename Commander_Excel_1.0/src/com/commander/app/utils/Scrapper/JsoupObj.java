@@ -6,8 +6,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.commander.app.model.MyTask;
+
 @XmlRootElement
-public class JsoupObj {
+public class JsoupObj extends MyTask {
 
 	private String sourceUrl;
 	private static final String uAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36"
@@ -21,7 +23,6 @@ public class JsoupObj {
 		this.sourceUrl = sourceUrl;
 
 	}
-
 
 	@XmlElement
 	public String getSourceUrl() {

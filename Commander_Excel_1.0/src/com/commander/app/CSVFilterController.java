@@ -2,6 +2,9 @@ package com.commander.app;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import com.commander.app.model.tasks.CSVfilter;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,7 +13,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.control.TextField;
-import com.commander.app.model.CSVfilter;
 
 /**
  * @author H.G. Dulaney IV

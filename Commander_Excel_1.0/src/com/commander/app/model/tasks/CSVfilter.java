@@ -1,4 +1,4 @@
-package com.commander.app.model;
+package com.commander.app.model.tasks;
 
 import org.apache.commons.csv.CSVFormat;
 
@@ -27,7 +27,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import com.commander.app.model.SpecialObj;
+import com.commander.app.model.MyTask;
 
 /**
  * @author H.G. Dulaney IV

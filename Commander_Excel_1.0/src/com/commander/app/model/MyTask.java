@@ -1,6 +1,6 @@
 package com.commander.app.model;
 
-abstract class MyTask {
+public abstract class MyTask {
 	
 	
 	

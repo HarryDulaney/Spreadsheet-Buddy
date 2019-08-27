@@ -197,12 +197,6 @@ public class ProjectController implements Initializable {
 	protected void handleOpenScrapper(ActionEvent event) throws IOException {
 
 		comboBox.setVisible(true);
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("SuperCommand Builder");
-		dialog.setHeaderText("Defining the attributes of the new SuperCommand");
-		dialog.setContentText("What would you you like to name the new SuperCommand, this will be "
-				+ "how you recall the command in the future.");
-		dialog.showAndWait();
 
 	}
 
