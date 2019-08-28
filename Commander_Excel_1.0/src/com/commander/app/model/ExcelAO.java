@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.codoid.products.exception.FilloException;
@@ -13,7 +11,6 @@ import com.codoid.products.fillo.Connection;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -27,6 +24,8 @@ public class ExcelAO extends MyTask {
 	/**
 	 * Like a DB object this is an "Excel Access Object" which contains my
 	 * implementation of the Fillo API
+	 * 
+	 * @throws FilloException
 	 */
 
 	/*
@@ -40,11 +39,86 @@ public class ExcelAO extends MyTask {
 	 * 
 	 */
 
-	public ExcelAO() {
+	public static ArrayList<String> selectWhere(File file, String columnName1, String columnValue1, String detailsToFind)
+			throws FilloException {
+		ArrayList<String> resultList = new ArrayList<>();
+
+		Fillo fillo = new Fillo();
+
+		Connection connection = fillo.getConnection(file.getAbsolutePath());
+
+		ArrayList<String> sheetNameList = connection.getMetaData().getTableNames();
+
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Select Function");
+		dialog.setHeaderText("Choose from the following sheet names: " + sheetNameList.toString());
+
+		dialog.setContentText("For " + file.getName() + " indicate the worksheet to scan for" + columnName1
+				+ " with a value of " + columnValue1);
+		dialog.showAndWait();
+
+		if (dialog.getResult() != null) {
+
+			Recordset recordset = connection
+					.executeQuery("Select * from " + dialog.getResult() + " where " + columnName1 + "=" + columnValue1);
+
+			if (recordset != null) {
+
+				while (recordset.next()) {
+
+					resultList.add(recordset.getField(detailsToFind));
+
+				}
+
+			}
+
+		}
+		return resultList;
+	}
+
+	public static ArrayList<String> selectWhere(File file, String columnName1, String columnValue1, String columnName2,
+			String columnValue2, String detailsToFind) throws FilloException {
+		ArrayList<String> resultList = new ArrayList<>();
+
+		Fillo fillo = new Fillo();
+
+		Connection connection = fillo.getConnection(file.getAbsolutePath());
+
+		ArrayList<String> sheetNameList = connection.getMetaData().getTableNames();
+
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Select Function");
+		dialog.setHeaderText("Choose from the following sheet names: " + sheetNameList.toString());
+
+		dialog.setContentText("For " + file.getName() + " indicate the worksheet to scan for" + columnName1
+				+ " with a value of " + columnValue1 + " and " + columnName2 + " = " + columnValue2);
+		
+		dialog.showAndWait();
+
+		if (dialog.getResult() != null) {
+
+			Recordset recordset = connection
+					.executeQuery("Select * from " + dialog.getResult() + " where " + columnName1 + "=" + columnValue1);
+
+			if (recordset != null) {
+
+				recordset.getField(detailsToFind);
+
+			}
+		}
+		return sheetNameList;
+	}
+
+	public static ArrayList<String> selectWhere(File file, String columnName1, String columnName2, String columnName3,
+			String detailsToFind) {
+		ArrayList<String> resultList = new ArrayList<>();
+
+		return resultList;
 
 	}
 
-	public static ArrayList<String> getColumn(File file, String colValue, String sheetname) throws FilloException {
+	public static ArrayList<String> getColumn(File file, String colValue, String sheetname)
+			throws FilloException {
 
 		ArrayList<String> colList = new ArrayList<>();
 
@@ -52,14 +126,16 @@ public class ExcelAO extends MyTask {
 
 		Connection connection = fillo.getConnection(file.getAbsolutePath());
 
-		Recordset recordset = connection.executeQuery("Select * From " + sheetname);
+		if (sheetname != null) {
 
-		while (recordset.next()) {
+			Recordset recordset = connection.executeQuery("Select * from " + sheetname);
 
-			String temp = recordset.getField(colValue);
+			while (recordset.next()) {
 
-			colList.add(temp);
+				String temp = recordset.getField(colValue);
 
+				colList.add(temp);
+			}
 		}
 
 		return colList;

@@ -43,24 +43,29 @@ public class DuplicateChecker extends MyTask {
 		dialog.setContentText("For " + fileOne.getName() + " enter the name of the worksheet " + "that contains the "
 				+ columnToCheck);
 		dialog.showAndWait();
-		ArrayList<String> fileOneList = ExcelAO.getColumn(fileOne, columnToCheck, dialog.getResult());
 
-		TextInputDialog dialogTwo = new TextInputDialog();
-		dialogTwo.setTitle("Compare For Duplicates Task ");
-		dialogTwo.setHeaderText("Task data requested...");
-		dialogTwo.setContentText("For " + fileTwo.getName() + " enter the name of the worksheet " + "that contains the "
-				+ columnToCheck);
-		dialogTwo.showAndWait();
+		if (dialog.getResult() != null) {
+			ArrayList<String> fileOneList = ExcelAO.getColumn(fileOne, columnToCheck, dialog.getResult());
 
-		ArrayList<String> fileTwoList = ExcelAO.getColumn(fileTwo, columnToCheck, dialogTwo.getResult());
+			TextInputDialog dialogTwo = new TextInputDialog();
+			dialogTwo.setTitle("Compare For Duplicates Task ");
+			dialogTwo.setHeaderText("Task data requested...");
+			dialogTwo.setContentText("For " + fileTwo.getName() + " enter the name of the worksheet "
+					+ "that contains the " + columnToCheck);
+			dialogTwo.showAndWait();
 
-		for (String str : fileOneList) {
-			
+			if (dialogTwo.getResult() != null) {
 
-			if (fileTwoList.contains(str)) {
-				
-				duplicates.add(str);
+				ArrayList<String> fileTwoList = ExcelAO.getColumn(fileTwo, columnToCheck, dialogTwo.getResult());
 
+				for (String str : fileOneList) {
+
+					if (fileTwoList.contains(str)) {
+
+						duplicates.add(str);
+
+					}
+				}
 			}
 		}
 		return duplicates;

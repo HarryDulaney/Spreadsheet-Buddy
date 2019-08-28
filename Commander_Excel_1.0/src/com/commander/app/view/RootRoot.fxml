@@ -43,8 +43,6 @@
 						<Menu mnemonicParsing="false" text="Task-Runner">
 							<items>
 								<MenuItem mnemonicParsing="false" onAction="#handleOpenSpreadsheet" text="Open SpreadSheet In Viewer" />
-
-      								<MenuItem mnemonicParsing="false" onAction="#handleBlankWorkbook" text="New Blank Excel Workbook" />
 								<MenuItem mnemonicParsing="false" onAction="#handleCSVFilter" text="CSV Filter Columns" />
 								<MenuItem mnemonicParsing="false" onAction="#handleLaunchWebScrapper" text="Launch Web Scrapper" />
 								<MenuItem mnemonicParsing="false" onAction="#handleConsolidateWorkbooks" text="Consolidate Workbooks" />

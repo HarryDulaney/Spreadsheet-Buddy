@@ -22,6 +22,9 @@ import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
 import com.commander.app.model.tasks.DuplicateChecker;
+import com.gembox.spreadsheet.ExcelFile;
+import com.gembox.spreadsheet.ExcelWorksheet;
+import com.gembox.spreadsheet.SpreadsheetInfo;
 
 import javafx.fxml.*;
 import javafx.application.Platform;
@@ -114,8 +117,25 @@ public class MenuController {
 
 	}
 
+	public void saveToWorkbook(ExcelFile excelfile) throws IOException {
+
+		FileChooser fchooser = new FileChooser();
+		fchooser.setTitle("Save your new workbook: ");
+		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
+		fchooser.setInitialFileName("New_Excel_Workbook");
+		File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
+
+		if (filePath != null) {
+
+			excelfile.save(filePath.getAbsolutePath());
+
+		}
+	}
+
 	@FXML
 	protected void handleCompareDuplicates(ActionEvent event) {
+		
+		SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
 
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Choose the file containing the first spreadsheet");
@@ -139,7 +159,7 @@ public class MenuController {
 				dialog.showAndWait();
 
 				if (dialog.getResult() != null) {
-
+					
 					DuplicateChecker dupCheck = new DuplicateChecker(fileOne, fileTwo, dialog.getResult());
 
 					ArrayList<String> dupes = null;
@@ -148,14 +168,26 @@ public class MenuController {
 					} catch (FilloException e) {
 						e.printStackTrace();
 					}
-					
-					for (String dupe : dupes) {
-						
-						System.out.print("Duplicates: ");
+					ExcelFile excelfile = new ExcelFile();
 
-						System.out.println(dupe);
+					ExcelWorksheet worksheet = excelfile.addWorksheet("Duplicates");
+
+					worksheet.getCell(0, 0).setValue("Duplicate" + dupCheck.getColumnToCheck() + " 's");
+
+					for (int i = 0, j = 1; i < dupes.size(); i++, j++) {
+
+						worksheet.getCell(j, 0).setValue(dupes.get(i));
 
 					}
+					
+					try {
+						saveToWorkbook(excelfile);
+					} catch (IOException e) {
+						System.out.println("Problem running saveToWorkbook.");
+						e.printStackTrace();
+					}
+					
+
 				}
 			}
 		}
@@ -281,39 +313,6 @@ public class MenuController {
 		stage.setScene(scene);
 		stage.show();
 
-	}
-
-	@FXML
-	protected void handleBlankWorkbook(ActionEvent event) {
-
-		FileChooser fchooser = new FileChooser();
-		fchooser.setTitle("Name and save your \".xlsx\" excel workbook: ");
-		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
-
-		if (filePath != null) {
-
-			if (filePath.toString().contains(".xlsx")) {
-				try {
-					FileOutputStream fOs = new FileOutputStream(filePath);
-					Workbook wb = new XSSFWorkbook();
-					wb.createSheet("Default");
-					wb.write(fOs);
-					wb.close();
-
-					Alert a = new Alert(AlertType.CONFIRMATION);
-					a.setContentText("You created a new workbook with one spreadsheet");
-					a.show();
-
-				} catch (Exception e) {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("I'm sorry something went wrong");
-					alert.show();
-					e.printStackTrace();
-				}
-
-			}
-		}
 	}
 
 	@FXML
