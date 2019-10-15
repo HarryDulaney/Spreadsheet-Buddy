@@ -5,8 +5,8 @@ Commander_Excel_1.0 is a project by Harry G. Dulaney.(So far just me, but contri
 The goal of this project is to use Excel communicator API's, specifically FILLO (because of ease of use and unlimited potential),
 in a way that will award the user with new possibilities for automating tedious or repetitive functions in MS Excel.
 
-The user will create a new project, and name it and save it; data persistence is being set up using JAXB for marshaling and unmarshalling XML
-documents which contain the user's instance of their project. 
+The user will create a new project, and name it and save it; Data persistence is currently JAXB for marshaling and unmarshalling XML
+documents which contain the user's instance of their project. Planning to use Hibernate and a MySql RDB for finished product.
 
 The user will be able to browse through a menu of tasks or "commands" which they can customize by inputting their spreadsheets/ workbooks
 information.
