@@ -1,6 +1,6 @@
  # SuperCommander_1.0
 
-## Commander_Excel_1.0 is a project by Harry G. Dulaney.
+## SuperCommander_Excel_1.0 is desktop application for creating automated Microsoft Excel tasks
 
 
 ### Project Elements:
