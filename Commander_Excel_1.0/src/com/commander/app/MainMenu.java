@@ -21,18 +21,13 @@ import javafx.stage.Stage;
 
 public class MainMenu extends Application {
 
-	/** The root pane. */
 	private static AnchorPane rootPane;
 
-	/** The primary stage. */
 	private Stage primaryStage;
 	
-	/** The mm. */
 	private static MainMenu mm;
 
-	/**
-	 * Instantiates a new main menu.
-	 */
+	
 	public MainMenu() {
 
 		mm = this;
