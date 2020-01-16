@@ -14,9 +14,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.codoid.products.exception.FilloException;
 import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
@@ -26,30 +23,31 @@ import com.gembox.spreadsheet.ExcelFile;
 import com.gembox.spreadsheet.ExcelWorksheet;
 import com.gembox.spreadsheet.SpreadsheetInfo;
 
-import javafx.fxml.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
-
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+
+
 /**
+ * The Controller for the Main Menu
+ *
  * @author HG Dulaney IV
  */
-/**
- * This controller still needs implementations for the event handlers that bind
- * to the root menu heading task bar ie.... Save ProjectXml, Close ProjectXml
- */
+
 public class MenuController {
 
 	private MainMenu mainmenu;
@@ -60,6 +58,11 @@ public class MenuController {
 	@FXML
 	private MenuItem projectSaveMenuItem;
 
+	/**
+	 * Handles saving project.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
 
@@ -80,6 +83,12 @@ public class MenuController {
 
 	}
 
+	/**
+	 * Handles creating new project.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	protected void handleNewProject(ActionEvent event) throws IOException {
 
@@ -112,11 +121,22 @@ public class MenuController {
 
 	}
 
+	/**
+	 * Handles consolidate workbooks.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void handleConsolidateWorkbooks(ActionEvent event) {
 
 	}
-
+	
+	/**
+	 * 	This is an individual task a user can run on a .xlsx spreadsheet file
+	 *
+	 * @param excelfile 
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void saveToWorkbook(ExcelFile excelfile) throws IOException {
 
 		FileChooser fchooser = new FileChooser();
@@ -132,6 +152,11 @@ public class MenuController {
 		}
 	}
 
+	/**
+	 * Handles comparing two .xlsx spreadsheets for duplicate entries. (This is a individual task)
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void handleCompareDuplicates(ActionEvent event) {
 		
@@ -194,6 +219,12 @@ public class MenuController {
 
 	}
 
+	/**
+	 * Handles opening a saved user project.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	protected void handleOpenProject(ActionEvent event) throws IOException {
 
@@ -219,6 +250,13 @@ public class MenuController {
 		}
 	}
 
+	/**
+	 * Handles the task for filtering user specified entries 
+	 * from a CSV spreadsheet. (Individual Task)
+	 *
+	 * @param event the event
+	 * @throws Exception the exception
+	 */
 	@FXML
 	protected void handleCSVFilter(ActionEvent event) throws Exception {
 
@@ -240,6 +278,11 @@ public class MenuController {
 		}
 	}
 
+	/**
+	 * Handles the about super commander link which re-directs to SuperCommander  GitHub page.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void handleAboutSuperCommander(ActionEvent event) {
 
@@ -256,6 +299,11 @@ public class MenuController {
 
 	}
 
+	/**
+	 * Handles the command to exit the application.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	protected void handleExitCommander(ActionEvent event) {
 
@@ -297,6 +345,11 @@ public class MenuController {
 		}
 	}
 
+	/**
+	 * Handle launch web scrapper.
+	 *
+	 * @throws Exception the exception
+	 */
 	@FXML
 	protected void handleLaunchWebScrapper() throws Exception {
 
@@ -315,6 +368,12 @@ public class MenuController {
 
 	}
 
+	/**
+	 * Handle open spreadsheet.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@FXML
 	protected void handleOpenSpreadsheet(ActionEvent event) throws IOException {
 
@@ -329,6 +388,9 @@ public class MenuController {
 
 	}
 
+	/**
+	 * Creates the new project.
+	 */
 	public void createNewProject() {
 
 		TextInputDialog textDialog = new TextInputDialog();
@@ -353,6 +415,11 @@ public class MenuController {
 		}
 	}
 
+	/**
+	 * Uses JAXB to convert the project instance to XML format for storage. 
+	 *
+	 * @throws FileNotFoundException the file not found exception
+	 */
 	public static void saveProject() throws FileNotFoundException {
 
 		if (ProjectBean.getInstance() != null) {
@@ -378,6 +445,11 @@ public class MenuController {
 		}
 	}
 
+	/**
+	 * Converts user and project info back from XML format.
+	 *
+	 * @param file the file
+	 */
 	public void openProject(File file) {
 
 		JAXBContext context;
@@ -402,14 +474,19 @@ public class MenuController {
 		}
 	}
 
+	/**s
+	 * Initialize.
+	 */
 	@FXML
 	public void initialize() {
 
 	}
 
+
 	public MainMenu getMainmenu() {
 		return mainmenu;
 	}
+
 
 	public void setMainmenu(MainMenu mainmenu) {
 		this.mainmenu = mainmenu;
