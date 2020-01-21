@@ -2,8 +2,6 @@ package com.commander.app;
 
 import java.io.IOException;
 
-import org.apache.xmlbeans.impl.jam.internal.javadoc.JavadocClassBuilder;
-import org.controlsfx.dialog.ExceptionDialog;
 
 import com.commander.app.model.Project;
 

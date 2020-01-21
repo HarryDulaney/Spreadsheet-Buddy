@@ -6,12 +6,12 @@
 	-fx-background-color:rgb(128.0,128.0,128.0);
 }
 .menu{
-	-fx-background-color:rgb(0.0,0.0,64.0);
+	-fx-background-color:rgb(0,0,0);
 	
 }
 
 .menu-item {
-	-fx-background-color:rgb(0.0,0.0,64.0);
+	-fx-background-color:rgb(0.0,0.0,0.0);
 	-fx-text-fill:rgb(255,255,255);
 	
 	
@@ -66,7 +66,7 @@
 }
 .table-view .column-header-background .label {
 	
-	-fx-background-color:rgb(0.0,0.0,128.0);
+	-fx-background-color:rgb(0.0,0.0,0.0);
 	-fx-font-family: 'Tw Cen MT Condensed';
 	-fx-text-fill:rgb(255,255,255);
 	

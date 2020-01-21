@@ -20,7 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 @XmlRootElement
-public class ExcelAO extends MyTask {
+public class ExcelAO extends ProjectElement {
 	/**
 	 * Like a DB object this is an "Excel Access Object" which contains my
 	 * implementation of the Fillo API

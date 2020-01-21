@@ -18,7 +18,7 @@ import javax.script.ScriptException;
 
 public class JSObj {
 	/**
-	 * JSObj is for creating instances of the Nashorn ScriptEngine
+	 * JSObj is instantiating the Nashorn ScriptEngine to run JavaScript tasks
 	 */
 
 	private File scriptFile;

@@ -1,6 +1,5 @@
 package com.commander.app;
 
-import com.gembox.spreadsheet.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,9 +14,7 @@ import java.io.IOException;
 
 public class SpreadsheetController {
 
-	static {
-		SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
-	}
+
 
 	@FXML
 	public TableView table;

@@ -5,11 +5,10 @@ import java.util.ArrayList;
 
 import com.codoid.products.exception.FilloException;
 import com.commander.app.model.ExcelAO;
-import com.commander.app.model.MyTask;
 
 import javafx.scene.control.TextInputDialog;
 
-public class DuplicateChecker extends MyTask {
+public class DuplicateChecker extends SpreadSheetTask {
 
 	private File fileOne;
 	private File fileTwo;

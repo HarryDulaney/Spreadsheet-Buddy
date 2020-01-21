@@ -27,13 +27,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import com.commander.app.model.MyTask;
+import com.commander.app.model.ProjectElement;
 
 /**
  * @author H.G. Dulaney IV
  */
 
-public class CSVfilter extends MyTask{
+public class CSVfilter extends ProjectElement{
 
 	private File csvFilePath;
 

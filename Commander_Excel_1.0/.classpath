@@ -17,6 +17,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Build-Tools/Java/GemBox/gembox-spreadsheet.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

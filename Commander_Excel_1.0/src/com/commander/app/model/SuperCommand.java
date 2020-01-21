@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.commander.app.model.tasks.SpreadSheetTask;
 import com.commander.app.utils.Scrapper.JsoupObj;
 
 @XmlRootElement
@@ -16,18 +17,18 @@ public class SuperCommand {
 	private File commFileIn;
 	private File commfileOut;
 	private JsoupObj scrapeFunc;
-	private LinkedList<MyTask> orderedTasks;
+	private LinkedList<SpreadSheetTask> orderedTasks;
 
 	public SuperCommand() {
 
 	}
 
 	@XmlElement
-	public LinkedList<MyTask> getOrderedTasks() {
+	public LinkedList<SpreadSheetTask> getOrderedTasks() {
 		return orderedTasks;
 	}
 
-	public void setOrderedTasks(LinkedList<MyTask> orderedTasks ) {
+	public void setOrderedTasks(LinkedList<SpreadSheetTask> orderedTasks ) {
 		this.orderedTasks = orderedTasks;
 	}
 
@@ -68,12 +69,12 @@ public class SuperCommand {
 		this.scrapeFunc = scrapeFunc;
 	}
 
-	public void addTask(MyTask task) {
+	public void addTask(SpreadSheetTask task) {
 
 		orderedTasks.add(task);
 
 	}
-	public void removeLastTask(MyTask task) {
+	public void removeLastTask(SpreadSheetTask task) {
 		orderedTasks.removeLast();
 	}
 

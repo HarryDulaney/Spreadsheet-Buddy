@@ -6,10 +6,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.commander.app.model.MyTask;
+import com.commander.app.model.ProjectElement;
 
 @XmlRootElement
-public class JsoupObj extends MyTask {
+public class JsoupObj extends ProjectElement {
 
 	private String sourceUrl;
 	private static final String uAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36"
