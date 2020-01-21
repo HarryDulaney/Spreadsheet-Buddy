@@ -1,4 +1,4 @@
-package com.commander.app.model.tasks;
+package com.commander.app.model.utils;
 
 import org.apache.commons.csv.CSVFormat;
 
@@ -9,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
+import com.commander.app.model.ProjectElement;
 import com.opencsv.CSVWriter;
 
 import java.io.Writer;
@@ -26,8 +27,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import com.commander.app.model.ProjectElement;
 
 /**
  * @author H.G. Dulaney IV

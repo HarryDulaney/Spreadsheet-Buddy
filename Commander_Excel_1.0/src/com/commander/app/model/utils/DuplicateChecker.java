@@ -1,10 +1,10 @@
-package com.commander.app.model.tasks;
+package com.commander.app.model.utils;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import com.codoid.products.exception.FilloException;
-import com.commander.app.model.ExcelAO;
+import com.commander.app.model.ExcelAccessObject;
 
 import javafx.scene.control.TextInputDialog;
 
@@ -44,7 +44,7 @@ public class DuplicateChecker extends SpreadSheetTask {
 		dialog.showAndWait();
 
 		if (dialog.getResult() != null) {
-			ArrayList<String> fileOneList = ExcelAO.getColumn(fileOne, columnToCheck, dialog.getResult());
+			ArrayList<String> fileOneList = ExcelAccessObject.getColumn(fileOne, columnToCheck, dialog.getResult());
 
 			TextInputDialog dialogTwo = new TextInputDialog();
 			dialogTwo.setTitle("Compare For Duplicates Task ");
@@ -55,7 +55,7 @@ public class DuplicateChecker extends SpreadSheetTask {
 
 			if (dialogTwo.getResult() != null) {
 
-				ArrayList<String> fileTwoList = ExcelAO.getColumn(fileTwo, columnToCheck, dialogTwo.getResult());
+				ArrayList<String> fileTwoList = ExcelAccessObject.getColumn(fileTwo, columnToCheck, dialogTwo.getResult());
 
 				for (String str : fileOneList) {
 

@@ -14,14 +14,20 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.poi.ss.formula.functions.Column;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Fillo;
 import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
-import com.commander.app.model.tasks.DuplicateChecker;
-import com.gembox.spreadsheet.ExcelFile;
-import com.gembox.spreadsheet.ExcelWorksheet;
-import com.gembox.spreadsheet.SpreadsheetInfo;
+import com.commander.app.model.utils.DuplicateChecker;
+
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -132,22 +138,26 @@ public class MenuController {
 	}
 	
 	/**
-	 * 	This is an individual task a user can run on a .xlsx spreadsheet file
+	 * 	
 	 *
-	 * @param excelfile 
+	 * @param excelfile - the workbook that the user wants top save as a File
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public void saveToWorkbook(ExcelFile excelfile) throws IOException {
+	public void saveToWorkbook(Workbook excelfile) throws IOException {
 
 		FileChooser fchooser = new FileChooser();
 		fchooser.setTitle("Save your new workbook: ");
 		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
 		fchooser.setInitialFileName("New_Excel_Workbook");
 		File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
-
+	
 		if (filePath != null) {
-
-			excelfile.save(filePath.getAbsolutePath());
+			
+			FileOutputStream fOs = new FileOutputStream(filePath);
+			excelfile.write(fOs);
+			
+			fOs.close();
+			excelfile.close();
 
 		}
 	}
@@ -160,8 +170,6 @@ public class MenuController {
 	@FXML
 	protected void handleCompareDuplicates(ActionEvent event) {
 		
-		SpreadsheetInfo.setLicense("FREE-LIMITED-KEY");
-
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle("Choose the file containing the first spreadsheet");
 		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
@@ -184,7 +192,7 @@ public class MenuController {
 				dialog.showAndWait();
 
 				if (dialog.getResult() != null) {
-					
+									
 					DuplicateChecker dupCheck = new DuplicateChecker(fileOne, fileTwo, dialog.getResult());
 
 					ArrayList<String> dupes = null;
@@ -193,20 +201,26 @@ public class MenuController {
 					} catch (FilloException e) {
 						e.printStackTrace();
 					}
-					ExcelFile excelfile = new ExcelFile();
+					
+					Workbook workbook = new XSSFWorkbook();
 
-					ExcelWorksheet worksheet = excelfile.addWorksheet("Duplicates");
-
-					worksheet.getCell(0, 0).setValue("Duplicate" + dupCheck.getColumnToCheck() + " 's");
-
+					Sheet worksheet = workbook.createSheet("Duplicates");
+					
+					Row headerRow = worksheet.createRow(0); 
+					
+					headerRow.createCell(0).setCellValue("Duplicate " + dupCheck.getColumnToCheck() + " 's");
+					
 					for (int i = 0, j = 1; i < dupes.size(); i++, j++) {
 
-						worksheet.getCell(j, 0).setValue(dupes.get(i));
-
+						worksheet.createRow(j).createCell(0).setCellValue(dupes.get(i));  
+					}
+					for (int i = 0; i < dupes.size(); i++) {
+						worksheet.autoSizeColumn(i);
 					}
 					
 					try {
-						saveToWorkbook(excelfile);
+						saveToWorkbook(workbook);
+						
 					} catch (IOException e) {
 						System.out.println("Problem running saveToWorkbook.");
 						e.printStackTrace();
@@ -216,6 +230,7 @@ public class MenuController {
 				}
 			}
 		}
+		
 
 	}
 

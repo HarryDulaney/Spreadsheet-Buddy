@@ -1,20 +1,18 @@
 package com.commander.app;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.stage.FileChooser;
-
-import java.io.File;
-import java.io.IOException;
-
-public class SpreadsheetController {
 
 
+public class SpreadsheetController  {
+	
+	
+	@FXML
+	public SpreadsheetView SSV;
+	
+
+	/*
 
 	@FXML
 	public TableView table;
@@ -81,4 +79,5 @@ public class SpreadsheetController {
 
 		file.save(saveFile.getAbsolutePath());
 	}
+	*/
 }

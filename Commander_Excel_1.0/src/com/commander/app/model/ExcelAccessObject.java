@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.codoid.products.exception.FilloException;
@@ -20,9 +22,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 @XmlRootElement
-public class ExcelAO extends ProjectElement {
+public class ExcelAccessObject extends ProjectElement {
 	/**
-	 * Like a DB object this is an "Excel Access Object" which contains my
+	 * Like a DB object this is an "Excel Access Object" which contains 
 	 * implementation of the Fillo API
 	 * 
 	 * @throws FilloException
@@ -117,6 +119,14 @@ public class ExcelAO extends ProjectElement {
 
 	}
 
+	/**
+	 * 
+	 * @param file - System file containing location path for the worksheet
+	 * @param colValue - The header or title of the column to retrieve 
+	 * @param sheetname
+	 * @return ArrayList
+	 * @throws FilloException
+	 */
 	public static ArrayList<String> getColumn(File file, String colValue, String sheetname)
 			throws FilloException {
 
@@ -154,7 +164,7 @@ public class ExcelAO extends ProjectElement {
 
 		} catch (FilloException e) {
 
-			ExcelAO.showAlert("Fillo Exception: Trying to connect to File source.", e);
+			ExcelAccessObject.showAlert("Fillo Exception: Trying to connect to File source.", e);
 
 		}
 
@@ -193,7 +203,7 @@ public class ExcelAO extends ProjectElement {
 			connection = fillo.getConnection(source.getAbsolutePath());
 		} catch (FilloException e) {
 
-			ExcelAO.showAlert("Fillo Exception: Trying to connect to File source.", e);
+			ExcelAccessObject.showAlert("Fillo Exception: \nSomething went wrong trying to connect to File source.", e);
 		}
 		String strQuery = "Update " + sheetName + " Set " + field + " = " + "\'" + "fieldDetail" + "\'" + " where "
 				+ rowID + " = " + rowVal + " and " + colID + " = " + "\'" + colVal + "\'";
@@ -202,7 +212,7 @@ public class ExcelAO extends ProjectElement {
 			connection.executeUpdate(strQuery);
 		} catch (FilloException e) {
 
-			showAlert("Fillo Exception: Trying to executeQuery on \"strQuery\"", e);
+			showAlert("Fillo Exception: \nSomething went wrong trying to executeQuery on \"strQuery\"", e);
 
 		}
 
@@ -210,15 +220,16 @@ public class ExcelAO extends ProjectElement {
 
 	}
 
-	public static void handleInsert(File source, String sheetName) {
+	public static void handleInsert(File source, String sheetName,List<?> values) {
 
 		Fillo fillo = new Fillo();
 		Connection connection = null;
 
 		try {
-			connection = fillo.getConnection("C:\\Test.xlsx");
+			connection = fillo.getConnection(source.getAbsolutePath());
+			
 		} catch (FilloException e) {
-			ExcelAO.showAlert("Fillo Exception: Trying to connect to File source.", e);
+			ExcelAccessObject.showAlert("Fillo Exception: \nSomething went wrong trying to connect to File source.", e);
 
 		}
 		String strQuery = "INSERT INTO " + sheetName + "(Name,Country) VALUES('Peter','UK')";
@@ -227,7 +238,7 @@ public class ExcelAO extends ProjectElement {
 			connection.executeUpdate(strQuery);
 		} catch (FilloException e) {
 
-			showAlert("Fillo Exception: Trying to executeQuery on \"strQuery\"", e);
+			showAlert("Fillo Exception: \nSomething went wrong trying to executeQuery on \"strQuery\"", e);
 
 		}
 

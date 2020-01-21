@@ -3,7 +3,7 @@ package com.commander.app;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.commander.app.model.tasks.CSVfilter;
+import com.commander.app.model.utils.CSVfilter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

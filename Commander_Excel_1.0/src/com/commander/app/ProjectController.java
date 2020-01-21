@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
 
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -44,6 +45,8 @@ public class ProjectController implements Initializable {
 
 	@FXML
 	private Label commandN;
+	
+
 
 	@FXML
 	private ComboBox<String> comboBox;
@@ -147,6 +150,8 @@ public class ProjectController implements Initializable {
 		}
 
 		initCounter++;
+		
+			
 
 	}
 

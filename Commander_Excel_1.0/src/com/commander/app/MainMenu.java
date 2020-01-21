@@ -2,7 +2,6 @@ package com.commander.app;
 
 import java.io.IOException;
 
-
 import com.commander.app.model.Project;
 
 import javafx.application.Application;
@@ -62,7 +61,7 @@ public class MainMenu extends Application {
 			controller.setMainmenu(this);
 
 			Scene scene = new Scene(rootPane);
-			scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
+//scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
 
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();

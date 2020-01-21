@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.commander.app.model.tasks.SpreadSheetTask;
+import com.commander.app.model.utils.SpreadSheetTask;
 import com.commander.app.utils.Scrapper.JsoupObj;
 
 @XmlRootElement
