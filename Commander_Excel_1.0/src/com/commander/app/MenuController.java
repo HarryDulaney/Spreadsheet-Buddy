@@ -391,15 +391,10 @@ public class MenuController {
 	 */
 	@FXML
 	protected void handleOpenSpreadsheet(ActionEvent event) throws IOException {
-
-		FXMLLoader loadSheet = new FXMLLoader();
-		loadSheet.setLocation(MainMenu.class.getResource("/com/commander/app/view/GemBoxView.fxml"));
-		AnchorPane anPane = (AnchorPane) loadSheet.load();
-
-		Stage stage = new Stage();
-		stage.setScene(new Scene(anPane));
-
-		stage.show();
+		
+			
+		
+				ProjectController.showSpreadTableView();
 
 	}
 

@@ -47,7 +47,7 @@ public class MainMenu extends Application {
 	}
 	
 	/**
-	 * Initialize the root frame for the GUI. 
+	 * Initialize the root frame which contains the Drop Down MenuBar for the GUI. 
 	 */
 	public void initRootLayerShow() {
 
@@ -61,7 +61,7 @@ public class MainMenu extends Application {
 			controller.setMainmenu(this);
 
 			Scene scene = new Scene(rootPane);
-//scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
+			//scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
 
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();
@@ -78,7 +78,8 @@ public class MainMenu extends Application {
 	}
 
 	/**
-	 * Initializes the users project which fills in the root frame. 
+	 * Initializes the UserView or 'open project'. Embeds the BorderPane inside the RootPane. 
+	 * 
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */

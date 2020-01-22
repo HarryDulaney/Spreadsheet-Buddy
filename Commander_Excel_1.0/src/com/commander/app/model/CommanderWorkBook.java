@@ -7,7 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
-public class WorkBook extends XSSFWorkbook {
+public class CommanderWorkBook extends XSSFWorkbook {
 
 	private static final String ELEMENT_TYPE = "Excel_Workbook";
 	private File location;
@@ -15,7 +15,7 @@ public class WorkBook extends XSSFWorkbook {
 	private List <XSSFSheet> sheets;
 	
 
-	public WorkBook() {
+	public CommanderWorkBook() {
 		id = makeId();
 		System.out.println(id);
 

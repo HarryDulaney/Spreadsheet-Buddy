@@ -22,7 +22,7 @@
 								<MenuItem fx:id="projectSaveMenuItem" disable="true" mnemonicParsing="false" onAction="#handleSaveProject" text="Save Current Project" />
 								<MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
 
-							</items>
+      							</items>
 						</Menu>
                   <Menu fx:id="buildMenu" disable="true" mnemonicParsing="false" text="Build">
                     <items>
@@ -42,7 +42,7 @@
                   </Menu>
 						<Menu mnemonicParsing="false" text="Task-Runner">
 							<items>
-								<MenuItem mnemonicParsing="false" onAction="#handleOpenSpreadsheet" text="Open SpreadSheet In Viewer" />
+								<MenuItem mnemonicParsing="false" onAction="#handleOpenSpreadsheet" text="Open SpreadSheet " />
 								<MenuItem mnemonicParsing="false" onAction="#handleCSVFilter" text="CSV Filter Columns" />
 								<MenuItem mnemonicParsing="false" onAction="#handleLaunchWebScrapper" text="Launch Web Scrapper" />
 								<MenuItem mnemonicParsing="false" onAction="#handleConsolidateWorkbooks" text="Consolidate Workbooks" />

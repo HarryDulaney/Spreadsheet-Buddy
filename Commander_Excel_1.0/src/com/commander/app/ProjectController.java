@@ -1,11 +1,19 @@
 package com.commander.app;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
+
+import com.codoid.products.exception.FilloException;
+import com.codoid.products.fillo.Connection;
+import com.codoid.products.fillo.Fillo;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
 
@@ -31,6 +39,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import com.codoid.products.fillo.Connection;
+
+
 
 /**
  * @author HG Dulaney IV
@@ -41,12 +52,15 @@ public class ProjectController implements Initializable {
 	private MainMenu mainMenu;
 	private static int initCounter = 1;
 	private ObservableList<String> cBox = FXCollections.observableArrayList("CSS Link Selectors", "HTML Elements");
+	private ObservableList<XSSFCell> ssList = FXCollections.observableArrayList();
 	private SuperCommand currentCommand;
 
 	@FXML
 	private Label commandN;
 	
-
+	@FXML
+	private static TableView <ObservableList<XSSFCell>> spreadTableView;
+	
 
 	@FXML
 	private ComboBox<String> comboBox;
@@ -221,6 +235,42 @@ public class ProjectController implements Initializable {
 	public Node getNestedPane(Scene scene) {
 		Node bp = scene.lookup("#bPane");
 		return bp;
+	}	
+	
+	
+	public static void showSpreadTableView() {
+		
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choose File To pull data from");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".csv", "*.csv"),
+				new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
+		File userFile = fileChooser.showOpenDialog(new Stage(StageStyle.TRANSPARENT));
+		FileInputStream fis = null;
+		Connection connection = null;
+		
+		try {
+			 fis = new FileInputStream(userFile);
+		
+					
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Fillo fillo = new Fillo();
+		try {
+			 connection = fillo.getConnection(userFile.getAbsolutePath());
+		} catch (FilloException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
+		
+		
+		spreadTableView.setVisible(true);
+		
+		
+		
 	}
 
 }
