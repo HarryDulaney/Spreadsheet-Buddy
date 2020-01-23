@@ -3,7 +3,7 @@ package com.commander.app.model.utils;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.codoid.products.exception.FilloException;
+import com.commander.app.PHelper;
 import com.commander.app.model.ExcelAccessObject;
 
 import javafx.scene.control.TextInputDialog;
@@ -32,19 +32,17 @@ public class DuplicateChecker extends SpreadSheetTask {
 		return columnToCheck;
 	}
 
-	public ArrayList<String> checkForDuplicates() throws FilloException {
+	public ArrayList<String> checkForDuplicates()  {
 
 		ArrayList<String> duplicates = new ArrayList<>();
-
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Compare For Duplicates Task ");
-		dialog.setHeaderText("Task data requested...");
-		dialog.setContentText("For " + fileOne.getName() + " enter the name of the worksheet " + "that contains the "
-				+ columnToCheck);
-		dialog.showAndWait();
-
-		if (dialog.getResult() != null) {
-			ArrayList<String> fileOneList = ExcelAccessObject.getColumn(fileOne, columnToCheck, dialog.getResult());
+		
+		String sheetName = PHelper.showInputPrompt("Task data requested...", 
+				"For " + fileOne.getName() + " enter the name of the worksheet "
+							+ "that contains the "
+								+ columnToCheck, "Compare For Duplicates Task ");
+		
+		if (sheetName != null) {
+			ArrayList<String> fileOneList = ExcelAccessObject.getColumn(fileOne, columnToCheck, sheetName);
 
 			TextInputDialog dialogTwo = new TextInputDialog();
 			dialogTwo.setTitle("Compare For Duplicates Task ");

@@ -11,9 +11,6 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
-import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Connection;
-import com.codoid.products.fillo.Fillo;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
 
@@ -39,7 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import com.codoid.products.fillo.Connection;
+
 
 
 
@@ -194,11 +191,7 @@ public class ProjectController implements Initializable {
 	@FXML
 	protected void handleOpenFile(ActionEvent event) throws IOException {
 
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose File To pull data from");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".csv", "*.csv"),
-				new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		File userFile = fileChooser.showOpenDialog(new Stage(StageStyle.TRANSPARENT));
+		File userFile = PHelper.showFileFilePrompt("Choose which file you would like to oepn",".csv", ".xlsx");
 
 		currentCommand.setFileIn(userFile);
 
@@ -240,33 +233,15 @@ public class ProjectController implements Initializable {
 	
 	public static void showSpreadTableView() {
 		
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose File To pull data from");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".csv", "*.csv"),
-				new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		File userFile = fileChooser.showOpenDialog(new Stage(StageStyle.TRANSPARENT));
-		FileInputStream fis = null;
-		Connection connection = null;
 		
-		try {
-			 fis = new FileInputStream(userFile);
+		File userFile = PHelper.showFilePrompt("Indicate the Excel workbook containing the spreadsheet"
+				+ "you would like to open",".xlsx");
+		FileInputStream fis = null;
+//		Connection connection = null;
+		
+//			 fis = new FileInputStream(userFile);
 		
 					
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Fillo fillo = new Fillo();
-		try {
-			 connection = fillo.getConnection(userFile.getAbsolutePath());
-		} catch (FilloException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	
-		
-		
 		spreadTableView.setVisible(true);
 		
 		

@@ -4,245 +4,104 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Connection;
-import com.codoid.products.fillo.Fillo;
-import com.codoid.products.fillo.Recordset;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 @XmlRootElement
 public class ExcelAccessObject extends ProjectElement {
+
 	/**
-	 * Like a DB object this is an "Excel Access Object" which contains 
-	 * implementation of the Fillo API
-	 * 
-	 * @throws FilloException
+	 * The current Workbook being operated on
+	 */
+	private static Workbook wB;
+	/**
+	 * The current Sheet being operated on
+	 */
+	private static Sheet sheet;
+	/**
+	 * The current Cell being operated on
+	 */
+	private static Cell cell;
+
+	/**
+	 * Like a DB object this is an "Excel Access Object"
 	 */
 
-	/*
-	 * WHERE CLAUSE EXAMPLES:
+	/**
 	 * 
-	 * This is an enhancement in Fillo-1.11, now you can mention multiple conditions
-	 * in a query as shown below. Recordset recordset=connection.
-	 * executeQuery("Select * from Sheet1 where column1=value1 and column2=value2 and column3=value3"
-	 * );
-	 * 
-	 * 
+	 * @param file      - System file containing location path for the worksheet
+	 * @param colValue  - The header or title of the column to retrieve
+	 * @param sheetname
+	 * @return ArrayList
 	 */
+	public static ArrayList<String> getColumn(File file, String colValue, String sheetname) {
 
-	public static ArrayList<String> selectWhere(File file, String columnName1, String columnValue1, String detailsToFind)
-			throws FilloException {
-		ArrayList<String> resultList = new ArrayList<>();
+		ArrayList<String> colList = new ArrayList<>();
 
-		Fillo fillo = new Fillo();
+		try {
+			wB = new XSSFWorkbook(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+			showAlert("IO Exception Thrown", e);
+		}
+		try {
+			sheet = wB.getSheet(sheetname);
+		} catch (Exception e) {
+			showAlert("Something went wrong try to load the sheet", e);
+		}
 
-		Connection connection = fillo.getConnection(file.getAbsolutePath());
+		if (sheet != null) {
 
-		ArrayList<String> sheetNameList = connection.getMetaData().getTableNames();
+			Row headerRow = sheet.getRow(0); // The first row containing the headers to search
+			int columnNum = 0; // the horizontal index of the column we will return
+			int numColums = headerRow.getPhysicalNumberOfCells(); // Number of non-null cells in the header row
 
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Select Function");
-		dialog.setHeaderText("Choose from the following sheet names: " + sheetNameList.toString());
+			for (int i = 0; i < numColums; i++) {
 
-		dialog.setContentText("For " + file.getName() + " indicate the worksheet to scan for" + columnName1
-				+ " with a value of " + columnValue1);
-		dialog.showAndWait();
+				Cell c = headerRow.getCell(i);
 
-		if (dialog.getResult() != null) {
+				if (c != null && c.getCellType() == CellType.STRING) {
 
-			Recordset recordset = connection
-					.executeQuery("Select * from " + dialog.getResult() + " where " + columnName1 + "=" + columnValue1);
+					if (c.getStringCellValue() == colValue) {
+						columnNum = i;
+						break;
+					}
 
-			if (recordset != null) {
-
-				while (recordset.next()) {
-
-					resultList.add(recordset.getField(detailsToFind));
+				} else {
 
 				}
 
 			}
+			if (columnNum != 0) {
 
-		}
-		return resultList;
-	}
+				for (int i = 1; i < sheet.getLastRowNum(); i++) {
 
-	public static ArrayList<String> selectWhere(File file, String columnName1, String columnValue1, String columnName2,
-			String columnValue2, String detailsToFind) throws FilloException {
-		ArrayList<String> resultList = new ArrayList<>();
+					Row currentRow = sheet.getRow(i);
+					Cell c = currentRow.getCell(columnNum);
 
-		Fillo fillo = new Fillo();
+					colList.add(c.getStringCellValue());
 
-		Connection connection = fillo.getConnection(file.getAbsolutePath());
+				}
 
-		ArrayList<String> sheetNameList = connection.getMetaData().getTableNames();
-
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Select Function");
-		dialog.setHeaderText("Choose from the following sheet names: " + sheetNameList.toString());
-
-		dialog.setContentText("For " + file.getName() + " indicate the worksheet to scan for" + columnName1
-				+ " with a value of " + columnValue1 + " and " + columnName2 + " = " + columnValue2);
-		
-		dialog.showAndWait();
-
-		if (dialog.getResult() != null) {
-
-			Recordset recordset = connection
-					.executeQuery("Select * from " + dialog.getResult() + " where " + columnName1 + "=" + columnValue1);
-
-			if (recordset != null) {
-
-				recordset.getField(detailsToFind);
-
-			}
-		}
-		return sheetNameList;
-	}
-
-	public static ArrayList<String> selectWhere(File file, String columnName1, String columnName2, String columnName3,
-			String detailsToFind) {
-		ArrayList<String> resultList = new ArrayList<>();
-
-		return resultList;
-
-	}
-
-	/**
-	 * 
-	 * @param file - System file containing location path for the worksheet
-	 * @param colValue - The header or title of the column to retrieve 
-	 * @param sheetname
-	 * @return ArrayList
-	 * @throws FilloException
-	 */
-	public static ArrayList<String> getColumn(File file, String colValue, String sheetname)
-			throws FilloException {
-
-		ArrayList<String> colList = new ArrayList<>();
-
-		Fillo fillo = new Fillo();
-
-		Connection connection = fillo.getConnection(file.getAbsolutePath());
-
-		if (sheetname != null) {
-
-			Recordset recordset = connection.executeQuery("Select * from " + sheetname);
-
-			while (recordset.next()) {
-
-				String temp = recordset.getField(colValue);
-
-				colList.add(temp);
 			}
 		}
 
 		return colList;
-
-	}
-
-	public static void handleSelectMatcher(File source, String sheetName, String rowID, String rowVal, String colID,
-			String colVal, String field) {
-
-		Recordset recordset = null;
-		Connection connection = null;
-
-		try {
-			Fillo fillo = new Fillo();
-			connection = fillo.getConnection(source.getAbsolutePath());
-
-		} catch (FilloException e) {
-
-			ExcelAccessObject.showAlert("Fillo Exception: Trying to connect to File source.", e);
-
-		}
-
-		try {
-			String strQuery = "Select * from " + sheetName + " where " + rowID + " = " + rowVal + " and " + colID
-					+ " = " + "\'" + colVal + "\'";
-
-			recordset = connection.executeQuery(strQuery);
-
-		} catch (FilloException e) {
-
-			showAlert("Fillo Exception: Trying to executeQuery on \"strQuery\"", e);
-
-		}
-
-		try {
-			while (recordset.next()) {
-				System.out.println(recordset.getField(field));
-			}
-		} catch (FilloException e) {
-			showAlert("Fillo Exception: on recordset return loop.", e);
-
-		}
-
-		recordset.close();
-		connection.close();
-	}
-
-	public static void handleUpdate(File source, String sheetName, String field, String fieldDetail, String rowID,
-			String rowVal, String colID, String colVal) {
-
-		Fillo fillo = new Fillo();
-		Connection connection = null;
-
-		try {
-			connection = fillo.getConnection(source.getAbsolutePath());
-		} catch (FilloException e) {
-
-			ExcelAccessObject.showAlert("Fillo Exception: \nSomething went wrong trying to connect to File source.", e);
-		}
-		String strQuery = "Update " + sheetName + " Set " + field + " = " + "\'" + "fieldDetail" + "\'" + " where "
-				+ rowID + " = " + rowVal + " and " + colID + " = " + "\'" + colVal + "\'";
-
-		try {
-			connection.executeUpdate(strQuery);
-		} catch (FilloException e) {
-
-			showAlert("Fillo Exception: \nSomething went wrong trying to executeQuery on \"strQuery\"", e);
-
-		}
-
-		connection.close();
-
-	}
-
-	public static void handleInsert(File source, String sheetName,List<?> values) {
-
-		Fillo fillo = new Fillo();
-		Connection connection = null;
-
-		try {
-			connection = fillo.getConnection(source.getAbsolutePath());
-			
-		} catch (FilloException e) {
-			ExcelAccessObject.showAlert("Fillo Exception: \nSomething went wrong trying to connect to File source.", e);
-
-		}
-		String strQuery = "INSERT INTO " + sheetName + "(Name,Country) VALUES('Peter','UK')";
-
-		try {
-			connection.executeUpdate(strQuery);
-		} catch (FilloException e) {
-
-			showAlert("Fillo Exception: \nSomething went wrong trying to executeQuery on \"strQuery\"", e);
-
-		}
-
-		connection.close();
 
 	}
 
@@ -274,6 +133,19 @@ public class ExcelAccessObject extends ProjectElement {
 		expContent.add(textArea, 0, 1);
 
 		alert.getDialogPane().setExpandableContent(expContent);
+
+	}
+
+	public Workbook getwB() {
+		return wB;
+	}
+
+	public Sheet getSheet() {
+		return sheet;
+	}
+
+	public Cell getCell() {
+		return cell;
 
 	}
 

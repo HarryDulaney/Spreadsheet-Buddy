@@ -21,13 +21,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.codoid.products.exception.FilloException;
-import com.codoid.products.fillo.Fillo;
 import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
 import com.commander.app.model.utils.DuplicateChecker;
-
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -45,8 +42,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-
 
 /**
  * The Controller for the Main Menu
@@ -136,9 +131,9 @@ public class MenuController {
 	protected void handleConsolidateWorkbooks(ActionEvent event) {
 
 	}
-	
+
 	/**
-	 * 	
+	 * 
 	 *
 	 * @param excelfile - the workbook that the user wants top save as a File
 	 * @throws IOException Signals that an I/O exception has occurred.
@@ -150,12 +145,12 @@ public class MenuController {
 		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
 		fchooser.setInitialFileName("New_Excel_Workbook");
 		File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
-	
+
 		if (filePath != null) {
-			
+
 			FileOutputStream fOs = new FileOutputStream(filePath);
 			excelfile.write(fOs);
-			
+
 			fOs.close();
 			excelfile.close();
 
@@ -163,74 +158,59 @@ public class MenuController {
 	}
 
 	/**
-	 * Handles comparing two .xlsx spreadsheets for duplicate entries. (This is a individual task)
+	 * Handles comparing two .xlsx spreadsheets for duplicate entries. (This is a
+	 * individual task)
 	 *
 	 * @param event the event
 	 */
 	@FXML
 	protected void handleCompareDuplicates(ActionEvent event) {
-		
-		FileChooser chooser = new FileChooser();
-		chooser.setTitle("Choose the file containing the first spreadsheet");
-		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		File fileOne = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+
+		File fileOne = PHelper.showFilePrompt("Choose the file containing the first spreadsheet",
+												".xlsx");
 
 		if (fileOne != null) {
 
-			FileChooser chooser2 = new FileChooser();
-			chooser2.setTitle("Choose the file containing the second spreadsheet to compare to the first.");
-			chooser2.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-			File fileTwo = chooser2.showOpenDialog(new Stage(StageStyle.UTILITY));
-
+			File fileTwo = PHelper.showFilePrompt("Choose the file containing the second spreadsheet to compare to the first.", 
+												".xlsx");
 			if (fileTwo != null) {
+				
+				String colName = PHelper.showInputPrompt("Task data requested...", "Please enter the header for the column to check for duplicate values "
+						+ "For Example: Email or Client ID Number: ", "Compare For Duplicates Task ");
 
-				TextInputDialog dialog = new TextInputDialog();
-				dialog.setTitle("Compare For Duplicates Task ");
-				dialog.setHeaderText("Task data requested...");
-				dialog.setContentText("Please enter the header for the column to check for duplicate values "
-						+ "For Example: Email or Client ID Number: ");
-				dialog.showAndWait();
+				if (colName != null) {
 
-				if (dialog.getResult() != null) {
-									
-					DuplicateChecker dupCheck = new DuplicateChecker(fileOne, fileTwo, dialog.getResult());
+					DuplicateChecker dupCheck = new DuplicateChecker(fileOne, fileTwo, colName);
 
-					ArrayList<String> dupes = null;
-					try {
-						dupes = dupCheck.checkForDuplicates();
-					} catch (FilloException e) {
-						e.printStackTrace();
-					}
-					
+					ArrayList<String> dupes = dupCheck.checkForDuplicates();
+				
 					Workbook workbook = new XSSFWorkbook();
 
 					Sheet worksheet = workbook.createSheet("Duplicates");
-					
-					Row headerRow = worksheet.createRow(0); 
-					
+
+					Row headerRow = worksheet.createRow(0);
+
 					headerRow.createCell(0).setCellValue("Duplicate " + dupCheck.getColumnToCheck() + " 's");
-					
+
 					for (int i = 0, j = 1; i < dupes.size(); i++, j++) {
 
-						worksheet.createRow(j).createCell(0).setCellValue(dupes.get(i));  
+						worksheet.createRow(j).createCell(0).setCellValue(dupes.get(i));
 					}
 					for (int i = 0; i < dupes.size(); i++) {
 						worksheet.autoSizeColumn(i);
 					}
-					
+
 					try {
 						saveToWorkbook(workbook);
-						
+
 					} catch (IOException e) {
 						System.out.println("Problem running saveToWorkbook.");
 						e.printStackTrace();
 					}
-					
 
 				}
 			}
 		}
-		
 
 	}
 
@@ -266,8 +246,8 @@ public class MenuController {
 	}
 
 	/**
-	 * Handles the task for filtering user specified entries 
-	 * from a CSV spreadsheet. (Individual Task)
+	 * Handles the task for filtering user specified entries from a CSV spreadsheet.
+	 * (Individual Task)
 	 *
 	 * @param event the event
 	 * @throws Exception the exception
@@ -294,7 +274,8 @@ public class MenuController {
 	}
 
 	/**
-	 * Handles the about super commander link which re-directs to SuperCommander  GitHub page.
+	 * Handles the about super commander link which re-directs to SuperCommander
+	 * GitHub page.
 	 *
 	 * @param event the event
 	 */
@@ -391,10 +372,8 @@ public class MenuController {
 	 */
 	@FXML
 	protected void handleOpenSpreadsheet(ActionEvent event) throws IOException {
-		
-			
-		
-				ProjectController.showSpreadTableView();
+
+		ProjectController.showSpreadTableView();
 
 	}
 
@@ -403,19 +382,13 @@ public class MenuController {
 	 */
 	public void createNewProject() {
 
-		TextInputDialog textDialog = new TextInputDialog();
-		textDialog.setHeaderText("Create New SuperCommander Project");
-		textDialog.setContentText("Please enter a name for your new project now");
-		textDialog.setTitle("Create New Project");
-		textDialog.showAndWait();
+		String projectName = PHelper.showInputPrompt("Create New SuperCommander Project",
+				"Please enter a name for your new project now",
+				"Create New Project");
+		
+		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", 
+				".xml");
 
-		String projectName = textDialog.getResult();
-
-		FileChooser chooser = new FileChooser();
-		chooser.setTitle("Create New SuperCommander Project");
-		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
-		chooser.setInitialFileName(projectName);
-		File projectFile = chooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 
 		if (projectFile != null) {
 
@@ -426,7 +399,7 @@ public class MenuController {
 	}
 
 	/**
-	 * Uses JAXB to convert the project instance to XML format for storage. 
+	 * Uses JAXB to convert the project instance to XML format for storage.
 	 *
 	 * @throws FileNotFoundException the file not found exception
 	 */
@@ -484,19 +457,17 @@ public class MenuController {
 		}
 	}
 
-	/**s
-	 * Initialize.
+	/**
+	 * s Initialize.
 	 */
 	@FXML
 	public void initialize() {
 
 	}
 
-
 	public MainMenu getMainmenu() {
 		return mainmenu;
 	}
-
 
 	public void setMainmenu(MainMenu mainmenu) {
 		this.mainmenu = mainmenu;
