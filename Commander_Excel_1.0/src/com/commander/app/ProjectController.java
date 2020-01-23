@@ -191,7 +191,7 @@ public class ProjectController implements Initializable {
 	@FXML
 	protected void handleOpenFile(ActionEvent event) throws IOException {
 
-		File userFile = PHelper.showFileFilePrompt("Choose which file you would like to oepn",".csv", ".xlsx");
+		File userFile = PHelper.showFilePrompt("Choose which file you would like to oepn",".csv", ".xlsx");
 
 		currentCommand.setFileIn(userFile);
 

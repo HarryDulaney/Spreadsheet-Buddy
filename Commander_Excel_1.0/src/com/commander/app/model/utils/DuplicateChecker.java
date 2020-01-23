@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import com.commander.app.PHelper;
 import com.commander.app.model.ExcelAccessObject;
 
-import javafx.scene.control.TextInputDialog;
-
 public class DuplicateChecker extends SpreadSheetTask {
 
 	private File fileOne;
@@ -32,7 +30,7 @@ public class DuplicateChecker extends SpreadSheetTask {
 		return columnToCheck;
 	}
 
-	public ArrayList<String> checkForDuplicates()  {
+	public ArrayList<String> checkForDuplicates() throws Exception  {
 
 		ArrayList<String> duplicates = new ArrayList<>();
 		
@@ -42,23 +40,21 @@ public class DuplicateChecker extends SpreadSheetTask {
 								+ columnToCheck, "Compare For Duplicates Task ");
 		
 		if (sheetName != null) {
+			
 			ArrayList<String> fileOneList = ExcelAccessObject.getColumn(fileOne, columnToCheck, sheetName);
+			
+			String dialogRes = PHelper.showInputPrompt("Task data requested...",
+					"For " + fileTwo.getName() + " enter the name of the worksheet "
+					+ "that contains the " + columnToCheck, "Compare For Duplicates Task ");
 
-			TextInputDialog dialogTwo = new TextInputDialog();
-			dialogTwo.setTitle("Compare For Duplicates Task ");
-			dialogTwo.setHeaderText("Task data requested...");
-			dialogTwo.setContentText("For " + fileTwo.getName() + " enter the name of the worksheet "
-					+ "that contains the " + columnToCheck);
-			dialogTwo.showAndWait();
+			if (dialogRes != null) {
 
-			if (dialogTwo.getResult() != null) {
-
-				ArrayList<String> fileTwoList = ExcelAccessObject.getColumn(fileTwo, columnToCheck, dialogTwo.getResult());
+				ArrayList<String> fileTwoList = ExcelAccessObject.getColumn(fileTwo, columnToCheck, dialogRes);
 
 				for (String str : fileOneList) {
 
 					if (fileTwoList.contains(str)) {
-
+						
 						duplicates.add(str);
 
 					}

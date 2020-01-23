@@ -1,26 +1,22 @@
 package com.commander.app.model;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import com.commander.app.PHelper;
 
 @XmlRootElement
 public class ExcelAccessObject extends ProjectElement {
@@ -42,97 +38,82 @@ public class ExcelAccessObject extends ProjectElement {
 	 * Like a DB object this is an "Excel Access Object"
 	 */
 
+	private static Logger logger;
+
 	/**
+	 * @param excelfile - the workbook that the user wants top save as a File
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static void saveWorkbook(Workbook workbook) {
+
+		File filePath = PHelper.showFilePrompt("Save your new workbook: ", ".xlsx", true);
+
+		if (filePath != null) {
+
+			FileOutputStream fOs = null;
+
+			try {
+				fOs = new FileOutputStream(filePath);
+				workbook.write(fOs);
+
+				fOs.close();
+				workbook.close();
+
+			} catch (IOException e) {
+				logger.log(Level.WARNING, "IO Exception at ExcelAccesObject.saveWorkbook");
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	/**
+	 * Gets a column as an ArrayList, identified by its header.
 	 * 
 	 * @param file      - System file containing location path for the worksheet
-	 * @param colValue  - The header or title of the column to retrieve
+	 * @param header    - The header or title of the column to retrieve
 	 * @param sheetname
-	 * @return ArrayList
+	 * @return ArrayList - List containing strings of each cell in the column under
+	 *         the header
+	 * @throws IOException
+	 * @throws InvalidFormatException
 	 */
-	public static ArrayList<String> getColumn(File file, String colValue, String sheetname) {
+	public static ArrayList<String> getColumn(File file, String header, String sheetname) throws Exception {
 
 		ArrayList<String> colList = new ArrayList<>();
 
-		try {
-			wB = new XSSFWorkbook(file);
-		} catch (Exception e) {
-			e.printStackTrace();
-			showAlert("IO Exception Thrown", e);
-		}
-		try {
-			sheet = wB.getSheet(sheetname);
-		} catch (Exception e) {
-			showAlert("Something went wrong try to load the sheet", e);
-		}
+		wB = new XSSFWorkbook(file);
+		sheet = wB.getSheet(sheetname);
 
 		if (sheet != null) {
 
-			Row headerRow = sheet.getRow(0); // The first row containing the headers to search
-			int columnNum = 0; // the horizontal index of the column we will return
-			int numColums = headerRow.getPhysicalNumberOfCells(); // Number of non-null cells in the header row
+			Row headerRow = sheet.getRow(0);// The first row which contains the headers to search
 
-			for (int i = 0; i < numColums; i++) {
+			int columnIndex = 0;
 
-				Cell c = headerRow.getCell(i);
+			for (Cell cell : headerRow) {
+				System.out.println(cell.getRichStringCellValue().getString());
+				if (cell.getRichStringCellValue().getString().equalsIgnoreCase(header)) {
+					columnIndex = cell.getColumnIndex();
+				}
+			}
 
-				if (c != null && c.getCellType() == CellType.STRING) {
+			for (Row row : sheet) {
+				if (row == headerRow)
+					continue;
+				for (Cell cell : row) {
+					System.out.println(cell.getRichStringCellValue().getString());
+					if (cell.getColumnIndex() == columnIndex) {
+						colList.add(cell.getRichStringCellValue().getString());
 
-					if (c.getStringCellValue() == colValue) {
-						columnNum = i;
-						break;
 					}
 
-				} else {
-
 				}
-
 			}
-			if (columnNum != 0) {
 
-				for (int i = 1; i < sheet.getLastRowNum(); i++) {
-
-					Row currentRow = sheet.getRow(i);
-					Cell c = currentRow.getCell(columnNum);
-
-					colList.add(c.getStringCellValue());
-
-				}
-
-			}
 		}
 
 		return colList;
-
-	}
-
-	public static void showAlert(String contentText, Exception e) {
-
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Exception Dialog");
-		alert.setHeaderText("Something went wrong");
-		alert.setContentText(contentText);
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
-		String exceptionText = sw.toString();
-
-		Label label = new Label("The exception stacktrace was:");
-
-		TextArea textArea = new TextArea(exceptionText);
-		textArea.setEditable(false);
-		textArea.setWrapText(true);
-
-		textArea.setMaxWidth(Double.MAX_VALUE);
-		textArea.setMaxHeight(Double.MAX_VALUE);
-		GridPane.setVgrow(textArea, Priority.ALWAYS);
-		GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-		GridPane expContent = new GridPane();
-		expContent.setMaxWidth(Double.MAX_VALUE);
-		expContent.add(label, 0, 0);
-		expContent.add(textArea, 0, 1);
-
-		alert.getDialogPane().setExpandableContent(expContent);
 
 	}
 

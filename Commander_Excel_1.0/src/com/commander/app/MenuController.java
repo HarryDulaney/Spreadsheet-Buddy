@@ -15,12 +15,14 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.poi.ss.formula.functions.Column;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.commander.app.model.ExcelAccessObject;
 import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
@@ -133,31 +135,6 @@ public class MenuController {
 	}
 
 	/**
-	 * 
-	 *
-	 * @param excelfile - the workbook that the user wants top save as a File
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public void saveToWorkbook(Workbook excelfile) throws IOException {
-
-		FileChooser fchooser = new FileChooser();
-		fchooser.setTitle("Save your new workbook: ");
-		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		fchooser.setInitialFileName("New_Excel_Workbook");
-		File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
-
-		if (filePath != null) {
-
-			FileOutputStream fOs = new FileOutputStream(filePath);
-			excelfile.write(fOs);
-
-			fOs.close();
-			excelfile.close();
-
-		}
-	}
-
-	/**
 	 * Handles comparing two .xlsx spreadsheets for duplicate entries. (This is a
 	 * individual task)
 	 *
@@ -166,47 +143,51 @@ public class MenuController {
 	@FXML
 	protected void handleCompareDuplicates(ActionEvent event) {
 
-		File fileOne = PHelper.showFilePrompt("Choose the file containing the first spreadsheet",
-												".xlsx");
+		File fileOne = PHelper.showFilePrompt("Choose the file containing the first spreadsheet", ".xlsx");
 
 		if (fileOne != null) {
 
-			File fileTwo = PHelper.showFilePrompt("Choose the file containing the second spreadsheet to compare to the first.", 
-												".xlsx");
+			File fileTwo = PHelper.showFilePrompt(
+					"Choose the file containing the second spreadsheet to compare to the first.", ".xlsx");
 			if (fileTwo != null) {
-				
-				String colName = PHelper.showInputPrompt("Task data requested...", "Please enter the header for the column to check for duplicate values "
-						+ "For Example: Email or Client ID Number: ", "Compare For Duplicates Task ");
+
+				String colName = PHelper.showInputPrompt("Task data requested...",
+						"Please enter the header for the column to check for duplicate values "
+								+ "For Example: Email or Client ID Number: ",
+						"Compare For Duplicates Task ");
 
 				if (colName != null) {
 
 					DuplicateChecker dupCheck = new DuplicateChecker(fileOne, fileTwo, colName);
+					ArrayList<String> dupes = null;
 
-					ArrayList<String> dupes = dupCheck.checkForDuplicates();
-				
+					try {
+						dupes = dupCheck.checkForDuplicates();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 					Workbook workbook = new XSSFWorkbook();
 
-					Sheet worksheet = workbook.createSheet("Duplicates");
+					Sheet sheet = workbook.createSheet("Duplicates");
 
-					Row headerRow = worksheet.createRow(0);
+					Row headerRow = sheet.createRow(0);
 
 					headerRow.createCell(0).setCellValue("Duplicate " + dupCheck.getColumnToCheck() + " 's");
 
-					for (int i = 0, j = 1; i < dupes.size(); i++, j++) {
-
-						worksheet.createRow(j).createCell(0).setCellValue(dupes.get(i));
-					}
+					int j = 1;
 					for (int i = 0; i < dupes.size(); i++) {
-						worksheet.autoSizeColumn(i);
-					}
+						
+						Row row = sheet.createRow(j++);
 
-					try {
-						saveToWorkbook(workbook);
-
-					} catch (IOException e) {
-						System.out.println("Problem running saveToWorkbook.");
-						e.printStackTrace();
+						row.createCell(0).setCellValue(dupes.get(i));
 					}
+					
+						sheet.autoSizeColumn(0);
+					
+
+					ExcelAccessObject.saveWorkbook(workbook);
 
 				}
 			}
@@ -383,12 +364,9 @@ public class MenuController {
 	public void createNewProject() {
 
 		String projectName = PHelper.showInputPrompt("Create New SuperCommander Project",
-				"Please enter a name for your new project now",
-				"Create New Project");
-		
-		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", 
-				".xml");
+				"Please enter a name for your new project now", "Create New Project");
 
+		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", ".xml");
 
 		if (projectFile != null) {
 
