@@ -4,10 +4,12 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,6 +33,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.com.commander.app.model.ExcelAccessObject;
 import main.java.com.commander.app.model.ProjectBean;
+import main.java.com.commander.app.model.ProjectBean.DataAccessObject;
 import main.java.com.commander.app.model.SuperCommand;
 import main.java.com.commander.app.model.utils.DuplicateChecker;
 
@@ -51,27 +54,16 @@ public class MenuController {
 	private MenuItem projectSaveMenuItem;
 
 	/**
-	 * Handles saving project.
+	 * Handles event action for the "Save Project" button on the Drop-down menu
 	 *
 	 * @param event the event
 	 */
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
 
-		if (ProjectBean.getInstance() != null) {
+		saveProject();
 
-			try {
-				saveProject();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			Alert alrt = new Alert(AlertType.WARNING);
-			alrt.setContentText("You must first open or create a new project in order to perform this action");
-			alrt.show();
-
-		}
+		PHelper.showWarningAlert("You must first open or create a new project in order to perform this action");
 
 	}
 
@@ -98,7 +90,7 @@ public class MenuController {
 			alert.showAndWait();
 
 			try {
-				mainmenu.showProject();
+				mainmenu.showProjectWindow();
 				projectSaveMenuItem.setDisable(false);
 
 			} catch (Exception e) {
@@ -111,6 +103,28 @@ public class MenuController {
 			alert.showAndWait();
 		}
 
+	}
+
+	/**
+	 * Creates the new project.
+	 */
+	public void createNewProject() {
+
+		String projectName = PHelper.showInputPrompt("Creating New Project",
+				"Please enter a name for your new project now", "Create New Project");
+
+		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", ".json");
+
+		if (projectFile != null) {
+
+			LinkedList<SuperCommand> commands = new LinkedList<>();
+			SuperCommand sc = new SuperCommand();
+			sc.setName("Start By Creating or trying some super-commands");
+
+			ProjectBean.getInstance().setSooperCommands(commands);
+			ProjectBean.getInstance().setName(projectName);
+			ProjectBean.getInstance().setDirectoryPath(projectFile);
+		}
 	}
 
 	/**
@@ -192,10 +206,7 @@ public class MenuController {
 	@FXML
 	protected void handleOpenProject(ActionEvent event) throws IOException {
 
-		FileChooser chooser = new FileChooser();
-		chooser.setTitle("Choose the project you would like to open");
-		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
-		File toOpen = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+		File toOpen = PHelper.showFilePrompt("Choose the project you would like to open", ",json");
 
 		if (toOpen != null) {
 
@@ -272,41 +283,32 @@ public class MenuController {
 	@FXML
 	protected void handleExitCommander(ActionEvent event) {
 
-		if (ProjectBean.getInstance() == null) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Action");
+		alert.setHeaderText("Are you sure you want to do that?");
+		alert.setContentText(
+				"Are you sure you want to exit the project build? Hit YES if you wish to exit, your project will save automa"
+						+ "tically. Hit NO if you wish to continue working.");
+
+		alert.getButtonTypes().removeAll(ButtonType.CANCEL, ButtonType.OK);
+		alert.getButtonTypes().add(ButtonType.YES);
+		alert.getButtonTypes().add(ButtonType.NO);
+		alert.showAndWait();
+
+		ButtonType result = alert.getResult();
+		if (result == ButtonType.YES) {
+
+			saveProject();
+
+			
+			ProjectBean.getInstance().closeProject();
+			
+
 			Platform.exit();
-		} else {
 
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Confirm Action");
-			alert.setHeaderText("Are you sure you want to do that?");
-			alert.setContentText(
-					"Are you sure you want to exit the project build? Hit YES if you wish to exit, your project will save automa"
-							+ "tically. Hit NO if you wish to continue working.");
+		} else if (result == ButtonType.NO) {
 
-			alert.getButtonTypes().removeAll(ButtonType.CANCEL, ButtonType.OK);
-			alert.getButtonTypes().add(ButtonType.YES);
-			alert.getButtonTypes().add(ButtonType.NO);
-			alert.showAndWait();
-
-			ButtonType result = alert.getResult();
-			if (result == ButtonType.YES) {
-
-				try {
-					saveProject();
-				} catch (FileNotFoundException e) {
-					System.out.println("Error Saving the Project in:   MenuController.handleExitCommander");
-					e.printStackTrace();
-				}
-				if (ProjectBean.getInstance() != null) {
-					ProjectBean.getInstance().closeProject();
-				}
-
-				Platform.exit();
-
-			} else if (result == ButtonType.NO) {
-
-				// DO nothing.... GO Back
-			}
+			// DO nothing.... GO Back
 		}
 	}
 
@@ -347,82 +349,41 @@ public class MenuController {
 	}
 
 	/**
-	 * Creates the new project.
-	 */
-	public void createNewProject() {
-
-		String projectName = PHelper.showInputPrompt("Creating New Project",
-				"Please enter a name for your new project now", "Create New Project");
-
-		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", ".json");
-
-		if (projectFile != null) {
-
-			LinkedList<SuperCommand> commands = new LinkedList<>();
-
-			ProjectBean.getInstance(projectName, projectFile, commands);
-		}
-	}
-
-	/**
 	 * Saves the
 	 *
 	 * @throws FileNotFoundException the file not found exception
 	 */
-	public static void saveProject() throws FileNotFoundException {}
-/*
-		if (ProjectBean.getInstance() != null) {
+	public static void saveProject() {
 
-			try {
+		if (ProjectBean.getInstance().getDirectoryLoc() != null) {
 
-				JAXBContext context = JAXBContext.newInstance(Project.class);
+			DataAccessObject.writeProjectJson(ProjectBean.getInstance().getDirectoryLoc(), ProjectBean.getInstance());
 
-				Marshaller jaxbMarshaller = context.createMarshaller();
+		} else {
+			DataAccessObject.writeProjectJson(new File(System.getProperty("java.io.tmpdir")),
+					ProjectBean.getInstance());
 
-				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-				Project project = new Project(ProjectBean.getInstance().getName(),
-						ProjectBean.getInstance().getDirectoryLoc(), ProjectBean.getInstance().getSooperCommands());
-
-				OutputStream output = new FileOutputStream(project.getProjectFile());
-				jaxbMarshaller.marshal(project, output);
-
-			} catch (JAXBException e) {
-				e.printStackTrace();
-
-			}
 		}
-	}*/
+
+	}
 
 	/**
 	 * Converts user and project info back from XML format.
 	 *
 	 * @param file the file
 	 */
-	public void openProject(File file) {}
+	public void openProject(File file) {
 
-	/*	JAXBContext context;
-
-		try {
-			context = JAXBContext.newInstance(Project.class);
-			Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
-
-			Project project = (Project) jaxbUnmarshaller.unmarshal(file);
-
-			ProjectBean.getInstance(project.getName(), project.getProjectFile(), project.getSooperCommands());
-
-			mainmenu.showProject();
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Please double check you are attempting to open the correct file and try again");
-			alert.showAndWait();
-
+		if(DataAccessObject.readProjectJson(file)) {
+			
+		}else {
+			PHelper.showErrorAlert("Please double check you are attempting to open the correct file and try again");
 		}
+		
+		
 	}
-	*/
+	
+	 
 
 	/**
 	 * s Initialize.
@@ -430,6 +391,12 @@ public class MenuController {
 	@FXML
 	public void initialize() {
 
+		try {
+			PropertyUtils.getProperty(MainMenu.class, "mainmenu");
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public MainMenu getMainmenu() {
@@ -440,14 +407,7 @@ public class MenuController {
 		this.mainmenu = mainmenu;
 	}
 
-	private static class DataAccessObject {
-
-		private static final ObjectMapper MAPPING = new ObjectMapper();
-
-		public static void writeToDefaultDirectory(final Object o) {
-
-		}
+	
 
 	}
 
-}

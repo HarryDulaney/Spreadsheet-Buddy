@@ -14,20 +14,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.java.com.commander.app.model.ProjectBean;
+//import main.java.com.commander.app.model.ProjectBean;
 
 /**
  * @author HGDIV
  */
 
-public class MainMenu extends Application {
+public final class MainMenu extends Application {
 
 	private static Pane rootPane;
 
 	private Stage primaryStage;
 
-	private static MainMenu MAIN = null;
-	
-	private final static ProjectBean PB = ProjectBean.getInstance();
+	private static MainMenu MAIN;
 	
 	private final static String ROOT_MENU = "/main/java/com/commander/app/view/RootRoot.fxml";
 	private final static String PROJ_MENU = "/main/java/com/commander/app/view/UserView.fxml";
@@ -59,10 +58,13 @@ public class MainMenu extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainMenu.class.getResource(ROOT_MENU));
 			rootPane = loader.load();
-
+			
+			
 			MenuController controller = loader.getController();
-			controller.setMainmenu(MainMenu.getMainMenu());
-
+			controller.setMainmenu(this);
+			
+			PropertyUtils.setProperty(MainMenu.class, "mainmenu", this);
+			
 			Scene scene = new Scene(rootPane);
 			// scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
 
@@ -89,17 +91,18 @@ public class MainMenu extends Application {
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public void showProject() throws IOException {
+	public void showProjectWindow() throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(MainMenu.class.getResource(PROJ_MENU));
 		AnchorPane anchorpane = (AnchorPane) loader.load();
 
 		ProjectController controller = loader.getController();
-		controller.initialize(MainMenu.class.getResource(MAIN),);
-
+		
+		
 		BorderPane borderpane = (BorderPane) getNestedPane(rootPane.getScene());
 		borderpane.setCenter(anchorpane);
+
 
 	}
 

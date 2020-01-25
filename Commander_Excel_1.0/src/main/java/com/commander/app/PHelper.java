@@ -65,7 +65,20 @@ public final class PHelper {
 		return textDialog.getResult();
 	}
 
-	public static void showAlert(String contentText, Exception e) {
+	public static void showWarningAlert(String content) {
+		Alert alrt = new Alert(AlertType.WARNING);
+		alrt.setContentText(content);
+		alrt.show();
+
+	}
+	public static void showErrorAlert(String content) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setContentText(content);
+		alert.showAndWait();
+		  
+	}
+
+	public static void showExceptionAlert(String contentText, Exception e) {
 
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Exception Dialog");
@@ -94,19 +107,6 @@ public final class PHelper {
 
 		alert.getDialogPane().setExpandableContent(expContent);
 
-	}
-
-}
-
-class SpecialProjectException extends Exception {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public SpecialProjectException(String a, Throwable thr) {
-		super(a, thr);
 	}
 
 }

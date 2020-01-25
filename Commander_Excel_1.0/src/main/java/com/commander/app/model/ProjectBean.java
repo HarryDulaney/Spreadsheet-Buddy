@@ -1,11 +1,10 @@
 package main.java.com.commander.app.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * ProjectBean is a Singleton JavaBean. Instantiating a new ProjectBean is done
@@ -16,48 +15,29 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * SuperCommands{@link SuperCommand}.
  * 
  *
- * @author Harry Dulaney IV
+ * @author HGDIV
  */
 public class ProjectBean {
-	//TO DO: Separate the Singleton constructors from this ProjectBean. 
 
 	/**
 	 * Represents the attributes and state of the current project.
 	 */
 	private static ProjectBean instance;
-
-	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
 	private LinkedList<SuperCommand> sooperCommands;
-
-	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
 	private String projectName;
-
-	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
 	private List<SuperWorkbook> workbooks;
-
-	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
-	private File directoryLoc;
-
-	private static final String TEMP_DIR = "java.io.tmpdir";
+	private File directoryLoc = null;
+	private String TEMP_DIR;
 
 	private ProjectBean() {
-
-		setDirectoryPath(TEMP_DIR);
-
-	}
-
-	private ProjectBean(String projectName, LinkedList<SuperCommand> sooperCommands) {
-		this.projectName = projectName;
-		setDirectoryPath(TEMP_DIR);
-		this.sooperCommands = sooperCommands;
+		setTEMP_DIR(System.getProperty("java.io.tmpdir"));
 
 	}
 
-	public static ProjectBean getInstance(String projectName, File storagePath,
-			LinkedList<SuperCommand> sooperCommands) {
+	public static ProjectBean getInstance() {
 		if (instance == null) {
 
-			instance = new ProjectBean(projectName, sooperCommands);
+			instance = new ProjectBean();
 		}
 
 		return instance;
@@ -98,19 +78,25 @@ public class ProjectBean {
 		return directoryLoc;
 	}
 
-	public void setDirectoryPath(String pathToSet) {
-		this.directoryLoc = new File(pathToSet);
+	public void setDirectoryPath(File file) {
+		this.directoryLoc = file;
 
 	}
 
-	public static ProjectBean getInstance() {
+	public List<SuperWorkbook> getWorkbooks() {
+		return workbooks;
+	}
 
-		if (instance == null) {
-			return new ProjectBean();
-		}
+	public void setWorkbooks(List<SuperWorkbook> workbooks) {
+		this.workbooks = workbooks;
+	}
+	
+	public String getTEMP_DIR() {
+		return TEMP_DIR;
+	}
 
-		return instance;
-
+	public void setTEMP_DIR(String tEMP_DIR) {
+		this.TEMP_DIR = tEMP_DIR;
 	}
 
 	@Override
@@ -121,6 +107,42 @@ public class ProjectBean {
 	@Override
 	public String toString() {
 		return "Project Name: " + projectName;
-	}
 
+	}
+	
+	public static class DataAccessObject {
+
+		public static void writeProjectJson(final File resultFile, final Object value) {
+
+			ObjectMapper mapper = new ObjectMapper();
+
+			try {
+				mapper.writeValue(resultFile, value);
+			} catch (IOException e) {
+				// TODO Throw alert dialog
+				e.printStackTrace();
+			}
+
+		}
+
+		public static boolean readProjectJson(final File file) {
+			boolean success = false;
+
+			ObjectMapper mapper = new ObjectMapper();
+
+			try {
+
+				  ProjectBean.instance = mapper.readValue(file,ProjectBean.class);
+				  
+				  success = true;
+			} catch (IOException e) {
+				success = false;
+				e.printStackTrace();
+
+			}
+			return success;
+
+		}
+
+	}
 }

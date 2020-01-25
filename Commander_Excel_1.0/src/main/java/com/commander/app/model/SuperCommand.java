@@ -2,7 +2,7 @@ package main.java.com.commander.app.model;
 
 import java.io.File;
 import java.util.LinkedList;
-import main.java.com.commander.app.model.utils.SpreadSheetTask;
+import main.java.com.commander.app.model.utils.SSTask;
 import main.java.com.commander.app.utils.Scrapper.JsoupObj;
 
 /**
@@ -19,25 +19,26 @@ public class SuperCommand {
 	private File commFileIn;
 	private File commfileOut;
 	private JsoupObj scrapeFunc;
-	private LinkedList<SpreadSheetTask> orderedTasks;
+	private LinkedList<SSTask> orderedTasks;
 
 	public SuperCommand() {
+		super();
 
 	}
 
-	public LinkedList<SpreadSheetTask> getOrderedTasks() {
+	public LinkedList<SSTask> getOrderedTasks() {
 		return orderedTasks;
 	}
 
-	public void setOrderedTasks(LinkedList<SpreadSheetTask> orderedTasks) {
+	public void setOrderedTasks(LinkedList<SSTask> orderedTasks) {
 		this.orderedTasks = orderedTasks;
 	}
 
-	public String getSuperCommandName() {
+	public String getName() {
 		return superCommandName;
 	}
 
-	public void setSuperCommandName(String name) {
+	public void setName(String name) {
 		this.superCommandName = name;
 
 	}
@@ -66,13 +67,13 @@ public class SuperCommand {
 		this.scrapeFunc = scrapeFunc;
 	}
 
-	public void addTask(SpreadSheetTask task) {
+	public void addTask(SSTask task) {
 
 		orderedTasks.add(task);
 
 	}
 
-	public void removeLastTask(SpreadSheetTask task) {
+	public void removeLastTask(SSTask task) {
 		orderedTasks.removeLast();
 	}
 

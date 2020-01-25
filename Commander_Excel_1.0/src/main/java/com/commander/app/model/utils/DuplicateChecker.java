@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import main.java.com.commander.app.PHelper;
 import main.java.com.commander.app.model.ExcelAccessObject;
 
-public class DuplicateChecker extends SpreadSheetTask {
+public class DuplicateChecker extends SSTask {
 
 	private File fileOne;
 	private File fileTwo;

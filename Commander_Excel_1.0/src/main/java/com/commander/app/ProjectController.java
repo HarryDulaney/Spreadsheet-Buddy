@@ -47,6 +47,7 @@ public class ProjectController implements Initializable {
 	private ObservableList<XSSFCell> ssList = FXCollections.observableArrayList();
 	private SuperCommand currentCommand;
 	private static final MainMenu MAIN = MainMenu.getMainMenu();
+	private ProjectBean pBean;
 
 	@FXML
 	private Label commandN;
@@ -162,7 +163,7 @@ public class ProjectController implements Initializable {
 
 		currentCommand = new SuperCommand();
 
-		currentCommand.setSuperCommandName(dialog.getResult());
+		currentCommand.setName(dialog.getResult());
 
 		ProjectBean.getInstance().addCommand(currentCommand);
 
@@ -179,12 +180,9 @@ public class ProjectController implements Initializable {
 
 		currentCommand.setFileIn(userFile);
 
-		try {
-			MenuController.saveProject();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		commandN.setText(currentCommand.getSuperCommandName());
+		MenuController.saveProject();
+
+		commandN.setText(currentCommand.getName());
 		commandN.setVisible(true);
 
 	}
