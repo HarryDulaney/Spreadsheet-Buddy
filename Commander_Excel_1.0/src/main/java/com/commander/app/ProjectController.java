@@ -1,4 +1,4 @@
-package com.commander.app;
+package main.java.com.commander.app;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,9 +11,8 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
-import com.commander.app.model.ProjectBean;
-import com.commander.app.model.SuperCommand;
-
+import main.java.com.commander.app.model.ProjectBean;
+import main.java.com.commander.app.model.SuperCommand;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -37,27 +36,23 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
-
-
 /**
  * @author HG Dulaney IV
  */
 
 public class ProjectController implements Initializable {
 
-	private MainMenu mainMenu;
 	private static int initCounter = 1;
 	private ObservableList<String> cBox = FXCollections.observableArrayList("CSS Link Selectors", "HTML Elements");
 	private ObservableList<XSSFCell> ssList = FXCollections.observableArrayList();
 	private SuperCommand currentCommand;
+	private static final MainMenu MAIN = MainMenu.getMainMenu();
 
 	@FXML
 	private Label commandN;
-	
+
 	@FXML
-	private static TableView <ObservableList<XSSFCell>> spreadTableView;
-	
+	private static TableView<ObservableList<XSSFCell>> spreadTableView;
 
 	@FXML
 	private ComboBox<String> comboBox;
@@ -86,15 +81,6 @@ public class ProjectController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		if (ProjectBean.getInstance().getSooperCommands().isEmpty()) {
-			label1.setVisible(true);
-			arrowImage.setVisible(true);
-		} else {
-			label1.setVisible(false);
-			arrowImage.setVisible(false);
-
-		}
 
 		ObservableList<SuperCommand> commandList = FXCollections
 				.observableArrayList(ProjectBean.getInstance().getSooperCommands());
@@ -161,8 +147,6 @@ public class ProjectController implements Initializable {
 		}
 
 		initCounter++;
-		
-			
 
 	}
 
@@ -191,7 +175,7 @@ public class ProjectController implements Initializable {
 	@FXML
 	protected void handleOpenFile(ActionEvent event) throws IOException {
 
-		File userFile = PHelper.showFilePrompt("Choose which file you would like to oepn",".csv", ".xlsx");
+		File userFile = PHelper.showFilePrompt("Choose which file you would like to oepn", ".csv", ".xlsx");
 
 		currentCommand.setFileIn(userFile);
 
@@ -220,32 +204,23 @@ public class ProjectController implements Initializable {
 		ProjectController.initCounter = initCounter;
 	}
 
-	public void setMainmenu(MainMenu mainMenu) {
-		this.mainMenu = mainMenu;
-
-	}
 
 	public Node getNestedPane(Scene scene) {
 		Node bp = scene.lookup("#bPane");
 		return bp;
-	}	
-	
-	
+	}
+
 	public static void showSpreadTableView() {
-		
-		
-		File userFile = PHelper.showFilePrompt("Indicate the Excel workbook containing the spreadsheet"
-				+ "you would like to open",".xlsx");
+
+		File userFile = PHelper.showFilePrompt(
+				"Indicate the Excel workbook containing the spreadsheet" + "you would like to open", ".xlsx");
 		FileInputStream fis = null;
 //		Connection connection = null;
-		
+
 //			 fis = new FileInputStream(userFile);
-		
-					
+
 		spreadTableView.setVisible(true);
-		
-		
-		
+
 	}
 
 }

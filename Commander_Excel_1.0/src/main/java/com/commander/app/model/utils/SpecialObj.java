@@ -1,4 +1,4 @@
-package com.commander.app.model.utils;
+package main.java.com.commander.app.model.utils;
 
 /**
  * 

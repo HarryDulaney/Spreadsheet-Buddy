@@ -1,4 +1,4 @@
-package com.commander.app.model;
+package main.java.com.commander.app.model;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,10 +14,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.commander.app.PHelper;
+import main.java.com.commander.app.PHelper;
 
-@XmlRootElement
+/**
+ * Like a DB object this is an "Excel Access Object"
+ */
 public class ExcelAccessObject extends ProjectElement {
+
+	final static String TAG = "Excel Access Object";
 
 	/**
 	 * The current Workbook being operated on
@@ -34,14 +36,10 @@ public class ExcelAccessObject extends ProjectElement {
 	 */
 	private static Cell cell;
 
-	/**
-	 * Like a DB object this is an "Excel Access Object"
-	 */
-
 	private static Logger logger;
 
 	/**
-	 * @param excelfile - the workbook that the user wants top save as a File
+	 * @param workbook - the workbook that the user wants top save as a File
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static void saveWorkbook(Workbook workbook) {
@@ -70,15 +68,15 @@ public class ExcelAccessObject extends ProjectElement {
 	/**
 	 * Gets a column as an ArrayList, identified by its header.
 	 * 
-	 * @param file      - System file containing location path for the worksheet
-	 * @param header    - The header or title of the column to retrieve
+	 * @param file         - System file containing location path for the worksheet
+	 * @param columnHeader - The header or title of the column to retrieve
 	 * @param sheetname
 	 * @return ArrayList - List containing strings of each cell in the column under
 	 *         the header
 	 * @throws IOException
 	 * @throws InvalidFormatException
 	 */
-	public static ArrayList<String> getColumn(File file, String header, String sheetname) throws Exception {
+	public static ArrayList<String> getColumn(File file, String columnHeader, String sheetname) throws Exception {
 
 		ArrayList<String> colList = new ArrayList<>();
 
@@ -93,7 +91,7 @@ public class ExcelAccessObject extends ProjectElement {
 
 			for (Cell cell : headerRow) {
 				System.out.println(cell.getRichStringCellValue().getString());
-				if (cell.getRichStringCellValue().getString().equalsIgnoreCase(header)) {
+				if (cell.getRichStringCellValue().getString().equalsIgnoreCase(columnHeader)) {
 					columnIndex = cell.getColumnIndex();
 				}
 			}

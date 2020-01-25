@@ -1,4 +1,4 @@
-package com.commander.app.model.utils;
+package main.java.com.commander.app.model.utils;
 
 import org.apache.commons.csv.CSVFormat;
 
@@ -9,7 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
-import com.commander.app.model.ProjectElement;
+import main.java.com.commander.app.model.ProjectElement;
 import com.opencsv.CSVWriter;
 
 import java.io.Writer;
@@ -32,7 +32,7 @@ import javafx.stage.StageStyle;
  * @author H.G. Dulaney IV
  */
 
-public class CSVfilter extends ProjectElement{
+public class CSVfilter extends ProjectElement {
 
 	private File csvFilePath;
 

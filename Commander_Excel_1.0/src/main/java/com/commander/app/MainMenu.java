@@ -1,6 +1,9 @@
-package com.commander.app;
+package main.java.com.commander.app;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
+
+import org.apache.commons.beanutils.PropertyUtils;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,59 +11,60 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
+import main.java.com.commander.app.model.ProjectBean;
 
 /**
- * @author H.G. Dulaney IV
+ * @author HGDIV
  */
 
 public class MainMenu extends Application {
 
-	private static AnchorPane rootPane;
+	private static Pane rootPane;
 
 	private Stage primaryStage;
-	
-	private static MainMenu mm;
 
+	private static MainMenu MAIN = null;
 	
+	private final static ProjectBean PB = ProjectBean.getInstance();
+	
+	private final static String ROOT_MENU = "/main/java/com/commander/app/view/RootRoot.fxml";
+	private final static String PROJ_MENU = "/main/java/com/commander/app/view/UserView.fxml";
+
 	public MainMenu() {
 
-		mm = this;
-
 	}
-	
+
 	/**
-	 * Applications main entry point.
+	 * Application main entry point.
 	 *
 	 * @param primaryStage the primary stage
 	 */
-	@Override 
+	@Override
 	public void start(Stage primaryStage) {
-		
+
+		setMainMenu(this);
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("Welcome to Super Commander for MS Excel");
 
 		initRootLayerShow();
 
 	}
-	
-	/**
-	 * Initialize the root frame which contains the Drop Down MenuBar for the GUI. 
-	 */
+
 	public void initRootLayerShow() {
 
 		try {
 
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/RootRoot.fxml"));
+			loader.setLocation(MainMenu.class.getResource(ROOT_MENU));
 			rootPane = loader.load();
 
 			MenuController controller = loader.getController();
-			controller.setMainmenu(this);
+			controller.setMainmenu(MainMenu.getMainMenu());
 
 			Scene scene = new Scene(rootPane);
-			//scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
+			// scene.getStylesheets().add("/com/commander/app/view/Style/CommanderStyle1.css");
 
 			this.primaryStage.setScene(scene);
 			getPrimaryStage().show();
@@ -68,16 +72,19 @@ public class MainMenu extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
+	/**
+	 * Initialize the root frame which contains the Drop Down MenuBar for the GUI.
+	 */
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	/**
-	 * Initializes the UserView or 'open project'. Embeds the BorderPane inside the RootPane. 
+	 * Initializes the UserView or 'open project'. Embeds the BorderPane inside the
+	 * RootPane.
 	 * 
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
@@ -85,11 +92,11 @@ public class MainMenu extends Application {
 	public void showProject() throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/UserView.fxml"));
+		loader.setLocation(MainMenu.class.getResource(PROJ_MENU));
 		AnchorPane anchorpane = (AnchorPane) loader.load();
 
 		ProjectController controller = loader.getController();
-		controller.setMainmenu(this);
+		controller.initialize(MainMenu.class.getResource(MAIN),);
 
 		BorderPane borderpane = (BorderPane) getNestedPane(rootPane.getScene());
 		borderpane.setCenter(anchorpane);
@@ -136,8 +143,19 @@ public class MainMenu extends Application {
 	 * @return the main menu
 	 */
 	public static MainMenu getMainMenu() {
+		return MAIN;
 
-		return MainMenu.mm;
+	}
+
+	/**
+	 * Sets m as a static reference to this menu
+	 * 
+	 * @param m - static reference of this menu
+	 */
+	public static void setMainMenu(MainMenu m) {
+
+		MAIN = m;
+
 	}
 
 	/**
@@ -145,7 +163,7 @@ public class MainMenu extends Application {
 	 *
 	 * @return the root pane
 	 */
-	public static AnchorPane getRootPane() {
+	public static Pane getRootPane() {
 		return rootPane;
 	}
 

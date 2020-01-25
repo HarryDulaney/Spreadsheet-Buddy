@@ -1,4 +1,4 @@
-package com.commander.app;
+package main.java.com.commander.app;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +20,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public final class PHelper {
-
-
 
 	public static File showFilePrompt(String title, String fileExtension1, String fileExtention2) {
 
@@ -67,8 +65,6 @@ public final class PHelper {
 		return textDialog.getResult();
 	}
 
-	
-
 	public static void showAlert(String contentText, Exception e) {
 
 		Alert alert = new Alert(AlertType.ERROR);
@@ -101,12 +97,16 @@ public final class PHelper {
 	}
 
 }
+
 class SpecialProjectException extends Exception {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public SpecialProjectException(String a, Throwable thr) {
-				super(a,thr);
+		super(a, thr);
 	}
-	
-	
-	
+
 }

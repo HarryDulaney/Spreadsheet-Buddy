@@ -1,4 +1,4 @@
-package com.commander.app.utils.Scrapper;
+package main.java.com.commander.app.utils.Scrapper;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,23 +10,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.commander.app.MainMenu;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 
 public class ScrapeController {
 
@@ -34,7 +25,7 @@ public class ScrapeController {
 
 	@FXML
 	private Label bodyToFill;
-	
+
 	@FXML
 	private TextField urlToScrape;
 

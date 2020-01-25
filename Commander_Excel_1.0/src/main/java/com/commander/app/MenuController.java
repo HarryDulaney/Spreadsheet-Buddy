@@ -1,29 +1,18 @@
-package com.commander.app;
+package main.java.com.commander.app;
 
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.commander.app.model.ExcelAccessObject;
-import com.commander.app.model.Project;
-import com.commander.app.model.ProjectBean;
-import com.commander.app.model.SuperCommand;
-import com.commander.app.model.utils.DuplicateChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.application.Platform;
@@ -40,6 +29,10 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.java.com.commander.app.model.ExcelAccessObject;
+import main.java.com.commander.app.model.ProjectBean;
+import main.java.com.commander.app.model.SuperCommand;
+import main.java.com.commander.app.model.utils.DuplicateChecker;
 
 /**
  * The Controller for the Main Menu
@@ -48,8 +41,7 @@ import javafx.stage.StageStyle;
  */
 
 public class MenuController {
-	
-	
+
 	private MainMenu mainmenu;
 
 	@FXML
@@ -175,14 +167,13 @@ public class MenuController {
 
 					int j = 1;
 					for (int i = 0; i < dupes.size(); i++) {
-						
+
 						Row row = sheet.createRow(j++);
 
 						row.createCell(0).setCellValue(dupes.get(i));
 					}
-					
-						sheet.autoSizeColumn(0);
-					
+
+					sheet.autoSizeColumn(0);
 
 					ExcelAccessObject.saveWorkbook(workbook);
 
@@ -320,7 +311,7 @@ public class MenuController {
 	}
 
 	/**
-	 * Handle launch web scrapper.
+	 * Handle launch web scraper.
 	 *
 	 * @throws Exception the exception
 	 */
@@ -360,10 +351,10 @@ public class MenuController {
 	 */
 	public void createNewProject() {
 
-		String projectName = PHelper.showInputPrompt("Create New SuperCommander Project",
+		String projectName = PHelper.showInputPrompt("Creating New Project",
 				"Please enter a name for your new project now", "Create New Project");
 
-		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", ".xml");
+		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", ".json");
 
 		if (projectFile != null) {
 
@@ -374,12 +365,12 @@ public class MenuController {
 	}
 
 	/**
-	 * Saves the 
+	 * Saves the
 	 *
 	 * @throws FileNotFoundException the file not found exception
 	 */
-	public static void saveProject() throws FileNotFoundException {
-
+	public static void saveProject() throws FileNotFoundException {}
+/*
 		if (ProjectBean.getInstance() != null) {
 
 			try {
@@ -401,16 +392,16 @@ public class MenuController {
 
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * Converts user and project info back from XML format.
 	 *
 	 * @param file the file
 	 */
-	public void openProject(File file) {
+	public void openProject(File file) {}
 
-		JAXBContext context;
+	/*	JAXBContext context;
 
 		try {
 			context = JAXBContext.newInstance(Project.class);
@@ -431,6 +422,7 @@ public class MenuController {
 
 		}
 	}
+	*/
 
 	/**
 	 * s Initialize.
@@ -447,17 +439,15 @@ public class MenuController {
 	public void setMainmenu(MainMenu mainmenu) {
 		this.mainmenu = mainmenu;
 	}
-	private static class DataAccessObject{
-		
+
+	private static class DataAccessObject {
+
 		private static final ObjectMapper MAPPING = new ObjectMapper();
-		
-		public static void writeToDefaultDirectory(final Object o)  {
-			
-			
-			
-			
+
+		public static void writeToDefaultDirectory(final Object o) {
+
 		}
-		
+
 	}
 
 }

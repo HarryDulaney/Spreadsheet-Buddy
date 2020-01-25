@@ -1,9 +1,9 @@
-package com.commander.app;
+package main.java.com.commander.app;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import com.commander.app.model.utils.CSVfilter;
+import main.java.com.commander.app.model.utils.CSVfilter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

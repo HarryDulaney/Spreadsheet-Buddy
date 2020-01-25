@@ -1,16 +1,18 @@
-package com.commander.app.model;
+package main.java.com.commander.app.model;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
+import main.java.com.commander.app.model.utils.SpreadSheetTask;
+import main.java.com.commander.app.utils.Scrapper.JsoupObj;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import com.commander.app.model.utils.SpreadSheetTask;
-import com.commander.app.utils.Scrapper.JsoupObj;
-
-@XmlRootElement
+/**
+ * 
+ * A SuperCommand object is that defines an automated operation on one or many
+ * Workbooks and Sheets.
+ * 
+ * 
+ * @author Harry Dulaney IV
+ */
 public class SuperCommand {
 
 	private String superCommandName;
@@ -23,16 +25,14 @@ public class SuperCommand {
 
 	}
 
-	@XmlElement
 	public LinkedList<SpreadSheetTask> getOrderedTasks() {
 		return orderedTasks;
 	}
 
-	public void setOrderedTasks(LinkedList<SpreadSheetTask> orderedTasks ) {
+	public void setOrderedTasks(LinkedList<SpreadSheetTask> orderedTasks) {
 		this.orderedTasks = orderedTasks;
 	}
 
-	@XmlElement(name = "SuperCommandName")
 	public String getSuperCommandName() {
 		return superCommandName;
 	}
@@ -42,7 +42,6 @@ public class SuperCommand {
 
 	}
 
-	@XmlElement(name = "MainFileIn")
 	public File getFileIn() {
 		return commFileIn;
 	}
@@ -51,7 +50,6 @@ public class SuperCommand {
 		this.commFileIn = fileIn;
 	}
 
-	@XmlElement(name = "MainFileOut")
 	public File getFileOut() {
 		return commfileOut;
 	}
@@ -60,7 +58,6 @@ public class SuperCommand {
 		this.commfileOut = commfileOut;
 	}
 
-	@XmlElement
 	public JsoupObj getScrapeFunc() {
 		return scrapeFunc;
 	}
@@ -74,6 +71,7 @@ public class SuperCommand {
 		orderedTasks.add(task);
 
 	}
+
 	public void removeLastTask(SpreadSheetTask task) {
 		orderedTasks.removeLast();
 	}

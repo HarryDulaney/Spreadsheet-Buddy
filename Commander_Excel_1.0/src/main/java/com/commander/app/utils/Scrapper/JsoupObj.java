@@ -1,4 +1,4 @@
-package com.commander.app.utils.Scrapper;
+package main.java.com.commander.app.utils.Scrapper;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.commander.app.model.ProjectElement;
+import main.java.com.commander.app.model.ProjectElement;
 
 @XmlRootElement
 public class JsoupObj extends ProjectElement {

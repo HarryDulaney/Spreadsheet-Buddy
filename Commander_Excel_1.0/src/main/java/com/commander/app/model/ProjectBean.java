@@ -1,19 +1,29 @@
-package com.commander.app.model;
+package main.java.com.commander.app.model;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+/**
+ * ProjectBean is a Singleton JavaBean. Instantiating a new ProjectBean is done
+ * using the static method: {@code ProjectBean.getInstance() }.
+ * <p>
+ * The ProjectBean represents the application users project properties, i.e.
+ * references to Workbooks, Sheets, user-defined directory folder, and
+ * SuperCommands{@link SuperCommand}.
+ * 
+ *
+ * @author Harry Dulaney IV
+ */
 public class ProjectBean {
+	//TO DO: Separate the Singleton constructors from this ProjectBean. 
 
+	/**
+	 * Represents the attributes and state of the current project.
+	 */
 	private static ProjectBean instance;
 
 	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
@@ -21,11 +31,11 @@ public class ProjectBean {
 
 	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
 	private String projectName;
-	
-	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
-	private Map<Workbook,Sheet[]> workbooksMap;
 
-	@JsonInclude
+	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
+	private List<SuperWorkbook> workbooks;
+
+	@JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
 	private File directoryLoc;
 
 	private static final String TEMP_DIR = "java.io.tmpdir";
@@ -53,13 +63,6 @@ public class ProjectBean {
 		return instance;
 
 	}
-	public Map<Workbook, Sheet[]> getWorkbooksMap() {
-		return workbooksMap;
-	}
-
-	public void setWorkbooksMap(Map<Workbook, Sheet[]> workbooksMap) {
-		this.workbooksMap = workbooksMap;
-	}
 
 	public LinkedList<SuperCommand> getSooperCommands() {
 		return this.sooperCommands;
@@ -85,7 +88,7 @@ public class ProjectBean {
 
 	public void closeProject() {
 
-		this.projectName = "";
+		this.projectName = null;
 		this.sooperCommands.clear();
 		instance = null;
 
@@ -101,8 +104,8 @@ public class ProjectBean {
 	}
 
 	public static ProjectBean getInstance() {
-		
-		if(instance == null) {
+
+		if (instance == null) {
 			return new ProjectBean();
 		}
 
