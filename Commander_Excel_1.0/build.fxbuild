@@ -2,7 +2,7 @@
 <anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://org.eclipse.fx.ide.jdt/1.0" buildDirectory="${project}/build">
   <deploy packagingFormat="all">
     <application name="Commander_Excel_1.0" mainclass="com.commander.app.MainMenu" version="1.0" toolkit="fx"/>
-    <info title="SuperCommander" vendor="Dulaney's"/>
+    <info title="SuperCommander" vendor="EthicalTechniques"/>
   </deploy>
   <signjar/>
 </anttasks:AntTask>

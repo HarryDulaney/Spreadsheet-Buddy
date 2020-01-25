@@ -8,18 +8,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
-
+import java.util.LinkedList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.poi.ss.formula.functions.Column;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.commander.app.model.ExcelAccessObject;
@@ -27,6 +24,7 @@ import com.commander.app.model.Project;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.SuperCommand;
 import com.commander.app.model.utils.DuplicateChecker;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -39,8 +37,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -52,7 +48,8 @@ import javafx.stage.StageStyle;
  */
 
 public class MenuController {
-
+	
+	
 	private MainMenu mainmenu;
 
 	@FXML
@@ -105,7 +102,7 @@ public class MenuController {
 
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setContentText("You're new project named: " + ProjectBean.getInstance().getName() + " was saved at: "
-					+ ProjectBean.getInstance().getProjectFile().toString());
+					+ ProjectBean.getInstance().getDirectoryLoc().toString());
 			alert.showAndWait();
 
 			try {
@@ -370,14 +367,14 @@ public class MenuController {
 
 		if (projectFile != null) {
 
-			ArrayList<SuperCommand> commands = new ArrayList<>();
+			LinkedList<SuperCommand> commands = new LinkedList<>();
 
 			ProjectBean.getInstance(projectName, projectFile, commands);
 		}
 	}
 
 	/**
-	 * Uses JAXB to convert the project instance to XML format for storage.
+	 * Saves the 
 	 *
 	 * @throws FileNotFoundException the file not found exception
 	 */
@@ -394,7 +391,7 @@ public class MenuController {
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
 				Project project = new Project(ProjectBean.getInstance().getName(),
-						ProjectBean.getInstance().getProjectFile(), ProjectBean.getInstance().getSooperCommands());
+						ProjectBean.getInstance().getDirectoryLoc(), ProjectBean.getInstance().getSooperCommands());
 
 				OutputStream output = new FileOutputStream(project.getProjectFile());
 				jaxbMarshaller.marshal(project, output);
@@ -449,6 +446,18 @@ public class MenuController {
 
 	public void setMainmenu(MainMenu mainmenu) {
 		this.mainmenu = mainmenu;
+	}
+	private static class DataAccessObject{
+		
+		private static final ObjectMapper MAPPING = new ObjectMapper();
+		
+		public static void writeToDefaultDirectory(final Object o)  {
+			
+			
+			
+			
+		}
+		
 	}
 
 }

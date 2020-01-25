@@ -2,13 +2,15 @@ package com.commander.app.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Project {
 
-	private ArrayList<SuperCommand> sooperCommands;
+	private	LinkedList<SuperCommand> sooperCommands;
 	private String projectName;
 	private File xmlFilePath;
 
@@ -16,18 +18,18 @@ public class Project {
 
 	}
 
-	public Project(String projectName, File xmlFilePath, ArrayList<SuperCommand> sooperCommands) {
+	public Project(String projectName, File xmlFilePath, LinkedList<SuperCommand> sooperCommands) {
 		this.projectName = projectName;
 		this.xmlFilePath = xmlFilePath;
 		this.sooperCommands = sooperCommands;
 	}
 
 	@XmlElement
-	public ArrayList<SuperCommand> getSooperCommands() {
+	public LinkedList<SuperCommand> getSooperCommands() {
 		return sooperCommands;
 	}
 
-	public void setSooperCommands(ArrayList<SuperCommand> sooperCommands) {
+	public void setSooperCommands(LinkedList<SuperCommand> sooperCommands) {
 		this.sooperCommands = sooperCommands;
 	}
 

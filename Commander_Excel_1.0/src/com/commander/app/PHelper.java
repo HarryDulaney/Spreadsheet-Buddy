@@ -1,8 +1,12 @@
 package com.commander.app;
 
 import java.io.File;
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Path;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -15,7 +19,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class PHelper {
+public final class PHelper {
+
+
 
 	public static File showFilePrompt(String title, String fileExtension1, String fileExtention2) {
 
@@ -26,14 +32,17 @@ public class PHelper {
 		return fileChooser.showOpenDialog(new Stage(StageStyle.UTILITY));
 
 	}
+
 	public static File showFilePrompt(String title, String fileExtension, Boolean initFileName) {
-		
+
 		FileChooser fchooser = new FileChooser();
 		fchooser.setTitle(title);
 		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(fileExtension, "*".concat(fileExtension)));
-		
-		if(initFileName) {fchooser.setInitialFileName("New_Excel_Workbook");}
-		
+
+		if (initFileName) {
+			fchooser.setInitialFileName("New_Excel_Workbook");
+		}
+
 		return fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 	}
 
@@ -46,16 +55,19 @@ public class PHelper {
 		return fileChooser.showOpenDialog(new Stage(StageStyle.TRANSPARENT));
 
 	}
+
 	public static String showInputPrompt(String header, String content, String title) {
-		
+
 		TextInputDialog textDialog = new TextInputDialog();
 		textDialog.setHeaderText(header);
 		textDialog.setContentText(content);
 		textDialog.setTitle(title);
 		textDialog.showAndWait();
-		
+
 		return textDialog.getResult();
 	}
+
+	
 
 	public static void showAlert(String contentText, Exception e) {
 
@@ -88,4 +100,13 @@ public class PHelper {
 
 	}
 
+}
+class SpecialProjectException extends Exception {
+	
+	public SpecialProjectException(String a, Throwable thr) {
+				super(a,thr);
+	}
+	
+	
+	
 }

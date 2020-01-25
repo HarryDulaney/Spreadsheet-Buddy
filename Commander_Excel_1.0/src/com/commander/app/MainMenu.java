@@ -2,8 +2,6 @@ package com.commander.app;
 
 import java.io.IOException;
 
-import com.commander.app.model.Project;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
 
 /**
  * @author H.G. Dulaney IV
