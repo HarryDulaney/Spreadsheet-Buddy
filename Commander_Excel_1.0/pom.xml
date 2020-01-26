@@ -85,4 +85,11 @@
 			<version>8.0.8</version>
 		</dependency>
 	</dependencies>
+	<developers>
+		<developer>
+			<name>Harry Dulaney IV</name>
+			<id>HGDIV</id>
+			<email>harrydulaney at gmail.com</email>
+		</developer>
+	</developers>
 </project>
