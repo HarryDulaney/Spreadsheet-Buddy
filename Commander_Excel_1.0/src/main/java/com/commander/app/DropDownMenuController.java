@@ -4,34 +4,38 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ResourceBundle;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.stage.FileChooser;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import main.java.com.commander.app.model.ExcelAccessObject;
+import main.java.com.commander.app.model.Main;
 import main.java.com.commander.app.model.ProjectBean;
 import main.java.com.commander.app.model.ProjectBean.DataAccessObject;
 import main.java.com.commander.app.model.SuperCommand;
@@ -43,15 +47,43 @@ import main.java.com.commander.app.model.utils.DuplicateChecker;
  * @author HG Dulaney IV
  */
 
-public class MenuController {
+public class DropDownMenuController implements Initializable {
 
-	private MainMenu mainmenu;
+	private Main main;
+	private ProjectBean project = null;
 
 	@FXML
 	private Menu buildMenu;
 
 	@FXML
 	private MenuItem projectSaveMenuItem;
+
+	@FXML
+	private BorderPane borderpane;
+
+	@FXML
+	private ComboBox<String> comboBox;
+
+	@FXML
+	private VBox sidePaneVbox;
+
+	@FXML
+	private Label label1;
+
+	@FXML
+	private Label label2;
+
+	@FXML
+	private ImageView arrowImage;
+
+	@FXML
+	private TableView<SuperCommand> tableView;
+
+	@FXML
+	private TableColumn<SuperCommand, String> commandName;
+
+	@FXML
+	private Label commandN;
 
 	/**
 	 * Handles event action for the "Save Project" button on the Drop-down menu
@@ -60,10 +92,12 @@ public class MenuController {
 	 */
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
+		try {
+			saveProject();
 
-		saveProject();
-
-		PHelper.showWarningAlert("You must first open or create a new project in order to perform this action");
+		} catch (Exception e) {
+			PHelper.showWarningAlert("You must first open or create a new project in order to perform this action");
+		}
 
 	}
 
@@ -78,7 +112,7 @@ public class MenuController {
 
 		createNewProject();
 
-		if (ProjectBean.getInstance() != null) {
+		if (project != null) {
 
 			saveProject();
 
@@ -90,7 +124,7 @@ public class MenuController {
 			alert.showAndWait();
 
 			try {
-				mainmenu.showProjectWindow();
+				main.initStartFrame();
 				projectSaveMenuItem.setDisable(false);
 
 			} catch (Exception e) {
@@ -110,20 +144,23 @@ public class MenuController {
 	 */
 	public void createNewProject() {
 
+		project = new ProjectBean();
+
 		String projectName = PHelper.showInputPrompt("Creating New Project",
-				"Please enter a name for your new project now", "Create New Project");
+				"Start by creating an unique name for you Project", "Create New Project");
 
-		File projectFile = PHelper.showFilePrompt("Create New SuperCommander Project", ".json");
+		if (projectName != null) {
+			project.setName(projectName);
 
-		if (projectFile != null) {
+			File directoryFilePath = PHelper.showFilePrompt("Choose the location to store your project files now.",
+					".json");
 
-			LinkedList<SuperCommand> commands = new LinkedList<>();
-			SuperCommand sc = new SuperCommand();
-			sc.setName("Start By Creating or trying some super-commands");
+			if (directoryFilePath != null) {
+				project.setDirectoryPath(directoryFilePath);
 
-			ProjectBean.getInstance().setSooperCommands(commands);
-			ProjectBean.getInstance().setName(projectName);
-			ProjectBean.getInstance().setDirectoryPath(projectFile);
+				PHelper.showSuccessAlert("New Project" + projectName + " Created!");
+
+			}
 		}
 	}
 
@@ -238,11 +275,11 @@ public class MenuController {
 		Stage stage = new Stage();
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/CSVfilterWiz.fxml"));
+		loader.setLocation(Main.class.getResource("/com/commander/app/view/CSVfilterWiz.fxml"));
 		Parent root = (Parent) loader.load();
 
 		CSVFilterController controller = loader.getController();
-		controller.setMainMenu(mainmenu);
+		controller.setMainMenu(main);
 		Scene scene = new Scene(root, 550, 600);
 
 		scene.getStylesheets().add("/com/commander/app/view/CommanderStyle1.css");
@@ -300,9 +337,7 @@ public class MenuController {
 
 			saveProject();
 
-			
 			ProjectBean.getInstance().closeProject();
-			
 
 			Platform.exit();
 
@@ -323,10 +358,8 @@ public class MenuController {
 		Stage stage = new Stage();
 
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(MainMenu.class.getResource("/com/commander/app/view/WebScrapeDefine.fxml"));
+		loader.setLocation(Main.class.getResource("/com/commander/app/view/WebScrapeDefine.fxml"));
 		Parent root = (Parent) loader.load();
-
-		ProjectController.setInitCounter(1);
 
 		Scene scene = new Scene(root, 550, 600);
 		scene.getStylesheets().add("/com/commander/app/view/CommanderStyle1.css");
@@ -344,8 +377,6 @@ public class MenuController {
 	@FXML
 	protected void handleOpenSpreadsheet(ActionEvent event) throws IOException {
 
-		ProjectController.showSpreadTableView();
-
 	}
 
 	/**
@@ -360,10 +391,29 @@ public class MenuController {
 			DataAccessObject.writeProjectJson(ProjectBean.getInstance().getDirectoryLoc(), ProjectBean.getInstance());
 
 		} else {
-			DataAccessObject.writeProjectJson(new File(System.getProperty("java.io.tmpdir")),
-					ProjectBean.getInstance());
 
 		}
+
+	}
+
+	@FXML
+	protected void handleOpenFile(ActionEvent event) throws IOException {
+
+		File userFile = PHelper.showFilePrompt("Choose which file you would like to oepn", ".csv", ".xlsx");
+		/*
+		 * currentCommand.setFileIn(userFile);
+		 * 
+		 * DropDownMenuController.saveProject();
+		 * 
+		 * commandN.setText(currentCommand.getName()); commandN.setVisible(true);
+		 */
+
+	}
+
+	@FXML
+	protected void handleOpenScrapper(ActionEvent event) throws IOException {
+
+		comboBox.setVisible(true);
 
 	}
 
@@ -374,40 +424,22 @@ public class MenuController {
 	 */
 	public void openProject(File file) {
 
-		if(DataAccessObject.readProjectJson(file)) {
-			
-		}else {
+		if (DataAccessObject.readProjectJson(file)) {
+
+		} else {
 			PHelper.showErrorAlert("Please double check you are attempting to open the correct file and try again");
 		}
-		
-		
-	}
-	
-	 
-
-	/**
-	 * s Initialize.
-	 */
-	@FXML
-	public void initialize() {
-
-		try {
-			PropertyUtils.getProperty(MainMenu.class, "mainmenu");
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public MainMenu getMainmenu() {
-		return mainmenu;
-	}
-
-	public void setMainmenu(MainMenu mainmenu) {
-		this.mainmenu = mainmenu;
-	}
-
-	
 
 	}
 
+	public BorderPane getBp() {
+		return borderpane;
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		project = new ProjectBean();
+
+	}
+
+}

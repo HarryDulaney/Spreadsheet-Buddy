@@ -48,11 +48,11 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>4.1.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.200</version>
-			<scope>test</scope>
+			<version>1.4.194</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsoup</groupId>

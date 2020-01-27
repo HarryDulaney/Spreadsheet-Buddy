@@ -1,13 +1,8 @@
 package main.java.com.commander.app;
 
 import java.io.File;
-import java.io.IOException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Path;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -73,6 +68,12 @@ public final class PHelper {
 	}
 	public static void showErrorAlert(String content) {
 		Alert alert = new Alert(AlertType.ERROR);
+		alert.setContentText(content);
+		alert.showAndWait();
+		  
+	}
+	public static void showSuccessAlert(String content) {
+		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setContentText(content);
 		alert.showAndWait();
 		  

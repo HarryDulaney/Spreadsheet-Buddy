@@ -3,6 +3,7 @@ package main.java.com.commander.app;
 import java.io.File;
 import java.util.ArrayList;
 
+import main.java.com.commander.app.model.Main;
 import main.java.com.commander.app.model.utils.CSVfilter;
 
 import javafx.event.ActionEvent;
@@ -21,7 +22,7 @@ public class CSVFilterController {
 
 	private CSVfilter csVfilter;
 	private File file;
-	private MainMenu m;
+	private Main m;
 
 	@FXML
 	private TextField textfield1;
@@ -137,7 +138,7 @@ public class CSVFilterController {
 
 	}
 
-	public void setMainMenu(MainMenu m) {
+	public void setMainMenu(Main m) {
 		this.m = m;
 	}
 

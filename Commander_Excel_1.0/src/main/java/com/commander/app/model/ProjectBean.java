@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
+import java.util.prefs.Preferences;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -29,7 +32,7 @@ public class ProjectBean {
 	private File directoryLoc = null;
 	private String TEMP_DIR;
 
-	private ProjectBean() {
+	public ProjectBean() {
 		setTEMP_DIR(System.getProperty("java.io.tmpdir"));
 
 	}
@@ -112,14 +115,18 @@ public class ProjectBean {
 	
 	public static class DataAccessObject {
 
-		public static void writeProjectJson(final File resultFile, final Object value) {
+		public static void writeProjectJson(final File resultFile, final ProjectBean value) {
 
 			ObjectMapper mapper = new ObjectMapper();
 
 			try {
-				mapper.writeValue(resultFile, value);
+				String packagedBean = mapper.writeValueAsString(value);
+				
+				Properties p = new Properties();
+				p.setProperty(instance.getName(), packagedBean);
+			
+				
 			} catch (IOException e) {
-				// TODO Throw alert dialog
 				e.printStackTrace();
 			}
 
