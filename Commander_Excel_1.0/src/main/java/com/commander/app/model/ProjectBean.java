@@ -10,8 +10,8 @@ import java.util.prefs.Preferences;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * ProjectBean is a Singleton JavaBean. Instantiating a new ProjectBean is done
- * using the static method: {@code ProjectBean.getInstance() }.
+ * ProjectBean is JavaBean and factory class. Instantiating a new ProjectBean
+ * is done using the static method: {@code ProjectBean.getInstance() }.
  * <p>
  * The ProjectBean represents the application users project properties, i.e.
  * references to Workbooks, Sheets, user-defined directory folder, and
@@ -22,19 +22,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ProjectBean {
 
-	/**
-	 * Represents the attributes and state of the current project.
-	 */
 	private static ProjectBean instance;
+	private Integer projectID;
 	private LinkedList<SuperCommand> sooperCommands;
 	private String projectName;
 	private List<SuperWorkbook> workbooks;
 	private File directoryLoc = null;
-	private String TEMP_DIR;
 
-	public ProjectBean() {
-		setTEMP_DIR(System.getProperty("java.io.tmpdir"));
+	private ProjectBean() {
+		setProjectID(-1); // Mark new instances until persisted into DB memory
 
+	}
+
+	private ProjectBean(ProjectBean pb) {
+		instance = pb;
 	}
 
 	public static ProjectBean getInstance() {
@@ -44,6 +45,12 @@ public class ProjectBean {
 		}
 
 		return instance;
+
+	}
+
+	public static void getInstance(ProjectBean pb) {
+
+		instance = new ProjectBean(pb);
 
 	}
 
@@ -70,11 +77,10 @@ public class ProjectBean {
 	}
 
 	public void closeProject() {
+		if (instance != null) {
 
-		this.projectName = null;
-		this.sooperCommands.clear();
-		instance = null;
-
+			instance = null;
+		}
 	}
 
 	public File getDirectoryLoc() {
@@ -93,14 +99,6 @@ public class ProjectBean {
 	public void setWorkbooks(List<SuperWorkbook> workbooks) {
 		this.workbooks = workbooks;
 	}
-	
-	public String getTEMP_DIR() {
-		return TEMP_DIR;
-	}
-
-	public void setTEMP_DIR(String tEMP_DIR) {
-		this.TEMP_DIR = tEMP_DIR;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -112,8 +110,16 @@ public class ProjectBean {
 		return "Project Name: " + projectName;
 
 	}
-	
-	public static class DataAccessObject {
+
+	public Integer getProjectID() {
+		return projectID;
+	}
+
+	public void setProjectID(Integer projectID) {
+		this.projectID = projectID;
+	}
+
+	public static class JsonAccessObject {
 
 		public static void writeProjectJson(final File resultFile, final ProjectBean value) {
 
@@ -121,11 +127,10 @@ public class ProjectBean {
 
 			try {
 				String packagedBean = mapper.writeValueAsString(value);
-				
+
 				Properties p = new Properties();
 				p.setProperty(instance.getName(), packagedBean);
-			
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -139,9 +144,9 @@ public class ProjectBean {
 
 			try {
 
-				  ProjectBean.instance = mapper.readValue(file,ProjectBean.class);
-				  
-				  success = true;
+				ProjectBean.instance = mapper.readValue(file, ProjectBean.class);
+
+				success = true;
 			} catch (IOException e) {
 				success = false;
 				e.printStackTrace();

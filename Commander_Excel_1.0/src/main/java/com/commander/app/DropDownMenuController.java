@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -31,13 +30,15 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import main.java.com.commander.app.model.ExcelAccessObject;
 import main.java.com.commander.app.model.Main;
 import main.java.com.commander.app.model.ProjectBean;
-import main.java.com.commander.app.model.ProjectBean.DataAccessObject;
+import main.java.com.commander.app.model.ProjectBean.JsonAccessObject;
 import main.java.com.commander.app.model.SuperCommand;
 import main.java.com.commander.app.model.utils.DuplicateChecker;
 
@@ -50,7 +51,7 @@ import main.java.com.commander.app.model.utils.DuplicateChecker;
 public class DropDownMenuController implements Initializable {
 
 	private Main main;
-	private ProjectBean project = null;
+	private static ProjectBean project = null;
 
 	@FXML
 	private Menu buildMenu;
@@ -85,42 +86,50 @@ public class DropDownMenuController implements Initializable {
 	@FXML
 	private Label commandN;
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+	}
+
 	/**
 	 * Handles event action for the "Save Project" button on the Drop-down menu
 	 *
-	 * @param event the event
+	 * @throws FileNotFoundException the file not found exception
+	 *
+	 * @param event button push
 	 */
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
-		try {
-			saveProject();
+		saveProject();
 
-		} catch (Exception e) {
-			PHelper.showWarningAlert("You must first open or create a new project in order to perform this action");
+	}
+
+	protected void saveProject() {
+		if (ProjectBean.getInstance().getDirectoryLoc() != null) {
+
+			JsonAccessObject.writeProjectJson(ProjectBean.getInstance().getDirectoryLoc(), ProjectBean.getInstance());
+
+		} else {
+			PHelper.showErrorAlert("No directory file location has been set for this project!");
+
 		}
 
 	}
 
 	/**
 	 * Handles creating new project.
-	 *
+	 * 
 	 * @param event the event
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@FXML
 	protected void handleNewProject(ActionEvent event) throws IOException {
 
-		createNewProject();
-
-		if (project != null) {
-
-			saveProject();
-
-			buildMenu.setDisable(false);
+		if (createNewProject()) {
 
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setContentText("You're new project named: " + ProjectBean.getInstance().getName() + " was saved at: "
-					+ ProjectBean.getInstance().getDirectoryLoc().toString());
+			alert.setContentText("You're new project named: " + project.getName() + " was saved at: "
+					+ project.getDirectoryLoc().toString());
 			alert.showAndWait();
 
 			try {
@@ -130,39 +139,216 @@ public class DropDownMenuController implements Initializable {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-		} else {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Please try again to create a new project");
-			alert.showAndWait();
 		}
 
 	}
 
 	/**
-	 * Creates the new project.
+	 * Handles creating the new project.
 	 */
-	public void createNewProject() {
+	protected boolean createNewProject() {
 
-		project = new ProjectBean();
+		project = ProjectBean.getInstance();
 
-		String projectName = PHelper.showInputPrompt("Creating New Project",
-				"Start by creating an unique name for you Project", "Create New Project");
+		String name = PHelper.showInputPrompt("Welcome to SuperCommander!",
+				"Start by assigning a unique name to you Project", "Start by naming your project.");
+		if (name != null) {
 
-		if (projectName != null) {
-			project.setName(projectName);
+			project.setName(name);
 
-			File directoryFilePath = PHelper.showFilePrompt("Choose the location to store your project files now.",
-					".json");
+			DirectoryChooser dc = new DirectoryChooser();
+			dc.titleProperty().set("Where would you like to save your project files?");
+			File projectPath = dc.showDialog(new Stage());
 
-			if (directoryFilePath != null) {
-				project.setDirectoryPath(directoryFilePath);
+			PHelper.showInfoAlert("Please pick a folder for where you would like your new project directory.", true);
 
-				PHelper.showSuccessAlert("New Project" + projectName + " Created!");
+			if (projectPath != null) {
+				if (!projectPath.canWrite()) {
+					try {
+						projectPath.setWritable(true);
+						if (projectPath.canWrite()) {
+
+							String readyWrite = projectPath.toString().concat(name);
+							File file = new File(readyWrite);
+							if (file.mkdir()) {
+
+								project.setDirectoryPath(projectPath);
+
+								ProjectBean.getInstance(project);
+
+								PHelper.showSuccessAlert("New Project " + name + " successfully created!");
+
+							}
+						}
+
+					} catch (SecurityException se) {
+
+						PHelper.showErrorAlert(
+								"You do not have the required permission to read and write to this folder. "
+										+ "Please try creating a project in a different folder");
+
+						se.printStackTrace();
+						return false;
+					}
+
+				} else {
+
+					String readyWrite = projectPath.toString().concat(name);
+					File file = new File(readyWrite);
+					if (file.mkdir()) {
+
+						project.setDirectoryPath(projectPath);
+
+						ProjectBean.getInstance(project);
+
+						PHelper.showSuccessAlert("New Project " + name + " successfully created!");
+						return true;
+
+					}
+
+				}
 
 			}
 		}
+		return false;
 	}
+
+	/**
+	 * Handles the about super commander link which re-directs to SuperCommander
+	 * GitHub page.
+	 *
+	 * @param event the event
+	 */
+	@FXML
+	protected void handleAboutSuperCommander(ActionEvent event) {
+
+		try {
+			URI url = new URI("https://github.com/Nothingrhymeswithorange/SuperCommander_1.0/blob/master/README.md");
+
+			Desktop.getDesktop().browse(url);
+
+		} catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("We were unable to open the weblink to the about me document you requested");
+			alert.show();
+		}
+
+	}
+
+	/**
+	 * Handles the command to exit the application.
+	 *
+	 * @param event the event
+	 */
+	@FXML
+	protected void handleExitCommander(ActionEvent event) {
+
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Action");
+		alert.setHeaderText("Are you sure you want to do that?");
+		alert.setContentText(
+				"Are you sure you want to exit the project build? Hit YES if you wish to exit, your project will save automa"
+						+ "tically. Hit NO if you wish to continue working.");
+
+		alert.getButtonTypes().removeAll(ButtonType.CANCEL, ButtonType.OK);
+		alert.getButtonTypes().add(ButtonType.YES);
+		alert.getButtonTypes().add(ButtonType.NO);
+		alert.showAndWait();
+
+		ButtonType result = alert.getResult();
+
+		if (result == ButtonType.YES) {
+			if (project != null && project.getDirectoryLoc() != null) {
+				saveProject();
+			}
+
+			ProjectBean.getInstance().closeProject();
+			Platform.exit();
+
+		} else if (result == ButtonType.NO) {
+
+			// DO nothing.... GO Back
+		}
+	}
+
+	/**
+	 * Converts user and project info back from XML format.
+	 *
+	 * @param file the file
+	 */
+	public void openProject(File file) {
+
+		if (JsonAccessObject.readProjectJson(file)) {
+
+		} else {
+			PHelper.showErrorAlert("Please double check you are attempting to open the correct file and try again");
+		}
+
+	}
+
+	/**
+	 * Handles opening a saved user project.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@FXML
+	protected void handleOpenProject(ActionEvent event) throws IOException {
+
+		File toOpen = PHelper.showFilePrompt("Choose the project you would like to open", ",json");
+
+		if (toOpen != null) {
+
+			try {
+				openProject(toOpen);
+				projectSaveMenuItem.setDisable(false);
+
+			} catch (Exception e) {
+
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("Sorry we were not able to open the selected file, please try again");
+				alert.showAndWait();
+
+			}
+
+		}
+	}
+
+	/**
+	 * Handles opening a .xslx or .csv file in a spreadsheet editable view.
+	 *
+	 * @param event the event
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@FXML
+	protected void handleOpenSpreadsheet(ActionEvent event) throws IOException {
+
+	}
+
+	@FXML
+	protected void handleOpenFile(ActionEvent event) throws IOException {
+
+		File userFile = PHelper.showFilePrompt("Choose which file you would like to oepn", ".csv", ".xlsx");
+		/*
+		 * currentCommand.setFileIn(userFile);
+		 * 
+		 * DropDownMenuController.saveProject();
+		 * 
+		 * commandN.setText(currentCommand.getName()); commandN.setVisible(true);
+		 */
+
+	}
+
+	public BorderPane getBp() {
+		return borderpane;
+	}
+
+	/*
+	 * Below are independent spreadsheet tasks. These will be taken out and put in
+	 * there own program as they do not let the user define the operations
+	 * explicitly
+	 */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Handles consolidate workbooks.
@@ -235,34 +421,6 @@ public class DropDownMenuController implements Initializable {
 	}
 
 	/**
-	 * Handles opening a saved user project.
-	 *
-	 * @param event the event
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	@FXML
-	protected void handleOpenProject(ActionEvent event) throws IOException {
-
-		File toOpen = PHelper.showFilePrompt("Choose the project you would like to open", ",json");
-
-		if (toOpen != null) {
-
-			try {
-				openProject(toOpen);
-				projectSaveMenuItem.setDisable(false);
-
-			} catch (Exception e) {
-
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Sorry we were not able to open the selected file, please try again");
-				alert.showAndWait();
-
-			}
-
-		}
-	}
-
-	/**
 	 * Handles the task for filtering user specified entries from a CSV spreadsheet.
 	 * (Individual Task)
 	 *
@@ -291,63 +449,6 @@ public class DropDownMenuController implements Initializable {
 	}
 
 	/**
-	 * Handles the about super commander link which re-directs to SuperCommander
-	 * GitHub page.
-	 *
-	 * @param event the event
-	 */
-	@FXML
-	protected void handleAboutSuperCommander(ActionEvent event) {
-
-		try {
-			URI url = new URI("https://github.com/Nothingrhymeswithorange/SuperCommander_1.0/blob/master/README.md");
-
-			Desktop.getDesktop().browse(url);
-
-		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("We were unable to open the weblink to the about me document you requested");
-			alert.show();
-		}
-
-	}
-
-	/**
-	 * Handles the command to exit the application.
-	 *
-	 * @param event the event
-	 */
-	@FXML
-	protected void handleExitCommander(ActionEvent event) {
-
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirm Action");
-		alert.setHeaderText("Are you sure you want to do that?");
-		alert.setContentText(
-				"Are you sure you want to exit the project build? Hit YES if you wish to exit, your project will save automa"
-						+ "tically. Hit NO if you wish to continue working.");
-
-		alert.getButtonTypes().removeAll(ButtonType.CANCEL, ButtonType.OK);
-		alert.getButtonTypes().add(ButtonType.YES);
-		alert.getButtonTypes().add(ButtonType.NO);
-		alert.showAndWait();
-
-		ButtonType result = alert.getResult();
-		if (result == ButtonType.YES) {
-
-			saveProject();
-
-			ProjectBean.getInstance().closeProject();
-
-			Platform.exit();
-
-		} else if (result == ButtonType.NO) {
-
-			// DO nothing.... GO Back
-		}
-	}
-
-	/**
 	 * Handle launch web scraper.
 	 *
 	 * @throws Exception the exception
@@ -368,77 +469,10 @@ public class DropDownMenuController implements Initializable {
 
 	}
 
-	/**
-	 * Handle open spreadsheet.
-	 *
-	 * @param event the event
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	@FXML
-	protected void handleOpenSpreadsheet(ActionEvent event) throws IOException {
-
-	}
-
-	/**
-	 * Saves the
-	 *
-	 * @throws FileNotFoundException the file not found exception
-	 */
-	public static void saveProject() {
-
-		if (ProjectBean.getInstance().getDirectoryLoc() != null) {
-
-			DataAccessObject.writeProjectJson(ProjectBean.getInstance().getDirectoryLoc(), ProjectBean.getInstance());
-
-		} else {
-
-		}
-
-	}
-
-	@FXML
-	protected void handleOpenFile(ActionEvent event) throws IOException {
-
-		File userFile = PHelper.showFilePrompt("Choose which file you would like to oepn", ".csv", ".xlsx");
-		/*
-		 * currentCommand.setFileIn(userFile);
-		 * 
-		 * DropDownMenuController.saveProject();
-		 * 
-		 * commandN.setText(currentCommand.getName()); commandN.setVisible(true);
-		 */
-
-	}
-
 	@FXML
 	protected void handleOpenScrapper(ActionEvent event) throws IOException {
 
 		comboBox.setVisible(true);
-
-	}
-
-	/**
-	 * Converts user and project info back from XML format.
-	 *
-	 * @param file the file
-	 */
-	public void openProject(File file) {
-
-		if (DataAccessObject.readProjectJson(file)) {
-
-		} else {
-			PHelper.showErrorAlert("Please double check you are attempting to open the correct file and try again");
-		}
-
-	}
-
-	public BorderPane getBp() {
-		return borderpane;
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		project = new ProjectBean();
 
 	}
 

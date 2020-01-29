@@ -73,10 +73,14 @@ public final class PHelper {
 		  
 	}
 	public static void showSuccessAlert(String content) {
+	
+		  
+	}
+	public static void showInfoAlert(String content, boolean wait) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setContentText(content);
-		alert.showAndWait();
-		  
+		if(wait) { alert.showAndWait();}else {alert.show();}
+		
 	}
 
 	public static void showExceptionAlert(String contentText, Exception e) {

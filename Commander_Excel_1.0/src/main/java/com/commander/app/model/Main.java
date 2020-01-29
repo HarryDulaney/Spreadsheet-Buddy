@@ -6,16 +6,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import main.java.com.commander.app.PHelper;
 
 /**
  * @author HGDIV
  */
 
 public class Main extends Application {
-
+	
 	private Stage primaryStage;
 
 	private final static String ROOT_MENU = "/main/java/com/commander/app/view/StartMenu.fxml";
+
 
 	/**
 	 * Application main entry point.
@@ -37,16 +39,17 @@ public class Main extends Application {
 	}
 
 	public void initStartFrame() throws IOException {
-		
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource(ROOT_MENU));
 
-		AnchorPane pane = (AnchorPane) loader.load();		
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource(ROOT_MENU));
+	
+		AnchorPane pane = (AnchorPane) loader.load();
 
 		Scene scene = new Scene(pane);
-
 		primaryStage.setScene(scene);
 		primaryStage.show();
-
+		
+		PHelper.showInfoAlert("Welcome! Start by creating a new project from the File menu", true);
+	
 	}
 
 	/**
@@ -56,5 +59,7 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	public Stage getStage() {
+		return primaryStage;
+	}
 }
