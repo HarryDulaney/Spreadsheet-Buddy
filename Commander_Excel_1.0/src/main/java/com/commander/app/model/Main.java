@@ -18,6 +18,7 @@ public class Main extends Application {
 
 	private final static String ROOT_MENU = "/main/java/com/commander/app/view/StartMenu.fxml";
 
+	private static Main main;
 
 	/**
 	 * Application main entry point.
@@ -26,9 +27,10 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
-
+		main = this;
+		
 		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("Welcome to Super Commander for MS Excel");
+		primaryStage.setTitle("Welcome to Super Commander for MS Excel");
 
 		try {
 			initStartFrame();
@@ -38,6 +40,11 @@ public class Main extends Application {
 
 	}
 
+	/**
+	 * Initialize the root frame and tool-bar
+	 * Initialize its controller 
+	 * 
+	 */
 	public void initStartFrame() throws IOException {
 
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource(ROOT_MENU));
@@ -48,18 +55,18 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		PHelper.showInfoAlert("Welcome! Start by creating a new project from the File menu", true);
+//		PHelper.showInfoAlert("Welcome! Start by creating a new project from the File menu", true);
 	
 	}
 
-	/**
-	 * Initialize the root frame which contains the Drop Down MenuBar for the GUI.
-	 */
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 	public Stage getStage() {
 		return primaryStage;
+	}
+	public static Main getMain() {
+		return main;
 	}
 }

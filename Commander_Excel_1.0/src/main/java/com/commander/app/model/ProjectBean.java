@@ -2,16 +2,19 @@ package main.java.com.commander.app.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * ProjectBean is JavaBean and factory class. Instantiating a new ProjectBean
- * is done using the static method: {@code ProjectBean.getInstance() }.
+ * ProjectBean is JavaBean and factory class. Instantiating a new ProjectBean is
+ * done using the static method: {@code ProjectBean.getInstance() }.
  * <p>
  * The ProjectBean represents the application users project properties, i.e.
  * references to Workbooks, Sheets, user-defined directory folder, and
@@ -27,15 +30,12 @@ public class ProjectBean {
 	private LinkedList<SuperCommand> sooperCommands;
 	private String projectName;
 	private List<SuperWorkbook> workbooks;
-	private File directoryLoc = null;
+	private File directoryFile = null;
+	private File projectFile = null;
 
 	private ProjectBean() {
-		setProjectID(-1); // Mark new instances until persisted into DB memory
+		setProjectID(-1); // Mark new instances with (ID = -1) until persisted into DB memory
 
-	}
-
-	private ProjectBean(ProjectBean pb) {
-		instance = pb;
 	}
 
 	public static ProjectBean getInstance() {
@@ -45,12 +45,6 @@ public class ProjectBean {
 		}
 
 		return instance;
-
-	}
-
-	public static void getInstance(ProjectBean pb) {
-
-		instance = new ProjectBean(pb);
 
 	}
 
@@ -83,12 +77,12 @@ public class ProjectBean {
 		}
 	}
 
-	public File getDirectoryLoc() {
-		return directoryLoc;
+	public File getDirectoryFile() {
+		return directoryFile;
 	}
 
-	public void setDirectoryPath(File file) {
-		this.directoryLoc = file;
+	public void setDirectoryFile(File file) {
+		this.directoryFile = file;
 
 	}
 
@@ -119,20 +113,36 @@ public class ProjectBean {
 		this.projectID = projectID;
 	}
 
+	public File getProjectFile() {
+		return projectFile;
+	}
+
+	public void setProjectFile(File projectFile) {
+
+		this.projectFile = projectFile;
+	}
+
 	public static class JsonAccessObject {
 
-		public static void writeProjectJson(final File resultFile, final ProjectBean value) {
+		public static void writeProjectJson() throws IOException {
 
 			ObjectMapper mapper = new ObjectMapper();
 
 			try {
-				String packagedBean = mapper.writeValueAsString(value);
 
-				Properties p = new Properties();
-				p.setProperty(instance.getName(), packagedBean);
+				File resultFile = ProjectBean.getInstance().getDirectoryFile();
+				String readyWrite = resultFile.getAbsolutePath() + "\\" + ProjectBean.getInstance().getName() + ".json";
+				File readyFile = new File(readyWrite);
+			
+				if (readyFile.canWrite()) {
+					mapper.writeValue(readyFile, ProjectBean.getInstance());
+					ProjectBean.getInstance().setProjectFile(readyFile);
+				}
 
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (JsonGenerationException jge) {
+				jge.printStackTrace();
+			} catch (JsonMappingException jme) {
+				jme.printStackTrace();
 			}
 
 		}

@@ -85,9 +85,6 @@
 								<MenuItem mnemonicParsing="false"
 									onAction="#handleConsolidateWorkbooks"
 									text="Consolidate Workbooks" />
-								<MenuItem mnemonicParsing="false"
-									onAction="#handleCompareDuplicates"
-									text="Compare For Duplicates" />
 							</items>
 						</Menu>
 						<Menu mnemonicParsing="false" text="Help">

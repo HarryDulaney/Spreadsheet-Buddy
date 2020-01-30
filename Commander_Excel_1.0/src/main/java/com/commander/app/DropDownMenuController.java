@@ -6,13 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -35,12 +29,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import main.java.com.commander.app.model.ExcelAccessObject;
 import main.java.com.commander.app.model.Main;
 import main.java.com.commander.app.model.ProjectBean;
 import main.java.com.commander.app.model.ProjectBean.JsonAccessObject;
 import main.java.com.commander.app.model.SuperCommand;
-import main.java.com.commander.app.model.utils.DuplicateChecker;
 
 /**
  * The Controller for the Main Menu
@@ -49,9 +41,6 @@ import main.java.com.commander.app.model.utils.DuplicateChecker;
  */
 
 public class DropDownMenuController implements Initializable {
-
-	private Main main;
-	private static ProjectBean project = null;
 
 	@FXML
 	private Menu buildMenu;
@@ -100,14 +89,22 @@ public class DropDownMenuController implements Initializable {
 	 */
 	@FXML
 	protected void handleSaveProject(ActionEvent event) {
-		saveProject();
+
+		try {
+			saveProject();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			System.out.print("Error on saveProject() @DropDownMenuController.handleSaveProject()");
+
+		}
 
 	}
 
-	protected void saveProject() {
-		if (ProjectBean.getInstance().getDirectoryLoc() != null) {
+	protected void saveProject() throws IOException {
 
-			JsonAccessObject.writeProjectJson(ProjectBean.getInstance().getDirectoryLoc(), ProjectBean.getInstance());
+		if (ProjectBean.getInstance().getDirectoryFile() != null) {
+
+			JsonAccessObject.writeProjectJson();
 
 		} else {
 			PHelper.showErrorAlert("No directory file location has been set for this project!");
@@ -123,22 +120,30 @@ public class DropDownMenuController implements Initializable {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@FXML
-	protected void handleNewProject(ActionEvent event) throws IOException {
+	protected void handleNewProject(ActionEvent event) {
 
 		if (createNewProject()) {
+			try {
+				saveProject();
+
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+				System.out.print("Error on saveProject() @DropDownMenuController.handleNewProject()");
+			}
 
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setContentText("You're new project named: " + project.getName() + " was saved at: "
-					+ project.getDirectoryLoc().toString());
+
+			alert.setContentText("You succesfully created a new project named: \n" + ProjectBean.getInstance().getName()
+					+ "\n with project files located at: \n"
+					+ ProjectBean.getInstance().getDirectoryFile().getAbsolutePath());
 			alert.showAndWait();
 
-			try {
-				main.initStartFrame();
-				projectSaveMenuItem.setDisable(false);
+			projectSaveMenuItem.setDisable(false);
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		} else {
+			PHelper.showErrorAlert("Something went wrong. Please try creating a project folder "
+					+ "in a location that doesn't require admin permissions.");
+
 		}
 
 	}
@@ -148,69 +153,38 @@ public class DropDownMenuController implements Initializable {
 	 */
 	protected boolean createNewProject() {
 
-		project = ProjectBean.getInstance();
-
-		String name = PHelper.showInputPrompt("Welcome to SuperCommander!",
-				"Start by assigning a unique name to you Project", "Start by naming your project.");
+		String name = PHelper.showInputPrompt("First create a new project!",
+				"Assign a unique name to your project now: ", "Name your project.");
 		if (name != null) {
+			ProjectBean.getInstance().setName(name);
+			System.out.println(ProjectBean.getInstance().getName());
 
-			project.setName(name);
+			/*
+			 * PHelper.showInfoAlert( "Next, please select a folder where we will create " +
+			 * "your project directory.\n The purpose of " +
+			 * "a dedicated directory is that it gives Super-Commander a " +
+			 * "central location from which to read and write Excel files. ", true);
+			 */
 
 			DirectoryChooser dc = new DirectoryChooser();
-			dc.titleProperty().set("Where would you like to save your project files?");
-			File projectPath = dc.showDialog(new Stage());
+			dc.setTitle("Where would you like to save your project files?");
+			File projectFile = dc.showDialog(Main.getMain().getStage());
 
-			PHelper.showInfoAlert("Please pick a folder for where you would like your new project directory.", true);
+			if (projectFile != null) {
+				String prep = projectFile.getAbsolutePath() + "\\" + ProjectBean.getInstance().getName();
+				File readyFile = new File(prep);
 
-			if (projectPath != null) {
-				if (!projectPath.canWrite()) {
-					try {
-						projectPath.setWritable(true);
-						if (projectPath.canWrite()) {
-
-							String readyWrite = projectPath.toString().concat(name);
-							File file = new File(readyWrite);
-							if (file.mkdir()) {
-
-								project.setDirectoryPath(projectPath);
-
-								ProjectBean.getInstance(project);
-
-								PHelper.showSuccessAlert("New Project " + name + " successfully created!");
-
-							}
-						}
-
-					} catch (SecurityException se) {
-
-						PHelper.showErrorAlert(
-								"You do not have the required permission to read and write to this folder. "
-										+ "Please try creating a project in a different folder");
-
-						se.printStackTrace();
-						return false;
-					}
-
-				} else {
-
-					String readyWrite = projectPath.toString().concat(name);
-					File file = new File(readyWrite);
-					if (file.mkdir()) {
-
-						project.setDirectoryPath(projectPath);
-
-						ProjectBean.getInstance(project);
-
-						PHelper.showSuccessAlert("New Project " + name + " successfully created!");
-						return true;
-
-					}
+				boolean wroteDir = readyFile.mkdir();
+				if (wroteDir) {
+					ProjectBean.getInstance().setDirectoryFile(readyFile);
+					return true;
 
 				}
 
 			}
 		}
 		return false;
+
 	}
 
 	/**
@@ -258,8 +232,14 @@ public class DropDownMenuController implements Initializable {
 		ButtonType result = alert.getResult();
 
 		if (result == ButtonType.YES) {
-			if (project != null && project.getDirectoryLoc() != null) {
-				saveProject();
+			if (ProjectBean.getInstance().getName() != null && ProjectBean.getInstance().getDirectoryFile() != null) {
+
+				try {
+					saveProject();
+
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
 			}
 
 			ProjectBean.getInstance().closeProject();
@@ -361,66 +341,6 @@ public class DropDownMenuController implements Initializable {
 	}
 
 	/**
-	 * Handles comparing two .xlsx spreadsheets for duplicate entries. (This is a
-	 * individual task)
-	 *
-	 * @param event the event
-	 */
-	@FXML
-	protected void handleCompareDuplicates(ActionEvent event) {
-
-		File fileOne = PHelper.showFilePrompt("Choose the file containing the first spreadsheet", ".xlsx");
-
-		if (fileOne != null) {
-
-			File fileTwo = PHelper.showFilePrompt(
-					"Choose the file containing the second spreadsheet to compare to the first.", ".xlsx");
-			if (fileTwo != null) {
-
-				String colName = PHelper.showInputPrompt("Task data requested...",
-						"Please enter the header for the column to check for duplicate values "
-								+ "For Example: Email or Client ID Number: ",
-						"Compare For Duplicates Task ");
-
-				if (colName != null) {
-
-					DuplicateChecker dupCheck = new DuplicateChecker(fileOne, fileTwo, colName);
-					ArrayList<String> dupes = null;
-
-					try {
-						dupes = dupCheck.checkForDuplicates();
-
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					Workbook workbook = new XSSFWorkbook();
-
-					Sheet sheet = workbook.createSheet("Duplicates");
-
-					Row headerRow = sheet.createRow(0);
-
-					headerRow.createCell(0).setCellValue("Duplicate " + dupCheck.getColumnToCheck() + " 's");
-
-					int j = 1;
-					for (int i = 0; i < dupes.size(); i++) {
-
-						Row row = sheet.createRow(j++);
-
-						row.createCell(0).setCellValue(dupes.get(i));
-					}
-
-					sheet.autoSizeColumn(0);
-
-					ExcelAccessObject.saveWorkbook(workbook);
-
-				}
-			}
-		}
-
-	}
-
-	/**
 	 * Handles the task for filtering user specified entries from a CSV spreadsheet.
 	 * (Individual Task)
 	 *
@@ -437,7 +357,7 @@ public class DropDownMenuController implements Initializable {
 		Parent root = (Parent) loader.load();
 
 		CSVFilterController controller = loader.getController();
-		controller.setMainMenu(main);
+		
 		Scene scene = new Scene(root, 550, 600);
 
 		scene.getStylesheets().add("/com/commander/app/view/CommanderStyle1.css");
