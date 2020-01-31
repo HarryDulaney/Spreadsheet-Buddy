@@ -32,6 +32,7 @@ import javafx.stage.Stage;
 import main.java.com.commander.app.model.Main;
 import main.java.com.commander.app.model.ProjectBean;
 import main.java.com.commander.app.model.ProjectBean.JsonAccessObject;
+import main.java.com.commander.app.model.utils.PHelper;
 import main.java.com.commander.app.model.SuperCommand;
 
 /**
@@ -340,33 +341,7 @@ public class DropDownMenuController implements Initializable {
 
 	}
 
-	/**
-	 * Handles the task for filtering user specified entries from a CSV spreadsheet.
-	 * (Individual Task)
-	 *
-	 * @param event the event
-	 * @throws Exception the exception
-	 */
-	@FXML
-	protected void handleCSVFilter(ActionEvent event) throws Exception {
-
-		Stage stage = new Stage();
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(Main.class.getResource("/com/commander/app/view/CSVfilterWiz.fxml"));
-		Parent root = (Parent) loader.load();
-
-		CSVFilterController controller = loader.getController();
-		
-		Scene scene = new Scene(root, 550, 600);
-
-		scene.getStylesheets().add("/com/commander/app/view/CommanderStyle1.css");
-
-		stage.setScene(scene);
-		if (controller.getFile() != null) {
-			stage.show();
-		}
-	}
+	
 
 	/**
 	 * Handle launch web scraper.

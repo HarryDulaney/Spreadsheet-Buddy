@@ -2,12 +2,8 @@ package main.java.com.commander.app.model;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
-import java.util.prefs.Preferences;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

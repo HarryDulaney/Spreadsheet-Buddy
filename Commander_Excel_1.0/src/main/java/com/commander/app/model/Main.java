@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import main.java.com.commander.app.PHelper;
+import main.java.com.commander.app.model.utils.PHelper;
 
 /**
  * @author HGDIV
