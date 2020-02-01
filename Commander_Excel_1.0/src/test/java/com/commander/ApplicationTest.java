@@ -1,4 +1,4 @@
-package test.java.com.commander;
+package com.commander;
 
 import java.io.File;
 

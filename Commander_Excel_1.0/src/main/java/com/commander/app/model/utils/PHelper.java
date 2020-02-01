@@ -1,4 +1,4 @@
-package main.java.com.commander.app.model.utils;
+package com.commander.app.model.utils;
 
 import java.io.File;
 import java.io.PrintWriter;

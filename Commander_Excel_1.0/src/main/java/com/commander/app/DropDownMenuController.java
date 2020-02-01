@@ -1,4 +1,4 @@
-package main.java.com.commander.app;
+package com.commander.app;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -29,11 +29,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import main.java.com.commander.app.model.Main;
-import main.java.com.commander.app.model.ProjectBean;
-import main.java.com.commander.app.model.ProjectBean.JsonAccessObject;
-import main.java.com.commander.app.model.utils.PHelper;
-import main.java.com.commander.app.model.SuperCommand;
+import com.commander.app.model.Main;
+import com.commander.app.model.ProjectBean;
+import com.commander.app.model.ProjectBean.JsonAccessObject;
+import com.commander.app.model.utils.PHelper;
+import com.commander.app.model.SuperCommand;
 
 /**
  * The Controller for the Main Menu

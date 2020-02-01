@@ -1,6 +1,6 @@
-package main.java.com.commander.app.model.utils;
+package com.commander.app.model.utils;
 
-import main.java.com.commander.app.model.ProjectElement;
+import com.commander.app.model.ProjectElement;
 import javafx.concurrent.Task;
 
 public class SSTask extends Task<ProjectElement> {

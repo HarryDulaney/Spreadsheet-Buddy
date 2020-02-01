@@ -1,4 +1,4 @@
-package main.java.com.commander.app;
+package com.commander.app;
 
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 

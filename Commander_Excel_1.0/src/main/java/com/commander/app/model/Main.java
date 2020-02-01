@@ -1,4 +1,4 @@
-package main.java.com.commander.app.model;
+package com.commander.app.model;
 
 import java.io.IOException;
 import javafx.application.Application;
@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import main.java.com.commander.app.model.utils.PHelper;
+import com.commander.app.model.utils.PHelper;
 
 /**
  * @author HGDIV
@@ -16,7 +16,7 @@ public class Main extends Application {
 	
 	private Stage primaryStage;
 
-	private final static String ROOT_MENU = "/main/java/com/commander/app/view/StartMenu.fxml";
+	private final static String ROOT_MENU = "/com/commander/app/view/StartMenu.fxml";
 
 	private static Main main;
 

@@ -1,4 +1,4 @@
-package main.java.com.commander.app.model;
+package com.commander.app.model;
 
 import java.io.File;
 

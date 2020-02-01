@@ -1,8 +1,8 @@
-package main.java.com.commander.app.model;
+package com.commander.app.model;
 
 import java.io.File;
 import java.util.LinkedList;
-import main.java.com.commander.app.model.utils.SSTask;
+import com.commander.app.model.utils.SSTask;
 
 /**
  * 

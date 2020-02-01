@@ -1,4 +1,4 @@
-package main.java.com.commander.app.model;
+package com.commander.app.model;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import main.java.com.commander.app.model.utils.PHelper;
+import com.commander.app.model.utils.PHelper;
 
 /**
  * Like a DB object this is an "Excel Access Object"
