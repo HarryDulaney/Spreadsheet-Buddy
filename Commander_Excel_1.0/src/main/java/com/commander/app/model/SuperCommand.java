@@ -3,7 +3,6 @@ package main.java.com.commander.app.model;
 import java.io.File;
 import java.util.LinkedList;
 import main.java.com.commander.app.model.utils.SSTask;
-import main.java.com.commander.app.utils.Scrapper.JsoupObj;
 
 /**
  * 
@@ -18,7 +17,6 @@ public class SuperCommand {
 	private String superCommandName;
 	private File commFileIn;
 	private File commfileOut;
-	private JsoupObj scrapeFunc;
 	private LinkedList<SSTask> orderedTasks;
 
 	public SuperCommand() {
@@ -57,14 +55,6 @@ public class SuperCommand {
 
 	public void setFileOut(File commfileOut) {
 		this.commfileOut = commfileOut;
-	}
-
-	public JsoupObj getScrapeFunc() {
-		return scrapeFunc;
-	}
-
-	public void setScrapeFunc(JsoupObj scrapeFunc) {
-		this.scrapeFunc = scrapeFunc;
 	}
 
 	public void addTask(SSTask task) {
