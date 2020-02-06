@@ -33,7 +33,7 @@ import com.commander.app.model.Main;
 import com.commander.app.model.ProjectBean;
 import com.commander.app.model.ProjectBean.JsonAccessObject;
 import com.commander.app.model.utils.PHelper;
-import com.commander.app.model.SuperCommand;
+import com.commander.app.model.utils.SuperCommand;
 
 /**
  * The Controller for the Main Menu

@@ -4,15 +4,10 @@ import java.io.File;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 public class SuperWorkbook extends XSSFWorkbook {
 
-	@JsonInclude(value = Include.ALWAYS)
-	private String workbookName;
-
-	@JsonInclude(value = Include.ALWAYS)
+	
+	private String name;
 	private File fileLoc;
 
 	public SuperWorkbook() {
@@ -23,19 +18,19 @@ public class SuperWorkbook extends XSSFWorkbook {
 		fileLoc = file;
 	}
 
-	public String getWorkbookName() {
-		return workbookName;
+	public String getName() {
+		return name;
 	}
 
-	public void setWorkbookName(String workbookName) {
-		this.workbookName = workbookName;
+	public void seName(String name) {
+		this.name = name;
 	}
 
-	public File getFileLoc() {
+	public File getFile() {
 		return fileLoc;
 	}
 
-	public void setFileLoc(File fileLoc) {
+	public void setFile(File fileLoc) {
 		this.fileLoc = fileLoc;
 	}
 

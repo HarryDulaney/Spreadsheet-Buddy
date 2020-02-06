@@ -1,2 +1,16 @@
 /InProcess/
 /target/
+/Design_Documents/
+/.settings/
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+*/bin
+*bin
+*.bin
+*bin

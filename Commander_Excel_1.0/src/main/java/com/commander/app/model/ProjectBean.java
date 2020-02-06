@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.springframework.data.annotation.Id;
+
+import com.commander.app.model.utils.SuperCommand;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,15 +26,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ProjectBean {
 
 	private static ProjectBean instance;
-	private Integer projectID;
-	private LinkedList<SuperCommand> sooperCommands;
+	
+	@Id
+	private String projectID;
+	
+	private LinkedList<SuperCommand> commands;
 	private String projectName;
 	private List<SuperWorkbook> workbooks;
 	private File directoryFile = null;
 	private File projectFile = null;
 
 	private ProjectBean() {
-		setProjectID(-1); // Mark new instances with (ID = -1) until persisted into DB memory
+		setProjectID("-1"); // Mark new instances with (ID = -1) until persisted into DB memory
 
 	}
 
@@ -45,11 +52,11 @@ public class ProjectBean {
 	}
 
 	public LinkedList<SuperCommand> getSooperCommands() {
-		return this.sooperCommands;
+		return this.commands;
 	}
 
 	public void setSooperCommands(LinkedList<SuperCommand> sooperCommands) {
-		this.sooperCommands = sooperCommands;
+		this.commands = sooperCommands;
 	}
 
 	public String getName() {
@@ -62,7 +69,7 @@ public class ProjectBean {
 
 	public void addCommand(SuperCommand supercommand) {
 
-		this.sooperCommands.add(supercommand);
+		this.commands.add(supercommand);
 
 	}
 
@@ -101,11 +108,11 @@ public class ProjectBean {
 
 	}
 
-	public Integer getProjectID() {
+	public String getProjectID() {
 		return projectID;
 	}
 
-	public void setProjectID(Integer projectID) {
+	public void setProjectID(String projectID) {
 		this.projectID = projectID;
 	}
 

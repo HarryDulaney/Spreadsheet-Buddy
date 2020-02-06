@@ -139,19 +139,19 @@
 							<top>
 								<JFXToolbar prefHeight="81.0" prefWidth="800.0" BorderPane.alignment="CENTER">
 									<top>
-										<JFXTextField text="TOp (ToolBar) ------------Needs Icons" BorderPane.alignment="CENTER" />
+										<JFXTextField BorderPane.alignment="CENTER" />
 									</top>
 									<left>
-										<JFXTextField text="Left" BorderPane.alignment="CENTER" />
+										<JFXTextField BorderPane.alignment="CENTER" />
 									</left>
 									<bottom>
 										<JFXTextField BorderPane.alignment="CENTER" />
 									</bottom>
 									<center>
-										<JFXTextField text="Center" BorderPane.alignment="CENTER" />
+										<JFXTextField BorderPane.alignment="CENTER" />
 									</center>
 									<right>
-										<JFXTextField text="Right" BorderPane.alignment="CENTER" />
+										<JFXTextField BorderPane.alignment="CENTER" />
 									</right>
 								</JFXToolbar>
 							</top>

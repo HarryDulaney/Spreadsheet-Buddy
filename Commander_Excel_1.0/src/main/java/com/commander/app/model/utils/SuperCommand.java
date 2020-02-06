@@ -1,8 +1,8 @@
-package com.commander.app.model;
+package com.commander.app.model.utils;
 
 import java.io.File;
 import java.util.LinkedList;
-import com.commander.app.model.utils.SSTask;
+import java.util.TreeMap;
 
 /**
  * 
@@ -14,9 +14,10 @@ import com.commander.app.model.utils.SSTask;
  */
 public class SuperCommand {
 
-	private String superCommandName;
-	private File commFileIn;
-	private File commfileOut;
+	private String name;
+	
+	private TreeMap<File,String> files;
+
 	private LinkedList<SSTask> orderedTasks;
 
 	public SuperCommand() {
@@ -33,28 +34,12 @@ public class SuperCommand {
 	}
 
 	public String getName() {
-		return superCommandName;
+		return name;
 	}
 
 	public void setName(String name) {
-		this.superCommandName = name;
+		this.name = name;
 
-	}
-
-	public File getFileIn() {
-		return commFileIn;
-	}
-
-	public void setFileIn(File fileIn) {
-		this.commFileIn = fileIn;
-	}
-
-	public File getFileOut() {
-		return commfileOut;
-	}
-
-	public void setFileOut(File commfileOut) {
-		this.commfileOut = commfileOut;
 	}
 
 	public void addTask(SSTask task) {
@@ -65,6 +50,14 @@ public class SuperCommand {
 
 	public void removeLastTask(SSTask task) {
 		orderedTasks.removeLast();
+	}
+
+	public TreeMap<File,String> getFiles() {
+		return files;
+	}
+
+	public void setFiles(TreeMap<File,String> files) {
+		this.files = files;
 	}
 
 }

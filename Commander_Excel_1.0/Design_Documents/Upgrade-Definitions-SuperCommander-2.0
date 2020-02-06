@@ -8,7 +8,7 @@ Improved methodology for updated design of SuperCommander-Excel-2.0:
 	 										- name 
 	 										- database stored id number
 	 										
-	 	-> HyperSQL to replace xml filesystem.
+	 	-> Mongo for project instances.
 	 	-> Java has a predefined class called "Task" which takes a generic object. 
 	 				- Create a "SpreadSheetTask" Object that extends "Task" and takes a 
 	 				SpreadSheet object as its parameter. The spreadsheet task can hold all the options
