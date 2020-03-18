@@ -1,0 +1,5 @@
+NOTES:
+
+Ideas: Create a table-view javafx scene where the tableview will be populated by the elements of the 
+user specified spreadsheet. Could be used as a preview feature, so after the user has specified their changes to the
+excel sheet, display a tableview representation of the finished spreadsheet so the user can confirm that is what they want.
