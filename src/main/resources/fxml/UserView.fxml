@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="600.0" maxWidth="800.0"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+	prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.hgdiv.office.controller.ProjectController">
+	<children>
+		<BorderPane id="fillpane" prefHeight="600.0"
+			prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+			AnchorPane.topAnchor="0.0">
+			<top>
+				<HBox prefHeight="53.0" prefWidth="726.0">
+					<children>
+						<Pane prefHeight="53.0" prefWidth="214.0" />
+						<Pane layoutX="10.0" layoutY="10.0" prefHeight="53.0"
+							prefWidth="189.0" />
+					</children>
+				</HBox>
+			</top>
+			<bottom>
+				<HBox BorderPane.alignment="CENTER">
+					<children>
+						<Pane prefHeight="200.0" prefWidth="200.0" />
+						<Pane layoutX="210.0" layoutY="10.0" prefHeight="0.0"
+							prefWidth="457.0">
+							<children>
+								<Label fx:id="Label1" layoutX="2.0" layoutY="93.0"
+									prefHeight="19.0" prefWidth="433.0" text="Label1" />
+							</children>
+						</Pane>
+						<Pane layoutX="410.0" layoutY="10.0" prefHeight="200.0"
+							prefWidth="200.0" />
+					</children>
+				</HBox>
+			</bottom>
+			<center>
+				<Pane prefHeight="426.0" prefWidth="400.0"
+					BorderPane.alignment="CENTER" />
+			</center>
+			<left>
+				<Pane prefHeight="196.0" prefWidth="200.0"
+					BorderPane.alignment="CENTER" />
+			</left>
+			<right>
+				<Pane prefHeight="200.0" prefWidth="200.0"
+					BorderPane.alignment="CENTER" />
+			</right>
+		</BorderPane>
+	</children>
+</AnchorPane>

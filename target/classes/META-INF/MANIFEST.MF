@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Built-By: Jordan Lightgate
-Build-Jdk: 1.8.0_211
+Implementation-Title: ExcelCommander
+Implementation-Version: 0.0.1-SNAPSHOT
+Build-Jdk-Spec: 1.8
 Created-By: Maven Integration for Eclipse
 
