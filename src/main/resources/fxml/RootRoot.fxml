@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hgdiv.office.controller.MenuController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excelcommander.controller.MenuController">
    <children>
       <BorderPane id="borderpane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0">
          <top>

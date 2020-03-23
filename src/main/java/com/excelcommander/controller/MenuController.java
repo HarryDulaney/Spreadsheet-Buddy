@@ -1,4 +1,4 @@
-package com.hgdiv.office.controller;
+package com.excelcommander.controller;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -16,7 +16,7 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.hgdiv.office.model.Project;
+import com.excelcommander.model.Project;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

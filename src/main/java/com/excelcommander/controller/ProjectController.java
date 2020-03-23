@@ -1,4 +1,4 @@
-package com.hgdiv.office.controller;
+package com.excelcommander.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

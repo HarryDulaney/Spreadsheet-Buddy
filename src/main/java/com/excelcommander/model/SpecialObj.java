@@ -1,4 +1,4 @@
-package com.hgdiv.office.model;
+package com.excelcommander.model;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package com.hgdiv.office.model;
+package com.excelcommander.model;
 
 import java.io.File;
 import java.io.IOException;

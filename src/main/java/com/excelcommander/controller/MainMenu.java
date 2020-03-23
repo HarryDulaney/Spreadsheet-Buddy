@@ -1,8 +1,8 @@
-package com.hgdiv.office.controller;
+package com.excelcommander.controller;
 
 import java.io.IOException;
 
-import com.hgdiv.office.model.Project;
+import com.excelcommander.model.Project;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
