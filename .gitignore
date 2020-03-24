@@ -7,4 +7,5 @@
 /.project
 /ExcelCommander.iml
 /InProcess/
-/.factorypath
+.factorypath
+/.idea/

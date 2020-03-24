@@ -1,65 +1,48 @@
 package com.excelcommander.model;
 
-import java.io.File;
-import java.util.ArrayList;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@XmlRootElement
+
+@Entity
 public class Project {
-
-	private ArrayList<Command> sooperCommands;
-
+	
 	private String projectName;
-	private File xmlFilePath;
+	private String backupFile;
+
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+
+
 
 	public Project() {
 
 	}
 
-	public Project(String projectName, File xmlFilePath) {
+	public Project(String projectName) {
 		this.projectName = projectName;
-		this.xmlFilePath = xmlFilePath;
 
 	}
 
-	@XmlElement
-	public ArrayList<Command> getSooperCommands() {
-		return sooperCommands;
-	}
-
-	public void setSooperCommands(ArrayList<Command> sooperCommands) {
-		this.sooperCommands = sooperCommands;
-	}
-
-	@XmlElement(name = "projectName")
-	public String getName() {
+	public String getProjectName() {
 		return projectName;
 	}
 
-	public void setName(String projectName) {
+	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
 
-	@XmlElement(name = "xmlFilePath")
-	public File getProjectFile() {
-		return xmlFilePath;
+
+
+	public String getBackupFile() {
+		return backupFile;
 	}
 
-	public void setProjectFile(File xmlFilePath) {
-		this.xmlFilePath = xmlFilePath;
-	}
-
-	public void addCommand(Command command) {
-
-		try {
-			if (sooperCommands == null) {
-				sooperCommands = new ArrayList<>();
-			}
-			sooperCommands.add(command);
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
+	public void setBackupFile(String backupFile) {
+		this.backupFile = backupFile;
 	}
 }

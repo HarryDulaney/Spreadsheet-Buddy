@@ -7,25 +7,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import javafx.application.HostServices;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.RadioMenuItem;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Controller;
 
 import com.excelcommander.model.Project;
+import com.excelcommander.util.WindowUtils;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -33,40 +40,64 @@ import javafx.stage.StageStyle;
 /**
  * @author HGDIV
  */
+
 /**
- * This controller still needs implementations for the event handlers that bind
- * to the root menu heading task bar ie.... Save ProjectXml, Close ProjectXml
+ * MenuController controls and handles events for the toolbars and dropdown File menu
  */
-public class MenuController {
+@Controller
+public class MenuController extends ParentController {
 
-	private Project project;
-	private MainMenu mainmenu;
+    public static final String ROOT_VIEW = "/fxml/RootRoot.fxml";
+    public static final String START_VIEW = "/fxml/StartBlankView.fxml";
 
-	@FXML
-	protected void handleSaveProject(ActionEvent event) {
+    @FXML
+    private ButtonBar mainButtonBar;
 
-		if (MainMenu.getCurrent() != null) {
+    @FXML
+    protected RadioMenuItem mainToolbarRadioButton;
 
-			try {
-				saveProject();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+    private ApplicationContext ctx;
+    private Project project;
+    private HostServices hostServices;
 
-		} else {
-			Alert alrt = new Alert(AlertType.WARNING);
-			alrt.setHeaderText("Please create a projectXml first before saving it");
-			alrt.setContentText(
-					"You must first open or create a new projectXml in order to perform the save projectXml action");
-			alrt.show();
+    @FXML
+    private AnchorPane fillPane; //RootRoot AnchorPane to fill in scene.
 
-		}
 
-	}
+    @Override
+    public <T> void init(Stage stage, HashMap<String, T> parameters) {
+        super.init(stage, parameters);
 
-	@FXML
-	protected void handleNewProject(ActionEvent event) throws IOException {
+        try {
+            WindowUtils.replaceFxmlOnWindow(fillPane, START_VIEW, stage, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        initButtons();
 
+
+    }
+
+    private void initButtons() {
+        mainButtonBar.setVisible(false);
+    }
+
+    @FXML
+    private void handleSaveProject(ActionEvent event) throws FileNotFoundException {
+
+
+        Alert alrt = new Alert(AlertType.WARNING);
+        alrt.setHeaderText("Please create a projectXml first before saving it");
+        alrt.setContentText(
+                "You must first open or create a new projectXml in order to perform the save projectXml action");
+        alrt.show();
+
+
+    }
+
+    @FXML
+    private void handleNewProject(ActionEvent event) throws IOException {
+/*
 		createNewProject();
 
 		if (MainMenu.getCurrent() != null) {
@@ -88,167 +119,153 @@ public class MenuController {
 			alert.setHeaderText("Something Went Wrong");
 			alert.setContentText("Please try again to create a new project");
 			alert.showAndWait();
-		}
+		}*/
 
-	}
+    }
 
-	@FXML
-	protected void handleOpenProject(ActionEvent event) throws IOException {
+    @FXML
+    private void handleOpenProject(ActionEvent event) throws IOException {
 
-		FileChooser chooser = new FileChooser();
-		chooser.setTitle("Choose the project you would like to open");
-		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
-		File toOpen = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Choose the project you would like to open");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
+        File toOpen = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
 
-		try {
-			openProject(toOpen);
+        try {
+            openProject(toOpen);
 
-		} catch (Exception e) {
+        } catch (Exception e) {
 
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Something Went Wrong");
-			alert.setHeaderText("Could not open the file");
-			alert.setContentText("Sorry we were not able to open the selected file, please try again");
-			alert.showAndWait();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Something Went Wrong");
+            alert.setHeaderText("Could not open the file");
+            alert.setContentText("Sorry we were not able to open the selected file, please try again");
+            alert.showAndWait();
 
-		}
+        }
 
-	}
+    }
+
+    @FXML
+    private void handleImportFromExcel(ActionEvent event) {
+    }
 
 
-	@FXML
-	protected void handleAboutSuperCommander(ActionEvent event) {
+    @FXML
+    private void handleAboutSuperCommander(ActionEvent event) {
 
-		try {
-			URI url = new URI("https://github.com/harrydulaney/commander-excel/");
+        String uri = "https://github.com/harrydulaney/commander-excel/";
+        hostServices.showDocument(uri);
 
-			Desktop.getDesktop().browse(url);
+    }
 
-		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Something went wrong");
-			alert.setContentText("We were unable to open the weblink to the about me document you requested");
-			alert.show();
-		}
+    @FXML
+    protected void handleExitCommander(ActionEvent event) {
+        Platform.exit();
+    }
 
-	}
+    @FXML
+    private void handleToggleMainToolbar(ActionEvent event) {
 
-	@FXML
-	protected void handleExitCommander(ActionEvent event) {
+        if (mainButtonBar.isVisible()) {
+            mainButtonBar.setVisible(false);
+        } else {
+            mainButtonBar.setVisible(true);
+        }
+    }
 
-		System.exit(0);
-	}
+    @FXML
+    protected void handleBlankWorkbook(ActionEvent event) {
 
-	@FXML
-	protected void handleBlankWorkbook(ActionEvent event) {
+        FileChooser fchooser = new FileChooser();
+        fchooser.setTitle("Name and save your \".xlsx\" excel workbook: ");
+        fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
+        File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 
-		FileChooser fchooser = new FileChooser();
-		fchooser.setTitle("Name and save your \".xlsx\" excel workbook: ");
-		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-		File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
+        if (filePath != null) {
 
-		if (filePath != null) {
+            if (filePath.toString().contains(".xlsx")) {
+                try {
+                    FileOutputStream fOs = new FileOutputStream(filePath);
+                    Workbook wb = new XSSFWorkbook();
+                    wb.createSheet("Default");
+                    wb.write(fOs);
+                    wb.close();
 
-			if (filePath.toString().contains(".xlsx")) {
-				try {
-					FileOutputStream fOs = new FileOutputStream(filePath);
-					Workbook wb = new XSSFWorkbook();
-					wb.createSheet("Default");
-					wb.write(fOs);
-					wb.close();
+                    Alert a = new Alert(AlertType.CONFIRMATION);
+                    a.setHeaderText("Successful Operation");
+                    a.setContentText("You created a new workbook with one spreadsheet");
+                    a.show();
 
-					Alert a = new Alert(AlertType.CONFIRMATION);
-					a.setHeaderText("Successful Operation");
-					a.setContentText("You created a new workbook with one spreadsheet");
-					a.show();
+                } catch (Exception e) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setContentText("I'm sorry something went wrong");
+                    alert.show();
+                    e.printStackTrace();
+                }
 
-				} catch (Exception e) {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("I'm sorry something went wrong");
-					alert.show();
-					e.printStackTrace();
-				}
+            }
+        }
+    }
 
-			}
-		}
-	}
+    private void createNewProject() {
 
-	private void createNewProject() {
 
-		TextInputDialog textDialog = new TextInputDialog();
-		textDialog.setHeaderText("Create New SuperCommander Project");
-		textDialog.setContentText("Please enter a name for your new project now");
-		textDialog.setTitle("Create New Project");
-		textDialog.showAndWait();
+    }
 
-		String projectName = textDialog.getResult();
+    private void saveProject() throws FileNotFoundException {
 
-		FileChooser chooser = new FileChooser();
-		chooser.setTitle("Create New SuperCommander Project");
-		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
-		File projectFile = chooser.showSaveDialog(new Stage(StageStyle.UTILITY));
+    }
 
-		project = new Project(projectName, projectFile);
+    private void openProject(File toOpen) {
 
-		MainMenu.setCurrent(project);
+        JAXBContext jaxbContext;
 
-	}
+        try {
+            jaxbContext = JAXBContext.newInstance(Project.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-	private void saveProject() throws FileNotFoundException {
-		try {
+            Project project = (Project) jaxbUnmarshaller.unmarshal(toOpen);
+            this.setProject(project);
 
-			JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+//			showProject();
 
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        } catch (Exception e) {
 
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            e.printStackTrace();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Cannot open project");
+            alert.setHeaderText("Something Went Wrong");
+            alert.setContentText("Please double check you are attempting to open the correct file and try again");
+            alert.showAndWait();
 
-			OutputStream output = new FileOutputStream(MainMenu.getCurrent().getProjectFile());
-			jaxbMarshaller.marshal(MainMenu.getCurrent(), output);
+        }
+    }
 
-		} catch (JAXBException e) {
-			System.out.print("Something went wrong with JAXB content and marshaller");
-			e.printStackTrace();
-		}
-	}
 
-	private void openProject(File toOpen) {
+    @Override
+    protected void onClose() {
+        // TODO Auto-generated method stub
 
-		JAXBContext jaxbContext;
+    }
 
-		try {
-			jaxbContext = JAXBContext.newInstance(Project.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+    @Autowired
+    public void setAppCtx(ApplicationContext ctx) {
+        this.ctx = ctx;
+    }
 
-			Project project = (Project) jaxbUnmarshaller.unmarshal(toOpen);
-			this.project = project;
-			MainMenu.setCurrent(project);
+    public Project getProject() {
+        return project;
+    }
 
-			mainmenu.showProject();
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
-		} catch (Exception e) {
+    @Autowired
+    private void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
-			e.printStackTrace();
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Cannot open project");
-			alert.setHeaderText("Something Went Wrong");
-			alert.setContentText("Please double check you are attempting to open the correct file and try again");
-			alert.showAndWait();
-
-		}
-	}
-
-	@FXML
-	public void initialize() {
-
-	}
-
-	public MainMenu getMainmenu() {
-		return mainmenu;
-	}
-
-	public void setMainmenu(MainMenu mainmenu) {
-		this.mainmenu = mainmenu;
-	}
 
 }

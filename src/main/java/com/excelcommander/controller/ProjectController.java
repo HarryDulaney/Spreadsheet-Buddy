@@ -1,31 +1,52 @@
 package com.excelcommander.controller;
 
+import java.util.HashMap;
+
+import javafx.geometry.Insets;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Controller;
+
+import com.excelcommander.util.SpreadSheetUtils;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 /**
- * @author HG Dulaney IV
+ * @author HGDIV
  */
-
-public class ProjectController {
-
-	private MainMenu mainMenu;
+@Controller
+public class ProjectController extends ParentController {
+	
+	@FXML
+	SpreadsheetView ssView;
 
 	@FXML
 	private Label Label1;
+	private ApplicationContext ctx;
 
 	public ProjectController() {
 
 	}
-
-	@FXML
-	public void initialize() {
+	@Override
+	public <T> void init(Stage stage, HashMap<String, T> parameters) {
+		super.init(stage, parameters);
 
 	}
 
-	public void setMainmenu(MainMenu mainMenu) {
-		this.mainMenu = mainMenu;
 
+
+	@Override
+	protected void onClose() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Autowired
+	void setApplicationContext(ApplicationContext ctx) {
+		this.ctx = ctx;
 	}
 
 }

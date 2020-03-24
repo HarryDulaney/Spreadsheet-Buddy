@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excelcommander.controller.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excelcommander.controller.MenuController">
    <children>
-      <BorderPane id="borderpane" maxHeight="600.0" maxWidth="1000.0" prefHeight="600.0" prefWidth="1000.0">
-         <top>
-            <MenuBar maxWidth="-Infinity" prefWidth="2000.0">
+      <VBox prefHeight="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar VBox.vgrow="ALWAYS">
                <menus>
                   <Menu mnemonicParsing="false" text="Project">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleNewProject" text="New Project (Blank)" />
-                        <MenuItem mnemonicParsing="false" text="Open Project" />
+                        <Menu mnemonicParsing="false" text="Import">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="From Excel Source" />
+                          </items>
+                        </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#handleSaveProject" text="Save Current Project" />
                         <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
-                        
-                     </items>
+
+                           </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="QuickTasks">
+                  <Menu mnemonicParsing="false" text="View">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleBlankWorkbook" text="New Blank Excel Workbook" />
+                        <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" onAction="#handleToggleMainToolbar" text="Main Toolbar" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Help">
@@ -34,10 +41,27 @@
                   </Menu>
                </menus>
                <tooltip>
-                  <Tooltip text="Start by creating a new project" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+                  <Tooltip text="Start by importing some data" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
                </tooltip>
             </MenuBar>
-         </top>
-      </BorderPane>
+            <ButtonBar fx:id="mainButtonBar" prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+                  <Button layoutX="85.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
+              </buttons>
+            </ButtonBar>
+         <AnchorPane fx:id="fillPane" prefHeight="947.0" prefWidth="1000.0">
+         </AnchorPane>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

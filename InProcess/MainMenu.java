@@ -37,7 +37,6 @@ public class MainMenu extends Application {
 	public void start(Stage primaryStage) {
 
 		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("Welcome to Super Commander for MS Excel");
 
 		initRootLayerShow();
 
