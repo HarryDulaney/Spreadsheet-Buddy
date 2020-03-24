@@ -17,8 +17,6 @@ public class Project {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-
-
 	public Project() {
 
 	}
@@ -35,7 +33,6 @@ public class Project {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-
 
 
 	public String getBackupFile() {

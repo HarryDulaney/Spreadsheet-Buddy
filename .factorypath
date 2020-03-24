@@ -87,4 +87,5 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eobjects/metamodel/MetaModel-core/3.4.11/MetaModel-core-3.4.11.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/jfoenix/jfoenix/8.0.8/jfoenix-8.0.8.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/controlsfx/controlsfx/8.40.16/controlsfx-8.40.16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/boot/spring-boot-configuration-processor/2.2.5.RELEASE/spring-boot-configuration-processor-2.2.5.RELEASE.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>

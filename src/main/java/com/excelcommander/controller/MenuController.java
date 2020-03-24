@@ -1,17 +1,12 @@
 package com.excelcommander.controller;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
 import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import javafx.application.HostServices;
@@ -19,6 +14,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.RadioMenuItem;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -31,7 +27,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -50,35 +45,35 @@ public class MenuController extends ParentController {
     public static final String ROOT_VIEW = "/fxml/RootRoot.fxml";
     public static final String START_VIEW = "/fxml/StartBlankView.fxml";
 
+    private ApplicationContext ctx;
+    private Project project;
+    private HostServices hostServices;
+    
+	@FXML
+	SpreadsheetView ssView;
+
+
     @FXML
     private ButtonBar mainButtonBar;
 
     @FXML
     protected RadioMenuItem mainToolbarRadioButton;
-
-    private ApplicationContext ctx;
-    private Project project;
-    private HostServices hostServices;
+    
 
     @FXML
-    private AnchorPane fillPane; //RootRoot AnchorPane to fill in scene.
+    private AnchorPane fillPane; //RootRoot AnchorPane to fill in reloading scene.
 
 
     @Override
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
-
-        try {
-            WindowUtils.replaceFxmlOnWindow(fillPane, START_VIEW, stage, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
         initButtons();
-
-
     }
 
-    private void initButtons() {
+ 
+
+	private void initButtons() {
         mainButtonBar.setVisible(false);
     }
 
@@ -148,6 +143,18 @@ public class MenuController extends ParentController {
 
     @FXML
     private void handleImportFromExcel(ActionEvent event) {
+
+        FileChooser fchooser = new FileChooser();
+        fchooser.setTitle("Import from Excel workbook: ");
+        fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
+        File excelFile = fchooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+    
+
+        try {
+            WindowUtils.replaceFxmlOnWindow(fillPane, START_VIEW, stage, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -161,6 +168,7 @@ public class MenuController extends ParentController {
 
     @FXML
     protected void handleExitCommander(ActionEvent event) {
+    	
         Platform.exit();
     }
 
