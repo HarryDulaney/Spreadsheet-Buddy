@@ -10,8 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import javafx.application.HostServices;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.*;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
@@ -25,7 +24,6 @@ import com.excelcommander.util.WindowUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -45,35 +43,41 @@ public class MenuController extends ParentController {
     public static final String ROOT_VIEW = "/fxml/RootRoot.fxml";
     public static final String START_VIEW = "/fxml/StartBlankView.fxml";
 
+
     private ApplicationContext ctx;
     private Project project;
     private HostServices hostServices;
-    
-	@FXML
-	SpreadsheetView ssView;
 
 
     @FXML
-    private ButtonBar mainButtonBar;
+    protected TabPane tabPane;
+
+    @FXML
+    protected Tab tabPaneStartSheet;
+
+    @FXML
+    SpreadsheetView ssView;
+
+    @FXML
+    protected ButtonBar mainButtonBar;
 
     @FXML
     protected RadioMenuItem mainToolbarRadioButton;
-    
+
 
     @FXML
-    private AnchorPane fillPane; //RootRoot AnchorPane to fill in reloading scene.
+    protected AnchorPane fillPane; //RootRoot AnchorPane to fill in reloading scene.
 
 
     @Override
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
-        
+
         initButtons();
     }
 
- 
 
-	private void initButtons() {
+    private void initButtons() {
         mainButtonBar.setVisible(false);
     }
 
@@ -118,6 +122,11 @@ public class MenuController extends ParentController {
 
     }
 
+    /**
+     *
+     * @param event Open a dialog that is populated with a selectable list of previously saved Projects by projectName
+     * @throws IOException Display alert dialog , problem opening the file
+     */
     @FXML
     private void handleOpenProject(ActionEvent event) throws IOException {
 
@@ -148,7 +157,7 @@ public class MenuController extends ParentController {
         fchooser.setTitle("Import from Excel workbook: ");
         fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
         File excelFile = fchooser.showOpenDialog(new Stage(StageStyle.UTILITY));
-    
+
 
         try {
             WindowUtils.replaceFxmlOnWindow(fillPane, START_VIEW, stage, null);
@@ -168,7 +177,7 @@ public class MenuController extends ParentController {
 
     @FXML
     protected void handleExitCommander(ActionEvent event) {
-    	
+
         Platform.exit();
     }
 

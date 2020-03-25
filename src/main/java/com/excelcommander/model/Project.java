@@ -1,9 +1,6 @@
 package com.excelcommander.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Project identifies the user and is created only after explicitly saving a project
@@ -17,6 +14,9 @@ public class Project {
 
 	private String projectName;
 	private String lastKnowWorkbookPath;
+
+	@Embedded
+	FileSys fileSysResource;
 
 	public Project() {
 

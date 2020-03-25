@@ -1,5 +1,6 @@
 package com.excelcommander;
 
+import com.excelcommander.model.FileSys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,41 +17,45 @@ import javafx.stage.Stage;
 @SpringBootApplication
 public class ExcelCommanderApplication extends Application {
 
-	private static ConfigurableApplicationContext ctx;	
-	
-	
-	@Value("${spring.application.name}")
-	String title;
+    private static ConfigurableApplicationContext ctx;
 
 
-	public static void main(String[] args) {
-		launch(args);
-	}
-
-	@Override
-	public void init() throws Exception {
-		ctx = SpringApplication.run(ExcelCommanderApplication.class);
+    @Value("${spring.application.name}")
+    String title;
 
 
-}
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		
-		WindowUtils.open(primaryStage, MenuController.ROOT_VIEW,title, null);
-		
+    @Override
+    public void init() throws Exception {
+        ctx = SpringApplication.run(ExcelCommanderApplication.class);
 
-	}
-	
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        WindowUtils.open(primaryStage, MenuController.ROOT_VIEW, title, null);
+
+
+    }
+
+    @Bean
+    public static ConfigurableApplicationContext getCtx() {
+        return ctx;
+    }
+
+    @Bean
+    HostServices initHostServices() {
+        return this.getHostServices();
+    }
 	@Bean
-	public static ConfigurableApplicationContext getCtx() {
-		return ctx;
+	FileSys initFileSys() {
+		return new FileSys();
 	}
-	
-	@Bean
-	HostServices initHostServices() {
-		return this.getHostServices();
-	}
-		
-	
+
+
+
 }

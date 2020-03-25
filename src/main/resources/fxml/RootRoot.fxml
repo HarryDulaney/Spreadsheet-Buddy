@@ -52,14 +52,6 @@
 						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
 						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
 						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="935.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
-						<Button layoutX="85.0" layoutY="15.0" mnemonicParsing="false" text="Button" />
 					</buttons>
 				</ButtonBar>
             <AnchorPane fx:id="fillPane" prefHeight="1000.0" prefWidth="1000.0">
