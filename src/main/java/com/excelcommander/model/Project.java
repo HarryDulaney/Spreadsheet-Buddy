@@ -1,5 +1,7 @@
 package com.excelcommander.model;
 
+import org.apache.metamodel.util.FileResource;
+
 import javax.persistence.*;
 
 /**
@@ -13,10 +15,8 @@ public class Project {
 	private long id;
 
 	private String projectName;
-	private String lastKnowWorkbookPath;
 
-	@Embedded
-	FileSys fileSysResource;
+	private FileResource fileResource;
 
 	public Project() {
 
@@ -34,13 +34,6 @@ public class Project {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-
-	public String getLastKnowWorkbookPath() {
-		return lastKnowWorkbookPath;
-	}
-
-	public void setLastKnowWorkbookPath(String lastKnowWorkbookPath) {
-		this.lastKnowWorkbookPath = lastKnowWorkbookPath;
-	}
+	
 
 }

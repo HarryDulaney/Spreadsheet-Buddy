@@ -1,4 +1,4 @@
-package service;
+package com.excelcommander.service;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public abstract class AbstractCrudService<T, R extends JpaRepository<T, Long>> e
 	public Service<List<T>> findAll(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
 		return createService(new Task<List<T>>() {
 			protected List<T> call() throws Exception {
-				return repository.findAll();
+				return (List<T>) repository.findAll();
 			};
 		}, onSuccess, beforeStart);
 	}

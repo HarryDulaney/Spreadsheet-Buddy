@@ -6,9 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
 import javafx.application.HostServices;
 import javafx.scene.control.*;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -16,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import com.excelcommander.model.Project;
@@ -29,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import com.excelcommander.service.ProjectService;
 
 /**
  * @author HGDIV
@@ -45,8 +44,11 @@ public class MenuController extends ParentController {
 
 
     private ApplicationContext ctx;
-    private Project project;
+
+
+    private static Project project;
     private HostServices hostServices;
+    ProjectService projectService;
 
 
     @FXML
@@ -136,7 +138,7 @@ public class MenuController extends ParentController {
         File toOpen = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
 
         try {
-            openProject(toOpen);
+            openProject("project");
 
         } catch (Exception e) {
 
@@ -230,20 +232,26 @@ public class MenuController extends ParentController {
 
     }
 
-    private void saveProject() throws FileNotFoundException {
+    private void saveProject() {
 
     }
 
-    private void openProject(File toOpen) {
+    private void openProject(String projectName) {
 
-        JAXBContext jaxbContext;
+
+        projectService.findByProjectName(projectName,event -> {
+
+            try {
+                setProject((Project) event.getSource().getValue());
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+
+
+                },null);
+
 
         try {
-            jaxbContext = JAXBContext.newInstance(Project.class);
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-            Project project = (Project) jaxbUnmarshaller.unmarshal(toOpen);
-            this.setProject(project);
 
 //			showProject();
 
@@ -265,23 +273,25 @@ public class MenuController extends ParentController {
         // TODO Auto-generated method stub
 
     }
+    @Autowired
+    public void setProjectService(ProjectService projectService) {
+		this.projectService = projectService;
+	}
 
     @Autowired
-    public void setAppCtx(ApplicationContext ctx) {
-        this.ctx = ctx;
+    public void setAppCtx(ConfigurableApplicationContext ctx) {
+
+        this.ctx = ctx.getParent();
     }
 
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
 
     @Autowired
     private void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
+    }
+
+    public static void setProject(Project project) {
+        MenuController.project = project;
     }
 
 
