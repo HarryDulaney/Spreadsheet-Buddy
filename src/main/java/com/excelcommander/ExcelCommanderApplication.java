@@ -31,7 +31,8 @@ public class ExcelCommanderApplication extends Application {
 	public void init() throws Exception {
 		ctx = SpringApplication.run(ExcelCommanderApplication.class);
 
-	}
+
+}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

@@ -7,5 +7,5 @@
 /.project
 /ExcelCommander.iml
 /InProcess/
-.factorypath
 /.idea/
+/src/main/resources/application.properties/

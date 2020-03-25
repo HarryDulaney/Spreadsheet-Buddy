@@ -1,15 +1,14 @@
 package com.excelcommander.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.excelcommander.model.Project;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.excelcommander.model.Project;
-
 @Repository
-public interface ProjectRepository extends JpaRepository<Project,Long >{
+public interface ProjectRepository extends CrudRepository<Project,Long > {
 	
     Project findByProjectName(String projectName);
-
     Project findById(long id);
+
 	
 }
