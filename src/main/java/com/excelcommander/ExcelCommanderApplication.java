@@ -1,28 +1,24 @@
 package com.excelcommander;
 
+import com.excelcommander.controller.MenuController;
 import com.excelcommander.model.Project;
+import com.excelcommander.service.ProjectService;
 import com.excelcommander.util.WindowUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import javafx.application.Application;
+import javafx.application.HostServices;
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.excelcommander.controller.MenuController;
-
-import javafx.application.Application;
-import javafx.application.HostServices;
-import javafx.stage.Stage;
-import com.excelcommander.service.ProjectService;
-
 @SpringBootApplication
 public class ExcelCommanderApplication extends Application {
 
     private static ConfigurableApplicationContext ctx;
-
     ProjectService projectService;
-    private Project project;
+    private static Project project;
 
 
     @Value("${spring.application.name}")
@@ -71,5 +67,11 @@ public class ExcelCommanderApplication extends Application {
     HostServices initHostServices() {
         return this.getHostServices();
     }
+    @Bean
+    Project initProject(){
+        return project;
+
+    }
+
 
 }

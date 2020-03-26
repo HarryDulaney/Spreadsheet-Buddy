@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextField;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.excelcommander.ExcelCommanderApplication;
@@ -19,7 +22,6 @@ import javafx.stage.Stage;
 public class WindowUtils {
 
     private static ConfigurableApplicationContext ctx = ExcelCommanderApplication.getCtx();
-
 
     public static <T> void replaceFxmlOnWindow(Pane root, String path, Stage stage, HashMap<String, T> parameters)
             throws Exception {
@@ -69,15 +71,27 @@ public class WindowUtils {
         try (InputStream fxmlStream = WindowUtils.class.getResourceAsStream(url)) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(WindowUtils.class.getResource(url));
-            loader.setControllerFactory(clazz -> {
+            loader.setControllerFactory(ctx::getBean);
+//            loader.setResources();
 
-                return ctx.getBean(clazz);
-            });
 
             return loader;
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
         }
     }
+
+    public static void watchEvents(SpreadsheetView view, WatchListener listener) {
+        view.focusedProperty().addListener((o, oldValue, newValue) -> {
+            listener.watch(newValue);
+        });
+    }
+
+    public static <T> void watchEvents(ComboBox<T> comboBox, WatchListener listener) {
+        comboBox.focusedProperty().addListener((o, oldValue, newValue) -> {
+            listener.watch(newValue);
+        });
+    }
+
 
 }

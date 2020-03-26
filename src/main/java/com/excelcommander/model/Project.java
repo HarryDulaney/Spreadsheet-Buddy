@@ -15,8 +15,8 @@ public class Project {
 	private long id;
 
 	private String projectName;
-
 	private FileResource fileResource;
+
 
 	public Project() {
 
@@ -33,6 +33,13 @@ public class Project {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	public FileResource getFileResource() {
+		return fileResource;
+	}
+
+	public void setFileResource(FileResource fileResource) {
+		this.fileResource = fileResource;
 	}
 	
 

@@ -2,15 +2,23 @@ package com.excelcommander.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.excelcommander.util.DialogHelper;
+import com.excelcommander.util.SpreadSheetUtils;
 import javafx.application.HostServices;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import org.apache.metamodel.util.FileResource;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.formula.atp.WorkdayCalculator;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -40,7 +48,10 @@ import com.excelcommander.service.ProjectService;
 public class MenuController extends ParentController {
 
     public static final String ROOT_VIEW = "/fxml/RootRoot.fxml";
-    public static final String START_VIEW = "/fxml/StartBlankView.fxml";
+    public static final String START_VIEW = "/fxml/FreshSSView.fxml";
+
+
+    Logger logger = LoggerFactory.getLogger(MenuController.class);
 
 
     private ApplicationContext ctx;
@@ -49,42 +60,34 @@ public class MenuController extends ParentController {
     private static Project project;
     private HostServices hostServices;
     ProjectService projectService;
+    private static Workbook currentWorkbook;
 
+
+    @FXML
+    protected StackPane stackPane;
 
     @FXML
     protected TabPane tabPane;
 
     @FXML
-    protected Tab tabPaneStartSheet;
+    protected Tab tab;
 
     @FXML
-    SpreadsheetView ssView;
-
-    @FXML
-    protected ButtonBar mainButtonBar;
+    protected SpreadsheetView ssView;
 
     @FXML
     protected RadioMenuItem mainToolbarRadioButton;
-
-
-    @FXML
-    protected AnchorPane fillPane; //RootRoot AnchorPane to fill in reloading scene.
 
 
     @Override
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
 
-        initButtons();
     }
 
-
-    private void initButtons() {
-        mainButtonBar.setVisible(false);
-    }
 
     @FXML
-    private void handleSaveProject(ActionEvent event) throws FileNotFoundException {
+    private void handleSaveWorkbook(ActionEvent event) throws FileNotFoundException {
 
 
         Alert alrt = new Alert(AlertType.WARNING);
@@ -97,38 +100,35 @@ public class MenuController extends ParentController {
     }
 
     @FXML
-    private void handleNewProject(ActionEvent event) throws IOException {
-/*
-		createNewProject();
+    private void handleNewWorkbook(ActionEvent event) {
 
-		if (MainMenu.getCurrent() != null) {
+        File filePath = DialogHelper.showFilePrompt("New Workbook", ".xlsx", true);
+        FileResource fileResource = new FileResource(filePath);
+        try {
+            SpreadSheetUtils.createBlankWorkbook(fileResource);
+            project.setFileResource(fileResource);
 
-			saveProject();
+        } catch (Exception e) {
+            DialogHelper.showErrorAlert("A file with this name may already exist");
 
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Create New Project");
-			alert.setHeaderText("Success!");
-			alert.setContentText("You're new project named: " + project.getName() + " was saved at: "
-					+ project.getProjectFile().toString());
-			alert.showAndWait();
+        }
 
-			openProject(MainMenu.getCurrent().getProjectFile());
+        if (fileResource.isExists()) {
 
-		} else {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setHeaderText("Something Went Wrong");
-			alert.setContentText("Please try again to create a new project");
-			alert.showAndWait();
-		}*/
+            try {
+                WindowUtils.replaceFxmlOnWindow(stackPane,SpreadSheetController.SSCONTROLLER_TAG,stage,null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+
+        }
     }
 
-    /**
-     *
-     * @param event Open a dialog that is populated with a selectable list of previously saved Projects by projectName
-     * @throws IOException Display alert dialog , problem opening the file
-     */
+
+
+
+
     @FXML
     private void handleOpenProject(ActionEvent event) throws IOException {
 
@@ -152,20 +152,37 @@ public class MenuController extends ParentController {
 
     }
 
+    /**
+     *
+     * @param event File menu import -> from Excel file clicked
+     *
+     */
     @FXML
     private void handleImportFromExcel(ActionEvent event) {
+
+        Workbook wb = null;
 
         FileChooser fchooser = new FileChooser();
         fchooser.setTitle("Import from Excel workbook: ");
         fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
         File excelFile = fchooser.showOpenDialog(new Stage(StageStyle.UTILITY));
 
+        try {
+            wb = SpreadSheetUtils.loadFromFile(excelFile);
+            setCurrentWorkbook(wb);
+        }catch (Exception e){
+            System.out.println("Problem loading from file");
+
+        }
+        HashMap<String, Object> params = new HashMap<>();
+        params.put(SpreadSheetController.SSCONTROLLER_TAG, wb);
 
         try {
-            WindowUtils.replaceFxmlOnWindow(fillPane, START_VIEW, stage, null);
+            WindowUtils.replaceFxmlOnWindow(stackPane,SpreadSheetController.FRESH_SS_VIEW,stage,params);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -183,48 +200,10 @@ public class MenuController extends ParentController {
         Platform.exit();
     }
 
-    @FXML
-    private void handleToggleMainToolbar(ActionEvent event) {
-
-        if (mainButtonBar.isVisible()) {
-            mainButtonBar.setVisible(false);
-        } else {
-            mainButtonBar.setVisible(true);
-        }
-    }
-
-    @FXML
+       @FXML
     protected void handleBlankWorkbook(ActionEvent event) {
 
-        FileChooser fchooser = new FileChooser();
-        fchooser.setTitle("Name and save your \".xlsx\" excel workbook: ");
-        fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-        File filePath = fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
 
-        if (filePath != null) {
-
-            if (filePath.toString().contains(".xlsx")) {
-                try {
-                    FileOutputStream fOs = new FileOutputStream(filePath);
-                    Workbook wb = new XSSFWorkbook();
-                    wb.createSheet("Default");
-                    wb.write(fOs);
-                    wb.close();
-
-                    Alert a = new Alert(AlertType.CONFIRMATION);
-                    a.setHeaderText("Successful Operation");
-                    a.setContentText("You created a new workbook with one spreadsheet");
-                    a.show();
-
-                } catch (Exception e) {
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setContentText("I'm sorry something went wrong");
-                    alert.show();
-                    e.printStackTrace();
-                }
-
-            }
-        }
     }
 
     private void createNewProject() {
@@ -290,9 +269,19 @@ public class MenuController extends ParentController {
         this.hostServices = hostServices;
     }
 
+    @Autowired
     public static void setProject(Project project) {
         MenuController.project = project;
     }
+
+    public static Workbook getCurrentWorkbook() {
+        return currentWorkbook;
+    }
+
+    public static void setCurrentWorkbook(Workbook currentWorkbook) {
+        MenuController.currentWorkbook = currentWorkbook;
+    }
+
 
 
 }
