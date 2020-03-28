@@ -7,10 +7,10 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
 
+<?import javafx.scene.layout.Pane?>
 <VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excelcommander.controller.MenuController">
    <children>
       <MenuBar prefWidth="1000.0" VBox.vgrow="ALWAYS">
@@ -42,18 +42,10 @@
             <Tooltip text="Start by importing some data" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
          </tooltip>
       </MenuBar>
-      <StackPane fx:id="stackPane" VBox.vgrow="ALWAYS">
+      <Pane fx:id="fillPane">
          <children>
-            <TabPane fx:id="tabPane">
-               <tabs>
-                  <Tab fx:id="tab" text="Sheet1">
-                     <content>
-                        <SpreadsheetView fx:id="ssView" minHeight="800.0" minWidth="600.0" />
-                     </content>
-                  </Tab>
-               </tabs>
-            </TabPane>
+      <fx:include fx:id="tabPane" source="/fxml/TabPaneView.fxml" VBox.vgrow="ALWAYS"/>
          </children>
-      </StackPane>
+      </Pane>
    </children>
 </VBox>

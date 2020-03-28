@@ -12,10 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.apache.metamodel.util.FileResource;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.formula.atp.WorkdayCalculator;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +28,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -47,33 +43,25 @@ import com.excelcommander.service.ProjectService;
 @Controller
 public class MenuController extends ParentController {
 
-    public static final String ROOT_VIEW = "/fxml/RootRoot.fxml";
-    public static final String START_VIEW = "/fxml/FreshSSView.fxml";
+    public static final String ROOT_FXML = "/fxml/Root_View.fxml";
+    public static final String START_VIEW = "/fxml/TabPaneView.fxml";
 
 
     Logger logger = LoggerFactory.getLogger(MenuController.class);
 
 
     private ApplicationContext ctx;
-
-
     private static Project project;
     private HostServices hostServices;
     ProjectService projectService;
-    private static Workbook currentWorkbook;
+
 
 
     @FXML
-    protected StackPane stackPane;
+    protected Pane fillPane;
 
     @FXML
     protected TabPane tabPane;
-
-    @FXML
-    protected Tab tab;
-
-    @FXML
-    protected SpreadsheetView ssView;
 
     @FXML
     protected RadioMenuItem mainToolbarRadioButton;
@@ -115,19 +103,11 @@ public class MenuController extends ParentController {
 
         if (fileResource.isExists()) {
 
-            try {
-                WindowUtils.replaceFxmlOnWindow(stackPane,SpreadSheetController.SSCONTROLLER_TAG,stage,null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
 
 
         }
     }
-
-
-
-
 
     @FXML
     private void handleOpenProject(ActionEvent event) throws IOException {
@@ -169,19 +149,18 @@ public class MenuController extends ParentController {
 
         try {
             wb = SpreadSheetUtils.loadFromFile(excelFile);
-            setCurrentWorkbook(wb);
         }catch (Exception e){
             System.out.println("Problem loading from file");
-
         }
-        HashMap<String, Object> params = new HashMap<>();
-        params.put(SpreadSheetController.SSCONTROLLER_TAG, wb);
+        HashMap<String,Object> params = new HashMap<>();
+        params.put(TabPaneController.SSController_KEY,wb);
 
         try {
-            WindowUtils.replaceFxmlOnWindow(stackPane,SpreadSheetController.FRESH_SS_VIEW,stage,params);
-        } catch (Exception e) {
+            WindowUtils.replaceFxmlOnWindow(fillPane,TabPaneController.TABPANE_FXML,stage,params);
+        }catch (Exception e){
             e.printStackTrace();
         }
+
 
     }
 
@@ -272,14 +251,6 @@ public class MenuController extends ParentController {
     @Autowired
     public static void setProject(Project project) {
         MenuController.project = project;
-    }
-
-    public static Workbook getCurrentWorkbook() {
-        return currentWorkbook;
-    }
-
-    public static void setCurrentWorkbook(Workbook currentWorkbook) {
-        MenuController.currentWorkbook = currentWorkbook;
     }
 
 

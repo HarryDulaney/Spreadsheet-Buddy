@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.util.Callback;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -71,8 +72,8 @@ public class WindowUtils {
         try (InputStream fxmlStream = WindowUtils.class.getResourceAsStream(url)) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(WindowUtils.class.getResource(url));
-            loader.setControllerFactory(ctx::getBean);
-//            loader.setResources();
+            loader.setControllerFactory(clazz -> ctx.getBean(clazz));
+            /* loader.setResources(); */
 
 
             return loader;

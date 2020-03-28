@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
+
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+
+<?import javafx.scene.control.Cell?>
+<TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="com.excelcommander.controller.TabPaneController">
+        <tabs>
+            <Tab fx:id="tab" text="Sheet 1">
+                <SpreadsheetView fx:id="ssView" prefHeight="800.0" prefWidth="1000.0"/>
+            </Tab>
+        </tabs>
+</TabPane>
+
+
+
+
+
+
+

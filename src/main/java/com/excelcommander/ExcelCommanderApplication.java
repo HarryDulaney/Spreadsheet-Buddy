@@ -49,7 +49,7 @@ public class ExcelCommanderApplication extends Application {
 
             project = (Project) e.getSource().getValue();
             try {
-                WindowUtils.open(primaryStage, MenuController.ROOT_VIEW, project.getProjectName(), null);
+                WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

@@ -9,3 +9,4 @@
 /InProcess/
 /.idea/
 /src/main/resources/application.properties/
+src/main/resources/fxml/FileSysNavWindow.fxml
