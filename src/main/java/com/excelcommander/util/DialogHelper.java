@@ -72,28 +72,38 @@ public final class DialogHelper {
 
 		dialog.show();
 	}
+	public static void showAndWaitAlert(String content,String header,String title,AlertType alertType) {
 
-	public static File showFilePrompt(String title, String fileExtension1, String fileExtention2) {
+		Alert alert = new Alert(alertType);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.setTitle(title);
+		alert.showAndWait();
 
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle(title);
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".csv", "*".concat(fileExtension1)),
-				new FileChooser.ExtensionFilter(".xlsx", "*".concat(fileExtention2)));
-		return fileChooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+
+	}
+	public static void showAlert(String content,String header,String title,AlertType alertType) {
+
+		Alert alert = new Alert(alertType);
+		alert.setHeaderText(header);
+		alert.setContentText(content);
+		alert.setTitle(title);
+		alert.show();
+
 
 	}
 
-	public static File showFilePrompt(String title, String fileExtension, Boolean initFileName) {
+	public static File showSaveFilePrompt(String title, String fileExtension, String initFileName,StageStyle stageStyle) {
 
 		FileChooser fchooser = new FileChooser();
 		fchooser.setTitle(title);
 		fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(fileExtension, "*".concat(fileExtension)));
 
-		if (initFileName) {
-			fchooser.setInitialFileName("New_Excel_Workbook");
+		if (!initFileName.isEmpty()) {
+			fchooser.setInitialFileName(initFileName);
 		}
 
-		return fchooser.showSaveDialog(new Stage(StageStyle.UTILITY));
+		return fchooser.showSaveDialog(new Stage(stageStyle));
 	}
 
 	public static File showFilePrompt(String title, String fileExtension) {
@@ -117,15 +127,10 @@ public final class DialogHelper {
 		return textDialog.getResult();
 	}
 
-	public static void showWarningAlert(String content) {
-		Alert alrt = new Alert(AlertType.WARNING);
-		alrt.setContentText(content);
-		alrt.show();
 
-	}
 
-	public static void showErrorAlert(String content) {
-		Alert alert = new Alert(AlertType.ERROR);
+	public static void showSimpleAlert(String content,AlertType alertType) {
+		Alert alert = new Alert(alertType);
 		alert.setContentText(content);
 		alert.showAndWait();
 

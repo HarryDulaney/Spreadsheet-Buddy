@@ -1,5 +1,6 @@
 package com.excelcommander.util;
 
+import com.excelcommander.model.WorkbookCE;
 import javafx.scene.control.Alert;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -7,6 +8,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellAddress;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
@@ -21,15 +24,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * @author HG Dulaney IV
  */
 public class SpreadSheetUtils {
+
+  private static WorkbookCE workbookCE;
 
 
     public static void createBlankWorkbook(FileResource fr) {
@@ -42,9 +44,7 @@ public class SpreadSheetUtils {
             DialogHelper.showInfoAlert("Successful Operation", "You created a new workbook with one spreadsheet", "New Sheet", false);
 
         } catch (Exception ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Error during writing your new file");
-            alert.show();
+            DialogHelper.showSimpleAlert("Error during writing your new file", Alert.AlertType.ERROR);
             ex.printStackTrace();
 
         }
@@ -59,89 +59,68 @@ public class SpreadSheetUtils {
     }
 
     /**
-     *
-     * @param wb the Workbook to map
-     * @return returns a triple nested HashMap which holds the content of the Workbook
-     *         and a reference to its position in the Sheet, Row, or Cell=(Column)
+     * @param workbook poi workbook
+     * @param sheetNum the current sheet to be mapped
+     * @return a the sheet mapped to a nested List format
      */
-    public static Map<String,Map<String,Map<String,Object>>> mapWorkbook(Workbook wb) {
+    public static WorkbookCE mapSheet(Workbook workbook, int sheetNum) {
 
-        Map<String, Map<String, Map<String,Object>>> sheetMap = new HashMap<>();
+        List<List<Cell>> sheetList = new ArrayList<>();
+        Sheet sheet = workbook.getSheetAt(sheetNum);
+        int numRows = sheet.getLastRowNum();
+        workbookCE.setMaxRow(numRows);
+        int maxCol = 0;
+        for (int r = 0; r < numRows; r++) {
 
-        for (int sheetNum = 0; sheetNum < wb.getNumberOfSheets(); sheetNum++) {
+            Row row = sheet.getRow(r);
+            List<Cell> rowList = new ArrayList<>();
+            Iterator<Cell> cellIterator = row.cellIterator();
 
-            Sheet sheet = wb.getSheetAt(sheetNum);
-            String sheetKey =sheetNum + "";
+            int count = 0;
+            while (cellIterator.hasNext()) {
+                Cell cell = cellIterator.next();
 
-            int lastRow = sheet.getLastRowNum();
-            int firstRow = sheet.getFirstRowNum();
-
-            Map<String,Map<String,Object>> rowMap = new HashMap<>();
-
-            for (int r = 0; r < lastRow; r++) {
-
-                Row row = sheet.getRow(r);
-                String rowKey = r + "";
-
-                Map<String, Object> cellMap = new HashMap<>();
-                Iterator<Cell> cellIterator = row.cellIterator();
-                int cellIndex = 0;
-                while (cellIterator.hasNext()) {
-                    String cellKey = cellIndex + "";
-                    Cell cell = cellIterator.next();
-
-                    switch (cell.getCellType()) {
-                        case NUMERIC:
-                            cellMap.put(cellKey, cell.getNumericCellValue());
-                            break;
-                        case STRING:
-                            cellMap.put(cellKey, cell.getStringCellValue().trim());
-                            break;
-                        case BOOLEAN:
-                            cellMap.put(cellKey, cell.getBooleanCellValue());
-                            break;
-                        case FORMULA:
-                            cellMap.put(cellKey, cell.getCellFormula());
-                            break;
-                        case ERROR:
-                            cellMap.put(cellKey, cell.getErrorCellValue());
-                            break;
-                        default:
-                            cellMap.put(cellKey, cell.getRichStringCellValue());
-                            break;
-
-                    }
+                count++;
+                if (count > maxCol){
+                    maxCol = count;
+                    workbookCE.setMaxColumn(maxCol);
                 }
-                rowMap.put(rowKey,cellMap);
+                CellAddress cellAddress = cell.getAddress();
 
+                rowList.add(cell);
             }
+            sheetList.add(rowList);
 
-            sheetMap.put(sheetKey, rowMap);
         }
-        return sheetMap;
+        workbookCE.setSheetAsList(sheetList);
+
+        return workbookCE;
+
     }
 
-
-    public static SpreadsheetView createSSView() {
-
-        int rowCount = 40; // Default row count
-
-        int columnCount = 40; // Default column count
-
-        GridBase grid = new GridBase(rowCount, columnCount);
-
-        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-        {
-            for (int row = 0; row < grid.getRowCount(); ++row) {
-                final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-                for (int column = 0; column < grid.getColumnCount(); ++column) {
-                    list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1, "value"));
-                }
-                rows.add(list);
-            }
-            grid.setRows(rows);
-
-            return new SpreadsheetView(grid);
-        }
+    public static SpreadsheetView renderSSView(GridBase gridBase) {
+        return new SpreadsheetView(gridBase);
     }
+
+    /**
+     * @param  The Workbook to map to a list
+     * @return returns a triple nested List of Cells which hold the content of the Workbook
+     */
+/*    public static List<List<List<Cell>>> mapWorkbook(Workbook wb) {
+         workbookCE = new WorkbookCE(wb);
+
+        int numberOfSheets = wb.getNumberOfSheets();
+        List<List<List<Cell>>> workbookAsList = new ArrayList<>();
+
+        for (int curSheet = 0; curSheet < numberOfSheets; curSheet++) {
+
+            workbookAsList.add(mapSheet(wb, curSheet));
+        }
+        return workbookAsList;
+
+
+    }*/
+
+
+
 }

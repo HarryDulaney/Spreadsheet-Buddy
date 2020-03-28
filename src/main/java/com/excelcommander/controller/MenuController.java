@@ -1,19 +1,26 @@
 package com.excelcommander.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-
+import com.excelcommander.model.Project;
+import com.excelcommander.model.WorkbookCE;
+import com.excelcommander.service.ProjectService;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.SpreadSheetUtils;
+import com.excelcommander.util.WindowUtils;
 import javafx.application.HostServices;
-import javafx.scene.control.*;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.controlsfx.control.spreadsheet.SpreadsheetView;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +28,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import com.excelcommander.model.Project;
-import com.excelcommander.util.WindowUtils;
-
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import com.excelcommander.service.ProjectService;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * @author HGDIV
@@ -44,8 +44,6 @@ import com.excelcommander.service.ProjectService;
 public class MenuController extends ParentController {
 
     public static final String ROOT_FXML = "/fxml/Root_View.fxml";
-    public static final String START_VIEW = "/fxml/TabPaneView.fxml";
-
 
     Logger logger = LoggerFactory.getLogger(MenuController.class);
 
@@ -54,7 +52,6 @@ public class MenuController extends ParentController {
     private static Project project;
     private HostServices hostServices;
     ProjectService projectService;
-
 
 
     @FXML
@@ -90,23 +87,16 @@ public class MenuController extends ParentController {
     @FXML
     private void handleNewWorkbook(ActionEvent event) {
 
-        File filePath = DialogHelper.showFilePrompt("New Workbook", ".xlsx", true);
+        File filePath = DialogHelper.showSaveFilePrompt("New Workbook", ".xlsx", "new-workbook", StageStyle.UTILITY);
         FileResource fileResource = new FileResource(filePath);
         try {
             SpreadSheetUtils.createBlankWorkbook(fileResource);
             project.setFileResource(fileResource);
 
         } catch (Exception e) {
-            DialogHelper.showErrorAlert("A file with this name may already exist");
-
+            DialogHelper.showSimpleAlert("A file with this name may already exist", AlertType.ERROR);
         }
 
-        if (fileResource.isExists()) {
-
-
-
-
-        }
     }
 
     @FXML
@@ -121,46 +111,31 @@ public class MenuController extends ParentController {
             openProject("project");
 
         } catch (Exception e) {
-
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Something Went Wrong");
-            alert.setHeaderText("Could not open the file");
-            alert.setContentText("Sorry we were not able to open the selected file, please try again");
-            alert.showAndWait();
+            DialogHelper.showAndWaitAlert("Sorry we were not able to open the selected file, please try again"
+                    , "Could not open the file", "Something Went Wrong", AlertType.ERROR);
 
         }
-
     }
 
     /**
-     *
      * @param event File menu import -> from Excel file clicked
-     *
      */
     @FXML
     private void handleImportFromExcel(ActionEvent event) {
-
-        Workbook wb = null;
-
-        FileChooser fchooser = new FileChooser();
-        fchooser.setTitle("Import from Excel workbook: ");
-        fchooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xlsx", "*.xlsx"));
-        File excelFile = fchooser.showOpenDialog(new Stage(StageStyle.UTILITY));
-
+        HashMap<String, Object> params = new HashMap<>();
+        File excelFile = DialogHelper.showFilePrompt("Import from Excel workbook: ", ".xlsx");
         try {
-            wb = SpreadSheetUtils.loadFromFile(excelFile);
-        }catch (Exception e){
+            Workbook wb = SpreadSheetUtils.loadFromFile(excelFile);
+            params.put(TabPaneController.WORKBOOK, wb);
+
+            try {
+                WindowUtils.replaceFxmlOnWindow(fillPane, TabPaneController.TABPANE_FXML, stage, params);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
             System.out.println("Problem loading from file");
         }
-        HashMap<String,Object> params = new HashMap<>();
-        params.put(TabPaneController.SSController_KEY,wb);
-
-        try {
-            WindowUtils.replaceFxmlOnWindow(fillPane,TabPaneController.TABPANE_FXML,stage,params);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
 
     }
 
@@ -179,7 +154,7 @@ public class MenuController extends ParentController {
         Platform.exit();
     }
 
-       @FXML
+    @FXML
     protected void handleBlankWorkbook(ActionEvent event) {
 
 
@@ -197,16 +172,16 @@ public class MenuController extends ParentController {
     private void openProject(String projectName) {
 
 
-        projectService.findByProjectName(projectName,event -> {
+        projectService.findByProjectName(projectName, event -> {
 
             try {
                 setProject((Project) event.getSource().getValue());
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
 
-                },null);
+        }, null);
 
 
         try {
@@ -231,10 +206,11 @@ public class MenuController extends ParentController {
         // TODO Auto-generated method stub
 
     }
+
     @Autowired
     public void setProjectService(ProjectService projectService) {
-		this.projectService = projectService;
-	}
+        this.projectService = projectService;
+    }
 
     @Autowired
     public void setAppCtx(ConfigurableApplicationContext ctx) {
@@ -252,7 +228,6 @@ public class MenuController extends ParentController {
     public static void setProject(Project project) {
         MenuController.project = project;
     }
-
 
 
 }
