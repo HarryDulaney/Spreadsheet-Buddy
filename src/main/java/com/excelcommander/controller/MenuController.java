@@ -1,7 +1,6 @@
 package com.excelcommander.controller;
 
 import com.excelcommander.model.Project;
-import com.excelcommander.model.WorkbookCE;
 import com.excelcommander.service.ProjectService;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.SpreadSheetUtils;
@@ -13,14 +12,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.hibernate.jdbc.Work;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,8 @@ import java.util.HashMap;
  */
 
 /**
- * MenuController controls and handles events for the toolbars and dropdown File menu
+ * MenuController controls and handles events for the Main File Menu and other drop-down menus
+ * Is registered as a Controller in with Spring
  */
 @Controller
 public class MenuController extends ParentController {
@@ -55,13 +56,17 @@ public class MenuController extends ParentController {
 
 
     @FXML
-    protected Pane fillPane;
+    private SpreadsheetView ssView;
+    @FXML
+    private Tab tab1;
+    @FXML
+    protected AnchorPane fillPane;
 
     @FXML
-    protected TabPane tabPane;
+    private TabPane tabPane;
 
     @FXML
-    protected RadioMenuItem mainToolbarRadioButton;
+    private RadioMenuItem mainToolbarRadioButton;
 
 
     @Override
@@ -74,14 +79,9 @@ public class MenuController extends ParentController {
     @FXML
     private void handleSaveWorkbook(ActionEvent event) throws FileNotFoundException {
 
-
-        Alert alrt = new Alert(AlertType.WARNING);
-        alrt.setHeaderText("Please create a projectXml first before saving it");
-        alrt.setContentText(
-                "You must first open or create a new projectXml in order to perform the save projectXml action");
-        alrt.show();
-
-
+        DialogHelper.showAlert(
+                "You must first open or create a new projectXml in order to perform the save projectXml action",
+                "Please create a projectXml first before saving it", "Warning", AlertType.WARNING);
     }
 
     @FXML
@@ -126,13 +126,8 @@ public class MenuController extends ParentController {
         File excelFile = DialogHelper.showFilePrompt("Import from Excel workbook: ", ".xlsx");
         try {
             Workbook wb = SpreadSheetUtils.loadFromFile(excelFile);
-            params.put(TabPaneController.WORKBOOK, wb);
+            WindowUtils.renderNewSheet(ssView, wb, tab1);
 
-            try {
-                WindowUtils.replaceFxmlOnWindow(fillPane, TabPaneController.TABPANE_FXML, stage, params);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         } catch (Exception e) {
             System.out.println("Problem loading from file");
         }
@@ -203,7 +198,12 @@ public class MenuController extends ParentController {
 
     @Override
     protected void onClose() {
-        // TODO Auto-generated method stub
+        try {
+            projectService.save(project, null, null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
 
     }
 

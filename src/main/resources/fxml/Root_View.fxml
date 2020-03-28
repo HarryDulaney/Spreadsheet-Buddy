@@ -7,45 +7,53 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
 
-<?import javafx.scene.layout.Pane?>
 <VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excelcommander.controller.MenuController">
-   <children>
-      <MenuBar prefWidth="1000.0" VBox.vgrow="ALWAYS">
-         <menus>
-            <Menu mnemonicParsing="false" text="Project">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook(Blank)" />
-                  <Menu mnemonicParsing="false" text="Import">
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="From Excel Source" />
-                     </items>
-                  </Menu>
-                  <MenuItem mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="View">
-               <items>
-                  <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" text="Main Toolbar" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleAboutSuperCommander" text="About SuperCommander" />
-               </items>
-            </Menu>
-         </menus>
-         <tooltip>
-            <Tooltip text="Start by importing some data" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
-         </tooltip>
-      </MenuBar>
-      <Pane fx:id="fillPane">
-         <children>
-      <fx:include fx:id="tabPane" source="/fxml/TabPaneView.fxml" VBox.vgrow="ALWAYS"/>
-         </children>
-      </Pane>
-   </children>
+    <children>
+        <MenuBar prefWidth="1000.0" VBox.vgrow="ALWAYS">
+            <menus>
+                <Menu mnemonicParsing="false" text="Project">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook(Blank)" />
+                        <Menu mnemonicParsing="false" text="Import">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="From Excel Source" />
+                            </items>
+                        </Menu>
+                        <MenuItem mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="View">
+                    <items>
+                        <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" text="Main Toolbar" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleAboutSuperCommander" text="About SuperCommander" />
+                    </items>
+                </Menu>
+            </menus>
+            <tooltip>
+                <Tooltip text="Start by importing some data" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
+            </tooltip>
+        </MenuBar>
+      <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab fx:id="tab1" text="Untitled Tab 1">
+            <content>
+              <AnchorPane fx:id="fillPane" minHeight="0.0" minWidth="0.0">
+                     <children>
+                               <SpreadsheetView fx:id="ssView" prefHeight="800.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+    </children>
 </VBox>

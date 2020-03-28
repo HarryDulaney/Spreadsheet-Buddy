@@ -68,7 +68,7 @@ public final class DialogHelper {
 		noButton.setOnAction(event -> {
 			dialog.close();
 		});
-		content.setActions(noButton);
+		content.setActions(noButton,yesButton);
 
 		dialog.show();
 	}

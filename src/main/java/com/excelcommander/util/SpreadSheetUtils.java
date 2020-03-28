@@ -8,30 +8,23 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellAddress;
-import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.GridBase;
-import org.controlsfx.control.spreadsheet.SpreadsheetCell;
-import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import org.hibernate.jdbc.Work;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author HG Dulaney IV
  */
 public class SpreadSheetUtils {
 
-  private static WorkbookCE workbookCE;
+
 
 
     public static void createBlankWorkbook(FileResource fr) {
@@ -64,30 +57,23 @@ public class SpreadSheetUtils {
      * @return a the sheet mapped to a nested List format
      */
     public static WorkbookCE mapSheet(Workbook workbook, int sheetNum) {
-
+      WorkbookCE workbookCE = new WorkbookCE(workbook);
         List<List<Cell>> sheetList = new ArrayList<>();
         Sheet sheet = workbook.getSheetAt(sheetNum);
-        int numRows = sheet.getLastRowNum();
-        workbookCE.setMaxRow(numRows);
-        int maxCol = 0;
-        for (int r = 0; r < numRows; r++) {
 
+        int numRows = sheet.getLastRowNum();
+
+        workbookCE.setMaxRow(100);
+        workbookCE.setMaxColumn(30);
+
+        for (int r = 0; r < 100; r++) {
             Row row = sheet.getRow(r);
             List<Cell> rowList = new ArrayList<>();
             Iterator<Cell> cellIterator = row.cellIterator();
 
             int count = 0;
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-
-                count++;
-                if (count > maxCol){
-                    maxCol = count;
-                    workbookCE.setMaxColumn(maxCol);
-                }
-                CellAddress cellAddress = cell.getAddress();
-
-                rowList.add(cell);
+            for (int c = 0; c < 30; c++) {
+                rowList.add(row.getCell(c));
             }
             sheetList.add(rowList);
 
@@ -120,7 +106,6 @@ public class SpreadSheetUtils {
 
 
     }*/
-
 
 
 }

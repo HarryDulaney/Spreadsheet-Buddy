@@ -3,9 +3,16 @@ package com.excelcommander;
 import com.excelcommander.controller.MenuController;
 import com.excelcommander.model.Project;
 import com.excelcommander.service.ProjectService;
+import com.excelcommander.util.DialogAction;
+import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.WindowUtils;
 import javafx.application.Application;
 import javafx.application.HostServices;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -21,8 +28,9 @@ public class ExcelCommanderApplication extends Application {
     private static Project project;
 
 
-    @Value("${spring.application.name}")
-    String title;
+    @Value("${application.title.display}")
+    public String title;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -37,15 +45,45 @@ public class ExcelCommanderApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Project ptest = new Project("Test");
+        StackPane sp = new StackPane();
+        sp.getChildren().add(new Button("Yes"));
+        Scene scene = new Scene(sp,500,250);
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-        projectService.save(ptest,e->{
+        DialogHelper.inputDialog(sp, "Welcome to " + title, "Would you like to open an existing project?", () -> {
+            try {
 
+                openProject(primaryStage);
 
-        },null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        });
 
-        projectService.findByProjectName("Test", e -> {
+  /*      String projectName = DialogHelper.showInputPrompt("Create A New Project",
+                "Please enter a name for the project you would like to create", "New Project");
+        if (projectName.length() < 1) {
+            project = new Project(projectName);
+            projectService.save(project, event -> {
+
+                project = (Project) event.getSource().getValue();
+
+                try {
+                    WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }, null);
+*/
+    }
+
+    private void openProject(Stage primaryStage) throws Exception {
+        String nameOfProject = DialogHelper.showInputPrompt("Open Project",
+                "Please enter the #ID for the project you would like to open", "Welcome back to " + title);
+
+        projectService.findById(Long.parseLong(nameOfProject), e -> {
 
             project = (Project) e.getSource().getValue();
             try {
@@ -54,9 +92,12 @@ public class ExcelCommanderApplication extends Application {
                 ex.printStackTrace();
             }
         }, null);
-
+    }
+    private void createNewProject(){
 
     }
+
+
 
     @Bean
     public static ConfigurableApplicationContext getCtx() {
@@ -67,8 +108,9 @@ public class ExcelCommanderApplication extends Application {
     HostServices initHostServices() {
         return this.getHostServices();
     }
+
     @Bean
-    Project initProject(){
+    Project initProject() {
         return project;
 
     }
