@@ -50,7 +50,7 @@ public class MenuController extends ParentController {
 
 
     private ApplicationContext ctx;
-    private static Project project;
+    private Project project;
     private HostServices hostServices;
     ProjectService projectService;
 
@@ -98,6 +98,9 @@ public class MenuController extends ParentController {
         try {
             SpreadSheetUtils.createBlankWorkbook(fileResource);
             project.setFileResource(fileResource);
+            DialogHelper.showSimpleAlert("You created a new Workbook and added it to your project", AlertType.CONFIRMATION);
+
+            tab1.setText("New Sheet");
 
         } catch (Exception e) {
             DialogHelper.showSimpleAlert("A file with this name may already exist", AlertType.ERROR);
@@ -105,36 +108,34 @@ public class MenuController extends ParentController {
 
     }
 
+    /**
+     * @param event ActionEvent triggers open project.
+     *              An application modal window opens with JFXListView
+     *              populated with local project names
+     */
+    @SuppressWarnings("unchecked")
     @FXML
     private void handleOpenProject(ActionEvent event) {
 
         final String prjWindowTitle = "Choose the project you would like to open";
-        HashMap<String,List<?>> params = new HashMap<>();
+        HashMap<String, List<?>> params = new HashMap<>();
 
         projectService.findAll(event1 -> {
 
             List<Project> projectList = (List<Project>) event1.getSource().getValue();
 
-            params.put("project_list",projectList);
+            params.put("project_list", projectList);
 
             try {
-                WindowUtils.open(PROJECT_SEARCH, prjWindowTitle,new HashMap<>(params), Modality.APPLICATION_MODAL);
+                WindowUtils.open(PROJECT_SEARCH, prjWindowTitle, new HashMap<>(params), Modality.APPLICATION_MODAL);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 DialogHelper.showAndWaitAlert("Something went wrong opening the window"
                         , "Could not open resource", "My Bad", AlertType.ERROR);
             }
 
-        },null);
+        }, null);
 
-        try {
-            openProject("project");
-
-        } catch (Exception e) {
-            DialogHelper.showAndWaitAlert("Sorry we couldn't find a project with that name, please try again"
-                    , "Could not open resource", "Something Went Wrong", AlertType.ERROR);
-
-        }
     }
 
     /**
@@ -169,50 +170,17 @@ public class MenuController extends ParentController {
         Platform.exit();
     }
 
-    @FXML
-    protected void handleBlankWorkbook(ActionEvent event) {
+    private void saveProject() throws Exception {
+        projectService.save(project,
 
+                event -> {
 
-    }
+                }
 
-    private void createNewProject() {
+                , event -> {
 
+                });
 
-    }
-
-    private void saveProject() {
-
-    }
-
-    private void openProject(String projectName) {
-
-
-        projectService.findByProjectName(projectName, event -> {
-
-            try {
-                setProject((Project) event.getSource().getValue());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-
-        }, null);
-
-
-        try {
-
-//			showProject();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Cannot open project");
-            alert.setHeaderText("Something Went Wrong");
-            alert.setContentText("Please double check you are attempting to open the correct file and try again");
-            alert.showAndWait();
-
-        }
     }
 
 
@@ -245,8 +213,8 @@ public class MenuController extends ParentController {
     }
 
     @Autowired
-    public static void setProject(Project project) {
-        MenuController.project = project;
+    protected void setProject(Project project) {
+        this.project = project;
     }
 
 

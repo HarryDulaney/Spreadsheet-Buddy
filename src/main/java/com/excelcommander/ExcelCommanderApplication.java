@@ -3,16 +3,14 @@ package com.excelcommander;
 import com.excelcommander.controller.MenuController;
 import com.excelcommander.model.Project;
 import com.excelcommander.service.ProjectService;
-import com.excelcommander.util.DialogAction;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.WindowUtils;
 import javafx.application.Application;
 import javafx.application.HostServices;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,7 +26,7 @@ public class ExcelCommanderApplication extends Application {
 
 
     @Value("${application.title.display}")
-    public String title;
+    protected String title;
 
 
     public static void main(String[] args) {
@@ -36,20 +34,20 @@ public class ExcelCommanderApplication extends Application {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         ctx = SpringApplication.run(ExcelCommanderApplication.class);
         projectService = ctx.getBean(ProjectService.class);
 
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         StackPane sp = new StackPane();
-        Scene scene = new Scene(sp);
+        Scene scene = new Scene(sp,415,150);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        DialogHelper.inputDialog(sp, "Welcome to " + title, "Would you like to open an existing project?", () -> {
+        DialogHelper.inputDialog(sp, "Welcome to ExcelCommander", "Would you like to open an existing project?", () -> {
             try {
                 openProject(primaryStage);
 
@@ -96,7 +94,7 @@ public class ExcelCommanderApplication extends Application {
 
 
 
-    @Bean
+    @Bean(name = "ctx")
     public static ConfigurableApplicationContext getCtx() {
         return ctx;
     }
@@ -106,8 +104,8 @@ public class ExcelCommanderApplication extends Application {
         return this.getHostServices();
     }
 
-    @Bean
-    Project initProject() {
+    @Bean(name = "project")
+    Project initProject(Project project) {
         return project;
 
     }

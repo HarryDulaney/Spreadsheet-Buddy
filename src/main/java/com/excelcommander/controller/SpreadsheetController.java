@@ -51,8 +51,6 @@ public class SpreadsheetController extends ParentController {
 
         ObservableList<ObservableList<SpreadsheetCell>> observableSheet = FXCollections.observableArrayList();
 
-
-
     }
 
 
