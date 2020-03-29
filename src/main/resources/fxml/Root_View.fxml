@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.PlusMinusSlider?>
 <?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excelcommander.controller.MenuController">
@@ -42,6 +47,30 @@
                 <Tooltip text="Start by importing some data" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
             </tooltip>
         </MenuBar>
+      <JFXToolbar fx:id="jfxToolbar">
+         <right>
+            <PlusMinusSlider fx:id="zoomSlider" BorderPane.alignment="CENTER" />
+         </right>
+         <top>
+            <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <items>
+                  <JFXButton onAction="#handleImportFromExcel" text="Import XLSX" />
+                  <JFXButton layoutX="10.0" layoutY="10.0" onAction="#handleOpenProject" text="Open Project"/>
+                  <JFXButton layoutX="80.0" layoutY="10.0" />
+                  <JFXButton layoutX="150.0" layoutY="10.0" />
+                  <JFXButton layoutX="220.0" layoutY="10.0" />
+                  <JFXButton layoutX="290.0" layoutY="10.0" />
+                  <JFXButton layoutX="360.0" layoutY="10.0" />
+                  <JFXButton layoutX="430.0" layoutY="10.0" />
+                  <JFXButton layoutX="500.0" layoutY="10.0" />
+                  <JFXButton layoutX="570.0" layoutY="10.0" />
+                  <JFXButton layoutX="640.0" layoutY="10.0" />
+                  <JFXButton layoutX="710.0" layoutY="10.0" />
+                  <JFXButton layoutX="850.0" layoutY="10.0" />
+                  <JFXButton layoutX="920.0" layoutY="10.0" />
+               </items>
+            </ToolBar>
+         </top></JFXToolbar>
       <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
           <Tab fx:id="tab1" text="Untitled Tab 1">

@@ -1,9 +1,9 @@
 package com.excelcommander.controller;
 
+import com.excelcommander.model.Project;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.utils.JFXUtilities;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,9 +21,6 @@ import java.util.List;
 @Controller
 public class FileSysNavController extends ParentController {
 
-	JFXListCell<Label> cell = new JFXListCell<>();
-	ObservableList<JFXListCell<Label>> obList = FXCollections.observableArrayList();
-	JFXListView<JFXListCell<Label>> listView;
 
 	@FXML
 	protected ScrollPane scrollPaneProjectNav;
@@ -39,25 +36,25 @@ public class FileSysNavController extends ParentController {
 	public <T> void init(Stage stage, HashMap<String, T> parameters) {
 		super.init(stage, parameters);
 
-		List<String> fileList = new ArrayList<>();
+		List<Project> projectList;
 		if (parameters != null) {
-			fileList = (List<String>) parameters.get("fileList");
+			projectList = (List<Project>) parameters.get("project_list");
+			initListView(projectList);
 		}
 
-		initListView(fileList);
+
 
 	}
 
-	private void initListView(List<String> fileNameList) {
+	private void initListView(List<Project> projectList) {
+		JFXListView<Label> listView = new JFXListView<>();
 
-		listView = new JFXListView<JFXListCell<Label>>();
+		for (Project project : projectList) {
+				listView.getItems().add(new Label(project.getProjectName()));
 
-		for (String str : fileNameList) {
-			cell.setItem(new Label(str));
-			obList.add(cell);
 		}
-		listView.setItems(obList);
-		
+		listView.autosize();
+
 		anchorPaneFileNav.getChildren().add(listView);
 
 	}

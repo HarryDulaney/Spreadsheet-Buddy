@@ -13,11 +13,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Service("projectService")
-public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepository > implements ProjectService {
+public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepository> implements ProjectService {
 
     final Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
@@ -90,7 +91,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
 
         return createService(new Task<List<Project>>() {
             protected List<Project> call() throws Exception {
-
+    
                 return repository.findAll();
             }
         }, onSuccess, beforeStart);

@@ -11,7 +11,6 @@ import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,14 +45,12 @@ public class ExcelCommanderApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         StackPane sp = new StackPane();
-        sp.getChildren().add(new Button("Yes"));
-        Scene scene = new Scene(sp,500,250);
+        Scene scene = new Scene(sp);
         primaryStage.setScene(scene);
         primaryStage.show();
 
         DialogHelper.inputDialog(sp, "Welcome to " + title, "Would you like to open an existing project?", () -> {
             try {
-
                 openProject(primaryStage);
 
             } catch (Exception e) {

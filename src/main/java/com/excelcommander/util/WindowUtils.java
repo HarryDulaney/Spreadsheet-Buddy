@@ -90,13 +90,13 @@ public class WindowUtils {
      * Creates new Grid model and set it to the live SpreadsheetView
      *
      * @param currentView The SpreadsheetView from the current window
-     * @param setToView XSSFWorkbook loaded from an file
+     * @param workbook XSSFWorkbook loaded from an file
      */
-    public static void renderNewSheet(SpreadsheetView currentView, Workbook setToView, Tab currentTab) {
+    public static void renderNewSheet(SpreadsheetView currentView, Workbook workbook, Tab currentTab) {
 
         Grid grid = new GridBase(currentView.getGrid().getRowCount(), currentView.getGrid().getColumnCount());
 
-        Sheet sheet = setToView.getSheetAt(0);
+        Sheet sheet = workbook.getSheetAt(0);
         ObservableList<ObservableList<SpreadsheetCell>> observableSheet = FXCollections.observableArrayList();
 
         for (int curRow = 0; curRow < grid.getRowCount(); curRow++) {
@@ -159,7 +159,7 @@ public class WindowUtils {
             }
             observableSheet.add(observableRow);
         }
-        currentTab.setText(String.valueOf(setToView.getSheetName(0)));
+        currentTab.setText(String.valueOf(workbook.getSheetName(0)));
         grid.setRows(observableSheet);
         currentView.setGrid(grid); //Set new gridbase Grid model to the current Spreadsheetview
         currentView.autosize();

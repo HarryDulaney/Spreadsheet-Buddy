@@ -5,6 +5,7 @@ import com.excelcommander.service.ProjectService;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.SpreadSheetUtils;
 import com.excelcommander.util.WindowUtils;
+import com.jfoenix.controls.JFXToolbar;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -15,11 +16,12 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.controlsfx.control.PlusMinusSlider;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +32,11 @@ import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * @author HGDIV
- */
-
-/**
+ * <p>
  * MenuController controls and handles events for the Main File Menu and other drop-down menus
  * Is registered as a Controller in with Spring
  */
@@ -45,6 +44,7 @@ import java.util.HashMap;
 public class MenuController extends ParentController {
 
     public static final String ROOT_FXML = "/fxml/Root_View.fxml";
+    private static final String PROJECT_SEARCH = "/fxml/FileSysNavWindow.fxml";
 
     Logger logger = LoggerFactory.getLogger(MenuController.class);
 
@@ -67,6 +67,12 @@ public class MenuController extends ParentController {
 
     @FXML
     private RadioMenuItem mainToolbarRadioButton;
+
+    @FXML
+    private JFXToolbar jfxToolbar;
+
+    @FXML
+    protected PlusMinusSlider zoomSlider;
 
 
     @Override
@@ -100,19 +106,33 @@ public class MenuController extends ParentController {
     }
 
     @FXML
-    private void handleOpenProject(ActionEvent event) throws IOException {
+    private void handleOpenProject(ActionEvent event) {
 
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("Choose the project you would like to open");
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(".xml", "*.xml"));
-        File toOpen = chooser.showOpenDialog(new Stage(StageStyle.UTILITY));
+        final String prjWindowTitle = "Choose the project you would like to open";
+        HashMap<String,List<?>> params = new HashMap<>();
+
+        projectService.findAll(event1 -> {
+
+            List<Project> projectList = (List<Project>) event1.getSource().getValue();
+
+            params.put("project_list",projectList);
+
+            try {
+                WindowUtils.open(PROJECT_SEARCH, prjWindowTitle,new HashMap<>(params), Modality.APPLICATION_MODAL);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                DialogHelper.showAndWaitAlert("Something went wrong opening the window"
+                        , "Could not open resource", "My Bad", AlertType.ERROR);
+            }
+
+        },null);
 
         try {
             openProject("project");
 
         } catch (Exception e) {
-            DialogHelper.showAndWaitAlert("Sorry we were not able to open the selected file, please try again"
-                    , "Could not open the file", "Something Went Wrong", AlertType.ERROR);
+            DialogHelper.showAndWaitAlert("Sorry we couldn't find a project with that name, please try again"
+                    , "Could not open resource", "Something Went Wrong", AlertType.ERROR);
 
         }
     }

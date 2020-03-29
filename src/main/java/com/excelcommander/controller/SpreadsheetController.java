@@ -1,20 +1,12 @@
 package com.excelcommander.controller;
 
-import java.time.LocalDate;
 import java.util.*;
 
-import com.excelcommander.model.WorkbookCE;
-import com.excelcommander.util.SpreadSheetUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.Pane;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.controlsfx.control.spreadsheet.*;
-import org.springframework.stereotype.Controller;
 
 import javafx.stage.Stage;
 
@@ -27,7 +19,6 @@ public class SpreadsheetController extends ParentController {
     public static String SSVIEW_FXML = "/fxml/SpreadSheetView.fxml";
     public static String WORKBOOK = "workbook";
 
-    private WorkbookCE workbookCE;
     private Workbook workbook;
 
     @FXML

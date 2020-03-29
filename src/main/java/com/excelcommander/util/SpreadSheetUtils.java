@@ -1,6 +1,5 @@
 package com.excelcommander.util;
 
-import com.excelcommander.model.WorkbookCE;
 import javafx.scene.control.Alert;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -23,8 +22,6 @@ import java.util.List;
  * @author HG Dulaney IV
  */
 public class SpreadSheetUtils {
-
-
 
 
     public static void createBlankWorkbook(FileResource fr) {
@@ -56,21 +53,20 @@ public class SpreadSheetUtils {
      * @param sheetNum the current sheet to be mapped
      * @return a the sheet mapped to a nested List format
      */
-    public static WorkbookCE mapSheet(Workbook workbook, int sheetNum) {
-      WorkbookCE workbookCE = new WorkbookCE(workbook);
+    public static List<List<Cell>> mapSheet(Workbook workbook, int sheetNum) {
         List<List<Cell>> sheetList = new ArrayList<>();
         Sheet sheet = workbook.getSheetAt(sheetNum);
 
         int numRows = sheet.getLastRowNum();
 
-        workbookCE.setMaxRow(100);
-        workbookCE.setMaxColumn(30);
-
         for (int r = 0; r < 100; r++) {
             Row row = sheet.getRow(r);
             List<Cell> rowList = new ArrayList<>();
             Iterator<Cell> cellIterator = row.cellIterator();
-
+            while(cellIterator.hasNext()){
+                Cell cell = cellIterator.next();
+                rowList.add(cell);
+            }
             int count = 0;
             for (int c = 0; c < 30; c++) {
                 rowList.add(row.getCell(c));
@@ -78,9 +74,8 @@ public class SpreadSheetUtils {
             sheetList.add(rowList);
 
         }
-        workbookCE.setSheetAsList(sheetList);
 
-        return workbookCE;
+        return sheetList;
 
     }
 
