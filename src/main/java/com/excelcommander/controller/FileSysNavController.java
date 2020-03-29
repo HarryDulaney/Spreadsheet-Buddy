@@ -11,7 +11,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
@@ -70,7 +69,7 @@ public class FileSysNavController extends ParentController {
                     for (Project p : projectList) {
                         if (p.getProjectName().equals(chosenLbl.getText())) {
                             this.project = p;
-                            ctx.getBean(MenuController.class).setProject(p);
+                            ctx.getBeanFactory().registerSingleton("active-project",Project.class);
 
                         }
 
@@ -87,15 +86,9 @@ public class FileSysNavController extends ParentController {
     }
 
 
-    @Autowired
-    protected void setProject(Project project) {
-        this.project = project;
-    }
-
 
     @Override
     protected void onClose() {
-
 
     }
 

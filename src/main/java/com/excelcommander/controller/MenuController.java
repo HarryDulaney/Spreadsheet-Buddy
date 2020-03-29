@@ -10,7 +10,6 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Tab;
@@ -46,13 +45,14 @@ public class MenuController extends ParentController {
 
     public static final String ROOT_FXML = "/fxml/Root_View.fxml";
     private static final String PROJECT_SEARCH = "/fxml/FileSysNavWindow.fxml";
+    public static final String NEW_PROJECT = "new-project";
 
     Logger logger = LoggerFactory.getLogger(MenuController.class);
 
 
     private ApplicationContext ctx;
 
-    protected static Project project;
+    protected Project project;
     private HostServices hostServices;
     ProjectService projectService;
 
@@ -80,12 +80,21 @@ public class MenuController extends ParentController {
     @Override
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
+        
+        checkParams(parameters);
+
+    }
+
+    private <T> void checkParams(Map<String,T> parameters) {
+        if (parameters != null){
+            project = (Project) parameters.get(NEW_PROJECT);
+        }
 
     }
 
 
     @FXML
-    private void handleSaveWorkbook(ActionEvent event) throws FileNotFoundException {
+    private void handleSaveWorkbook(ActionEvent event) {
 
         DialogHelper.showAlert(
                 "You must first open or create a new projectXml in order to perform the save projectXml action",
@@ -129,7 +138,7 @@ public class MenuController extends ParentController {
             params.put("project_list", projectList);
 
             try {
-                WindowUtils.open(PROJECT_SEARCH, prjWindowTitle, new HashMap<>(params), Modality.APPLICATION_MODAL);
+                WindowUtils.open(PROJECT_SEARCH, prjWindowTitle, params, Modality.APPLICATION_MODAL);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 DialogHelper.showAndWaitAlert("Something went wrong opening the window"
@@ -212,11 +221,6 @@ public class MenuController extends ParentController {
     @Autowired
     private void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
-    }
-
-    @Autowired
-    protected void setProject(Project project) {
-        this.project = project;
     }
 
 

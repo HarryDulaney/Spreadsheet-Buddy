@@ -73,7 +73,6 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
         }, onSuccess, beforeStart);
     }
 
-
     @Override
     public javafx.concurrent.Service<Void> delete(Project project, EventHandler<WorkerStateEvent> onSuccess,
                                                   EventHandler<WorkerStateEvent> beforeStart) throws Exception {

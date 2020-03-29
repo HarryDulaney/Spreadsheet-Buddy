@@ -15,5 +15,7 @@ public interface ProjectService extends IBaseService<Project>{
     Service<Project> findByProjectName(String projectName, EventHandler<WorkerStateEvent> onSuccess,
                                       EventHandler<WorkerStateEvent> beforeStart);
 
+
+
     void onClose();
 }

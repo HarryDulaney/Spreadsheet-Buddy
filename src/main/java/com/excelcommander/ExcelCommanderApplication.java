@@ -7,15 +7,15 @@ import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.WindowUtils;
 import javafx.application.Application;
 import javafx.application.HostServices;
-import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+
+import java.util.HashMap;
 
 @SpringBootApplication
 public class ExcelCommanderApplication extends Application {
@@ -23,6 +23,7 @@ public class ExcelCommanderApplication extends Application {
     private static ConfigurableApplicationContext ctx;
     ProjectService projectService;
     private Project project;
+    private StackPane stackPane;
 
 
     @Value("${application.title.display}")
@@ -42,56 +43,51 @@ public class ExcelCommanderApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        StackPane sp = new StackPane();
-        Scene scene = new Scene(sp,415,150);
-        primaryStage.setScene(scene);
-        primaryStage.show();
 
-        DialogHelper.inputDialog(sp, "Welcome to ExcelCommander", "Would you like to open an existing project?", () -> {
-            try {
-                openProject(primaryStage);
+        stackPane = new StackPane();
+        DialogHelper.inputDialog(stackPane, "Welcome to ExcelCommander", "Would you like to create a new project?\n or open and existing one?",
+                () -> {    //action1 New Project
+                    String projectName = DialogHelper.showInputPrompt("Create A New Project",
+                            "Please enter a name for the project you would like to create", "New Project");
+                    if (projectName.length() > 1) {
+                        project = new Project(projectName);
+                        try {
+                            projectService.save(project, event -> {
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                                project = (Project) event.getSource().getValue();
 
-        });
+                                try {
+                                    WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }, null);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, //action2 Open Project
 
-  /*      String projectName = DialogHelper.showInputPrompt("Create A New Project",
-                "Please enter a name for the project you would like to create", "New Project");
-        if (projectName.length() < 1) {
-            project = new Project(projectName);
-            projectService.save(project, event -> {
+                () -> {
+                    String nameOfProject = DialogHelper.showInputPrompt("Open Project",
+                            "Please enter the #ID for the project you would like to open", "Welcome back to " + title);
 
-                project = (Project) event.getSource().getValue();
+                    projectService.findByProjectName(nameOfProject, e -> {
 
-                try {
-                    WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }, null);
-*/
-    }
+                        project = (Project) e.getSource().getValue();
+                        HashMap<String, Object> parmas = new HashMap<>();
+                        parmas.put(MenuController.NEW_PROJECT, project);
+                        try {
+                            WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), parmas);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }, null);
 
-    private void openProject(Stage primaryStage) throws Exception {
-        String nameOfProject = DialogHelper.showInputPrompt("Open Project",
-                "Please enter the #ID for the project you would like to open", "Welcome back to " + title);
+                });
 
-        projectService.findById(Long.parseLong(nameOfProject), e -> {
-
-            project = (Project) e.getSource().getValue();
-            try {
-                WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }, null);
-    }
-    private void createNewProject(){
 
     }
-
 
 
     @Bean
@@ -102,14 +98,6 @@ public class ExcelCommanderApplication extends Application {
     @Bean
     HostServices initHostServices() {
         return this.getHostServices();
-    }
-
-    @Bean
-    Project initProject() {
-        Project project = new Project();
-        this.project = project;
-        return project;
-
     }
 
 
