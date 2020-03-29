@@ -86,6 +86,7 @@ public class FileSysNavController extends ParentController {
         anchorPaneFileNav.getChildren().add(listView);
     }
 
+
     @Autowired
     protected void setProject(Project project) {
         this.project = project;

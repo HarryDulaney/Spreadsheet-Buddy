@@ -30,6 +30,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -50,7 +51,8 @@ public class MenuController extends ParentController {
 
 
     private ApplicationContext ctx;
-    private Project project;
+
+    protected static Project project;
     private HostServices hostServices;
     ProjectService projectService;
 

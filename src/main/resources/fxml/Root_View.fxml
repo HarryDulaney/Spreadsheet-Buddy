@@ -71,7 +71,7 @@
                </items>
             </ToolBar>
          </top></JFXToolbar>
-      <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+      <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
           <Tab fx:id="tab1" text="Untitled Tab 1">
             <content>

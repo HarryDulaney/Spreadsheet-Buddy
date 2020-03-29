@@ -22,7 +22,7 @@ public class ExcelCommanderApplication extends Application {
 
     private static ConfigurableApplicationContext ctx;
     ProjectService projectService;
-    private static Project project;
+    private Project project;
 
 
     @Value("${application.title.display}")
@@ -94,7 +94,7 @@ public class ExcelCommanderApplication extends Application {
 
 
 
-    @Bean(name = "ctx")
+    @Bean
     public static ConfigurableApplicationContext getCtx() {
         return ctx;
     }
@@ -104,8 +104,10 @@ public class ExcelCommanderApplication extends Application {
         return this.getHostServices();
     }
 
-    @Bean(name = "project")
-    Project initProject(Project project) {
+    @Bean
+    Project initProject() {
+        Project project = new Project();
+        this.project = project;
         return project;
 
     }
