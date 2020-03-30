@@ -7,6 +7,7 @@ import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.WindowUtils;
 import javafx.application.Application;
 import javafx.application.HostServices;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,7 +67,7 @@ public class ExcelCommanderApplication extends Application {
 
                     }
                 }, () -> {
-                    String nameOfProject = DialogHelper.showInputPrompt("Open Project", "Please enter the #ID for the project you would like to open", "Welcome back to ExcelCommander");
+                    String nameOfProject = DialogHelper.showInputPrompt("Open Project", "Please enter the name for the project you would like to open", "Welcome back to ExcelCommander");
                     if (!nameOfProject.isEmpty()) {
                         try {
                             projectService.findByProjectName(nameOfProject, e -> {
@@ -74,6 +75,8 @@ public class ExcelCommanderApplication extends Application {
                                 try {
                                     WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
                                 } catch (Exception ex) {
+                                    DialogHelper.showSimpleAlert("Sorry I couldn't find your project in the database," +
+                                            "Perhaps try a altering the name, and try again, or create a new project ;)", Alert.AlertType.ERROR);
                                     ex.printStackTrace();
                                 }
                             }, null);
