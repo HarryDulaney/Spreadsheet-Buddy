@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.*;
 import org.apache.metamodel.util.FileResource;
@@ -24,18 +25,22 @@ import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * @author HGDIV
  * <p>
  * MenuController controls and handles events for the Main File Menu and other drop-down menus
  * Is registered as a Controller in with Spring
+ * </p>
  */
 @Controller
 public class MenuController extends ParentController {
@@ -44,12 +49,15 @@ public class MenuController extends ParentController {
     private static final String PROJECT_SEARCH = "/fxml/FileSysNavWindow.fxml";
 
     Logger logger = LoggerFactory.getLogger(MenuController.class);
-
     private static ConfigurableApplicationContext ctx;
     private HostServices hostServices;
     ProjectService projectService;
 
-
+    /**************************************************************
+     *                                                            *
+     * FXMl Field's                                               *
+     *                                                            *
+     **************************************************************/
 
     @FXML
     private SpreadsheetView ssView;
@@ -78,8 +86,71 @@ public class MenuController extends ParentController {
         setLabels();
     }
 
+    /**************************************************************
+     *                                                            *
+     * View                                                       *
+     *                                                            *
+     **************************************************************/
+
     private void setLabels() {
         stage.setTitle(projectService.activeProject().getProjectName());
+    }
+
+    @FXML
+    private void handleToggleMainToolbar(ActionEvent event) {
+        if (jfxToolbar.isVisible()) {
+            jfxToolbar.setVisible(false);
+        } else {
+            jfxToolbar.setVisible(true);
+
+
+        }
+    }
+
+    /**************************************************************
+     *                                                            *
+     * Zoom Slider                                                *
+     *                                                            *
+     **************************************************************/
+
+    public void handleZoomEvent(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
+    }
+
+    public void handleOnZoom(ZoomEvent zoomEvent) {
+    }
+
+    public void handleZoomEnd(ZoomEvent zoomEvent) {
+    }
+
+    public void handleZoomStart(ZoomEvent zoomEvent) {
+    }
+
+    public void handleNewProject(ActionEvent event) {
+    }
+
+    /**************************************************************
+     *                                                            *
+     * Workbook                                                   *
+     *                                                            *
+     **************************************************************/
+
+
+    /**
+     * @param event File menu import -> from Excel file clicked
+     */
+    @FXML
+    private void handleImportFromExcel(ActionEvent event) {
+        Project project = projectService.activeProject();
+        File excelFile = DialogHelper.showFilePrompt("Import from Excel workbook: ", ".xlsx");
+        try {
+            Workbook wb = SpreadSheetUtils.loadFromFile(excelFile);
+            WindowUtils.renderNewSheet(ssView, wb, tab1);
+            project.setFileResource(new FileResource(excelFile));
+
+        } catch (Exception e) {
+            System.out.println("Problem loading from file");
+        }
+
     }
 
 
@@ -142,25 +213,6 @@ public class MenuController extends ParentController {
     }
 
 
-    /**
-     * @param event File menu import -> from Excel file clicked
-     */
-    @FXML
-    private void handleImportFromExcel(ActionEvent event) {
-        Project project = projectService.activeProject();
-        File excelFile = DialogHelper.showFilePrompt("Import from Excel workbook: ", ".xlsx");
-        try {
-            Workbook wb = SpreadSheetUtils.loadFromFile(excelFile);
-            WindowUtils.renderNewSheet(ssView, wb, tab1);
-            project.setFileResource(new FileResource(excelFile));
-
-        } catch (Exception e) {
-            System.out.println("Problem loading from file");
-        }
-
-    }
-
-
     @FXML
     private void handleAboutSuperCommander(ActionEvent event) {
 
@@ -175,23 +227,16 @@ public class MenuController extends ParentController {
         Platform.exit();
     }
 
-    @FXML
-    private void handleToggleMainToolbar(ActionEvent event) {
-        if (jfxToolbar.isVisible()) {
-            jfxToolbar.setVisible(false);
-        } else {
-            jfxToolbar.setVisible(true);
-
-
-        }
-    }
-
-
     @Override
     protected void onClose() {
 
     }
 
+    /**************************************************************
+     *                                                            *
+     * Autowired Injected Beans                                   *
+     *                                                            *
+     **************************************************************/
 
     @Autowired
     public void setProjectService(ProjectService projectService) {
@@ -209,5 +254,6 @@ public class MenuController extends ParentController {
     private void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
+
 
 }

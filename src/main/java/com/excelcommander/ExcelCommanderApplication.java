@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 
 @SpringBootApplication
@@ -25,10 +26,7 @@ public class ExcelCommanderApplication extends Application {
     private static ConfigurableApplicationContext ctx;
     ProjectService projectService;
     private StackPane stackPane;
-    private Stage primaryStage;
 
-    @Value("${application.title.display}")
-    protected String title;
 
 
     public static void main(String[] args) {
@@ -52,8 +50,8 @@ public class ExcelCommanderApplication extends Application {
                     if (!projectName.isEmpty()) {
                         project = new Project(projectName);
                         try {
-                            projectService.save(project, e->{
-                              project = (Project) e.getSource().getValue();
+                            projectService.save(project, e -> {
+                                project = (Project) e.getSource().getValue();
                             }, null);
 
                             try {

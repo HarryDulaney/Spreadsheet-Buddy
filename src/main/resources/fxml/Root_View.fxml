@@ -24,19 +24,25 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook (Blank)" />
-                        <Menu mnemonicParsing="false" text="Import">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="Excel Source" />
-                            </items>
-                        </Menu>
-                        <MenuItem mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit SuperCommander" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleNewProject" text="New Project" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpenProject" text="Open Project" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit ExcelCommander" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="Workbook">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook (Blank)" />
+                  <Menu mnemonicParsing="false" text="Import">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="Excel Source" />
+                     </items>
+                  </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
+               </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="View">
                     <items>
-                        <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" onAction="#handleToggleMainToolbar" text="Main Toolbar" />
+                        <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" onAction="#handleToggleMainToolbar" selected="true" text="Toolbar on/off" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -49,9 +55,9 @@
                 <Tooltip text="Start by importing some data" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
             </tooltip>
         </MenuBar>
-      <JFXToolbar fx:id="jfxToolbar" visible="false">
+      <JFXToolbar fx:id="jfxToolbar">
          <right>
-            <PlusMinusSlider fx:id="zoomSlider" BorderPane.alignment="CENTER" />
+            <PlusMinusSlider fx:id="zoomSlider" disable="true" onValueChanged="#handleZoomEvent" onZoom="#handleOnZoom" onZoomFinished="#handleZoomEnd" onZoomStarted="#handleZoomStart" BorderPane.alignment="CENTER" />
          </right>
          <top>
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -76,7 +82,6 @@
                   <JFXButton buttonType="RAISED" layoutX="570.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                   <JFXButton buttonType="RAISED" layoutX="640.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                   <JFXButton buttonType="RAISED" layoutX="850.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
-                  <JFXButton buttonType="RAISED" layoutX="920.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                </items>
             </ToolBar>
          </top></JFXToolbar>
