@@ -2,6 +2,7 @@ package com.excelcommander.util;
 
 import com.excelcommander.ExcelCommanderApplication;
 import com.excelcommander.controller.ParentController;
+import com.jfoenix.controls.JFXListView;
 import impl.org.controlsfx.skin.GridCellSkin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,8 +15,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
 import org.controlsfx.control.spreadsheet.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -28,7 +31,7 @@ public class WindowUtils {
 
     private static ConfigurableApplicationContext ctx = ExcelCommanderApplication.getCtx();
 
-    public static <T> void replaceFxmlOnWindow(Pane root, String path, Stage stage, HashMap<String, T> parameters)
+    public static <T> void replaceWindowContent(Pane root, String path, Stage stage, HashMap<String, T> parameters)
             throws Exception {
         FXMLLoader loader = loadFxml(path);
 
@@ -71,6 +74,7 @@ public class WindowUtils {
         return stage;
     }
 
+
     public static FXMLLoader loadFxml(String url) {
 
         try (InputStream fxmlStream = WindowUtils.class.getResourceAsStream(url)) {
@@ -90,7 +94,7 @@ public class WindowUtils {
      * Creates new Grid model and set it to the live SpreadsheetView
      *
      * @param currentView The SpreadsheetView from the current window
-     * @param workbook XSSFWorkbook loaded from an file
+     * @param workbook    XSSFWorkbook loaded from an file
      */
     public static void renderNewSheet(SpreadsheetView currentView, Workbook workbook, Tab currentTab) {
 
@@ -165,7 +169,6 @@ public class WindowUtils {
         currentView.autosize();
 
     }
-
 
     public static void watchEvents(SpreadsheetView view, WatchListener listener) {
         view.focusedProperty().addListener((o, oldValue, newValue) -> {

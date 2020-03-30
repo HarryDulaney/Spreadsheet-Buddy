@@ -57,10 +57,15 @@ public final class DialogHelper {
 
         JFXDialog dialog = new JFXDialog(root, content, JFXDialog.DialogTransition.CENTER);
 
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 415, 175));
+
         JFXButton yesButton = new JFXButton("New Project");
         yesButton.setOnAction(event -> {
             dialog.close();
             action1.onAction();
+            stage.close();
+
         });
         content.setActions(yesButton);
 
@@ -68,16 +73,15 @@ public final class DialogHelper {
         noButton.setOnAction(event -> {
             dialog.close();
             action2.onAction();
+            stage.close();
+
         });
         content.setActions(noButton, yesButton);
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root, 415, 175));
+        stage.show();
+        dialog.show();
 
-        stage.setOnShowing(event -> {
-                    dialog.show();
-                }
-        );
+
     }
 
     public static void showAndWaitAlert(String content, String header, String title, AlertType alertType) {
@@ -132,8 +136,10 @@ public final class DialogHelper {
         textDialog.setContentText(content);
         textDialog.setTitle(title);
         textDialog.showAndWait();
-
-        return textDialog.getResult();
+        if (textDialog.getResult().isEmpty()) {
+            return "canceled!!@#";
+        } else
+            return textDialog.getResult();
     }
 
 

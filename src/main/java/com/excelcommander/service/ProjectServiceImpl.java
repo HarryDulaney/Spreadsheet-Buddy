@@ -9,11 +9,9 @@ import org.apache.metamodel.util.FileResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,6 +21,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
     final Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     private ProjectRepository repository;
+    private Project activeProject;
 
 
     @Autowired
@@ -59,16 +58,25 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
     public javafx.concurrent.Service<Project> save(Project project, EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) throws Exception {
         return createService(new Task<Project>() {
             protected Project call() throws Exception {
-                return repository.save(project);
+
+                setActiveProject(repository.save(project));
+                activeProject.setOpen(true);
+
+                return activeProject;
+
             }
         }, onSuccess, beforeStart);
     }
 
     @Override
-    public javafx.concurrent.Service<Project> findByProjectName(String projectName, EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) {
+    public javafx.concurrent.Service<Project> findByProjectName(String projectName, EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) throws Exception {
         return createService(new Task<Project>() {
             protected Project call() throws Exception {
-                return repository.findByProjectName(projectName);
+
+                setActiveProject(repository.findByProjectName(projectName));
+                activeProject.setOpen(true);
+
+                return activeProject;
             }
         }, onSuccess, beforeStart);
     }
@@ -90,7 +98,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
 
         return createService(new Task<List<Project>>() {
             protected List<Project> call() throws Exception {
-    
+
                 return repository.findAll();
             }
         }, onSuccess, beforeStart);
@@ -106,6 +114,16 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
             }
         }, onSuccess, beforeStart);
     }
+
+    @Override
+    public Project activeProject() {
+        return activeProject;
+    }
+    @Override
+    public void setActiveProject(Project activeProject) {
+        this.activeProject = activeProject;
+    }
+
 
 }
 

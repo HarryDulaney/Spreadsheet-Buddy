@@ -8,13 +8,17 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import org.apache.metamodel.util.FileResource;
 
-public interface ProjectService extends IBaseService<Project>{
+public interface ProjectService extends IBaseService<Project> {
 
     Service<File[]> getDirectoryFiles(FileResource fileResource, EventHandler<WorkerStateEvent> onSuccess,
                                       EventHandler<WorkerStateEvent> beforeStart);
-    Service<Project> findByProjectName(String projectName, EventHandler<WorkerStateEvent> onSuccess,
-                                      EventHandler<WorkerStateEvent> beforeStart);
 
+    Service<Project> findByProjectName(String projectName, EventHandler<WorkerStateEvent> onSuccess,
+                                       EventHandler<WorkerStateEvent> beforeStart) throws Exception;
+
+    Project activeProject();
+
+    void setActiveProject(Project project);
 
 
     void onClose();

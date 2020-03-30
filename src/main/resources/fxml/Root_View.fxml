@@ -13,6 +13,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import org.controlsfx.control.PlusMinusSlider?>
 <?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
 
@@ -22,10 +24,10 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Project">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook(Blank)" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook (Blank)" />
                         <Menu mnemonicParsing="false" text="Import">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="From Excel Source" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="Excel Source" />
                             </items>
                         </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
@@ -34,7 +36,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="View">
                     <items>
-                        <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" text="Main Toolbar" />
+                        <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" onAction="#handleToggleMainToolbar" text="Main Toolbar" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -47,27 +49,34 @@
                 <Tooltip text="Start by importing some data" textAlignment="CENTER" textOverrun="CLIP" wrapText="true" />
             </tooltip>
         </MenuBar>
-      <JFXToolbar fx:id="jfxToolbar">
+      <JFXToolbar fx:id="jfxToolbar" visible="false">
          <right>
             <PlusMinusSlider fx:id="zoomSlider" BorderPane.alignment="CENTER" />
          </right>
          <top>
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
-                  <JFXButton onAction="#handleImportFromExcel" text="Import XLSX" />
-                  <JFXButton layoutX="10.0" layoutY="10.0" onAction="#handleOpenProject" text="Open Project"/>
-                  <JFXButton layoutX="80.0" layoutY="10.0" />
-                  <JFXButton layoutX="150.0" layoutY="10.0" />
-                  <JFXButton layoutX="220.0" layoutY="10.0" />
-                  <JFXButton layoutX="290.0" layoutY="10.0" />
-                  <JFXButton layoutX="360.0" layoutY="10.0" />
-                  <JFXButton layoutX="430.0" layoutY="10.0" />
-                  <JFXButton layoutX="500.0" layoutY="10.0" />
-                  <JFXButton layoutX="570.0" layoutY="10.0" />
-                  <JFXButton layoutX="640.0" layoutY="10.0" />
-                  <JFXButton layoutX="710.0" layoutY="10.0" />
-                  <JFXButton layoutX="850.0" layoutY="10.0" />
-                  <JFXButton layoutX="920.0" layoutY="10.0" />
+                  <JFXButton buttonType="RAISED" onAction="#handleImportFromExcel" text="Import XLSX">
+                     <ripplerFill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop color="#00508d" />
+                              <Stop color="WHITE" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </ripplerFill></JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" onAction="#handleOpenProject" ripplerFill="#791a1a" text="Open Project" />
+                  <JFXButton buttonType="RAISED" layoutX="80.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="150.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="220.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="290.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="360.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="430.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="500.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="570.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="640.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="850.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="920.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                </items>
             </ToolBar>
          </top></JFXToolbar>

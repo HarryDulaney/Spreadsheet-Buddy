@@ -19,5 +19,6 @@ public interface IBaseService<T> {
 	 Service<T> findById(long id, EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart)
 			throws Exception;
 
+
 	 void onClose();
 }

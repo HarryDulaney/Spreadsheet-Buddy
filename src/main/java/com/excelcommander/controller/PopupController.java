@@ -1,43 +1,50 @@
 package com.excelcommander.controller;
 
-import com.excelcommander.ExcelCommanderApplication;
 import com.excelcommander.model.Project;
-import com.excelcommander.util.DialogHelper;
+import com.excelcommander.service.ProjectService;
+import com.excelcommander.util.WindowUtils;
 import com.jfoenix.controls.JFXListView;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 import java.util.List;
 
+import static com.excelcommander.controller.MenuController.ROOT_FXML;
+
+
 @Controller
-public class FileSysNavController extends ParentController {
+public class PopupController extends ParentController {
 
-
-    private Project project; //Current Project
-    private static ConfigurableApplicationContext ctx = ExcelCommanderApplication.getCtx();
+    private ProjectService projectService;
+    List<Project> projectList;
+    protected Label chosenLbl;
+    private MenuController menuController;
+    private Project tempProject = new Project();
 
     @FXML
     protected ScrollPane scrollPaneProjectNav;
     @FXML
     protected AnchorPane anchorPaneFileNav;
 
-    protected Label chosenLbl;
 
+    @Autowired
+    public PopupController(MenuController menuController) {
+        this.menuController = menuController;
+
+    }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
 
-        List<Project> projectList;
+
         if (parameters != null) {
             projectList = (List<Project>) parameters.get("project_list");
             initListView(projectList);
@@ -61,35 +68,43 @@ public class FileSysNavController extends ParentController {
         listView.setMinWidth(scrollPaneProjectNav.getPrefViewportWidth());
         listView.setMinHeight(scrollPaneProjectNav.getPrefViewportHeight());
 
-        listView.setOnMouseClicked((MouseEvent e) -> {
-            if (e.getClickCount() == 2) {
+        listView.setOnMouseClicked(e -> {
+            if (e.getClickCount() > 1) {
                 chosenLbl = listView.getSelectionModel().getSelectedItem();
 
                 if (!chosenLbl.getText().isEmpty()) {
-                    for (Project p : projectList) {
-                        if (p.getProjectName().equals(chosenLbl.getText())) {
-                            this.project = p;
-                            ctx.getBeanFactory().registerSingleton("active-project",Project.class);
-
+                    for (Project project : projectList) {
+                        if (project.getProjectName().equals(chosenLbl.getText())) {
+                            tempProject = project;
+                            break;
                         }
-
                     }
-                    DialogHelper.showSimpleAlert("Success, your project is open", Alert.AlertType.CONFIRMATION);
+                    projectService.activeProject().setOpen(false);
+                    projectService.setActiveProject(tempProject);
+                    menuController.getStage().close();
+                    try {
+                        WindowUtils.open(stage,ROOT_FXML,tempProject.getProjectName(),null);
+                    } catch (Exception ex) {
+                        System.out.println("PopupController ->> line 88");
+                        ex.printStackTrace();
+                    }
 
-                    stage.close();
                 }
-            }
-
+                }
         });
-
         anchorPaneFileNav.getChildren().add(listView);
     }
-
 
 
     @Override
     protected void onClose() {
 
+
+    }
+
+    @Autowired
+    private void setProjectService(ProjectService projectService) {
+        this.projectService = projectService;
     }
 
 }
