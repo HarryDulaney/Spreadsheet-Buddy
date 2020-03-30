@@ -9,7 +9,6 @@ import com.jfoenix.controls.JFXToolbar;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.RadioMenuItem;
@@ -17,7 +16,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.controlsfx.control.PlusMinusSlider;
@@ -25,11 +26,9 @@ import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -102,7 +101,6 @@ public class MenuController extends ParentController {
             jfxToolbar.setVisible(false);
         } else {
             jfxToolbar.setVisible(true);
-
 
         }
     }
