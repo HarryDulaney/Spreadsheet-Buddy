@@ -11,7 +11,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.ZoomEvent;
@@ -32,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -43,6 +43,7 @@ import java.util.List;
  */
 @Controller
 public class MenuController extends ParentController {
+
     public static final String MENU_CONTROLLER_MESSAGE = "open.stage.project.modality";
     public static final String ROOT_FXML = "/fxml/Root_View.fxml";
     private static final String PROJECT_SEARCH = "/fxml/FileSysNavWindow.fxml";
@@ -53,11 +54,6 @@ public class MenuController extends ParentController {
     private HostServices hostServices;
     ProjectService projectService;
 
-    /**************************************************************
-     *                                                            *
-     * FXMl Field's                                               *
-     *                                                            *
-     **************************************************************/
 
     @FXML
     private SpreadsheetView ssView;
@@ -70,9 +66,6 @@ public class MenuController extends ParentController {
     private TabPane tabPane;
 
     @FXML
-    private RadioMenuItem mainToolbarRadioButton;
-
-    @FXML
     private JFXToolbar jfxToolbar;
 
     @FXML
@@ -83,7 +76,22 @@ public class MenuController extends ParentController {
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
         super.init(stage, parameters);
 
-        setLabels();
+        readParams(parameters);
+    }
+
+    private <T> void readParams(Map<String, T> parameters) {
+        if (parameters != null) {
+            switch ((String) parameters.get(MENU_CONTROLLER_MESSAGE)) {
+                case "NEW_PROJECT":
+                    break;
+                case "OPEN_PROJECT":
+                    break;
+                case "STANDALONE":
+                    break;
+            }
+
+        }
+
     }
 
     /**************************************************************
@@ -91,10 +99,6 @@ public class MenuController extends ParentController {
      * View                                                       *
      *                                                            *
      **************************************************************/
-
-    private void setLabels() {
-        stage.setTitle(projectService.activeProject().getProjectName());
-    }
 
     @FXML
     private void handleToggleMainToolbar(ActionEvent event) {
@@ -141,6 +145,7 @@ public class MenuController extends ParentController {
     private void handleImportFromExcel(ActionEvent event) {
         Project project = projectService.activeProject();
         File excelFile = DialogHelper.showFilePrompt("Import from Excel workbook: ", ".xlsx");
+
         try {
             Workbook wb = SpreadSheetUtils.loadFromFile(excelFile);
             WindowUtils.renderNewSheet(ssView, wb, tab1);
@@ -187,8 +192,6 @@ public class MenuController extends ParentController {
 
         Project project = projectService.activeProject();
 
-        System.out.println(project.getProjectName() + " 119");
-
         final String prjWindowTitle = "Choose the project you would like to open";
         HashMap<String, List<?>> params = new HashMap<>();
 
@@ -211,6 +214,15 @@ public class MenuController extends ParentController {
 
     }
 
+    @FXML
+    private void handleSaveProject(ActionEvent event) {
+        try {
+            projectService.save(null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private void handleAboutSuperCommander(ActionEvent event) {
@@ -228,6 +240,7 @@ public class MenuController extends ParentController {
 
     @Override
     protected void onClose() {
+        projectService.onClose();
 
     }
 

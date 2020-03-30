@@ -2,6 +2,7 @@ package com.excelcommander.service;
 
 import com.excelcommander.model.Project;
 import com.excelcommander.repository.ProjectRepository;
+import com.sun.istack.Nullable;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -22,6 +23,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
 
     private ProjectRepository repository;
     private Project activeProject;
+    private static final String STAND_ALONE_MODE = "STAND_ALONE_MODE";
 
 
     @Autowired
@@ -55,14 +57,16 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
     }
 
     @Override
-    public javafx.concurrent.Service<Project> save(Project project, EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) throws Exception {
+    public javafx.concurrent.Service<Project> save(@Nullable Project project, EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) throws Exception {
         return createService(new Task<Project>() {
             protected Project call() throws Exception {
-
-                setActiveProject(repository.save(project));
-                activeProject.setOpen(true);
-
-                return activeProject;
+                if (project != null) {
+                    setActiveProject(repository.save(project));
+                    activeProject.setOpen(true);
+                    return activeProject;
+                } else {
+                    return repository.save(activeProject);
+                }
 
             }
         }, onSuccess, beforeStart);
@@ -77,6 +81,18 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
                 activeProject.setOpen(true);
 
                 return activeProject;
+            }
+        }, onSuccess, beforeStart);
+    }
+
+    @Override
+    public javafx.concurrent.Service<Void> standAloneMode(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) throws Exception {
+        return createService(new Task<Void>() {
+            protected Void call() throws Exception {
+
+                setActiveProject(repository.findByProjectName(STAND_ALONE_MODE));
+                activeProject.setOpen(true);
+                return null;
             }
         }, onSuccess, beforeStart);
     }
@@ -119,6 +135,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
     public Project activeProject() {
         return activeProject;
     }
+
     @Override
     public void setActiveProject(Project activeProject) {
         this.activeProject = activeProject;

@@ -97,8 +97,14 @@ public class ExcelCommanderApplication extends Application {
                     }
                     /*Run as Standalone*/
                 }, () -> {
+                    try {
+                        projectService.standAloneMode(null,null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     HashMap<String,Object> params = new HashMap<>();
                     params.put(MENU_CONTROLLER_MESSAGE,"STAND_ALONE");
+
 
                     try {
                         WindowUtils.open(primaryStage, MenuController.ROOT_FXML, "StandAlone MODE", params);

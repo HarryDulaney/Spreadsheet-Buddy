@@ -26,7 +26,8 @@
                     <items>
                   <MenuItem mnemonicParsing="false" onAction="#handleNewProject" text="New Project" />
                   <MenuItem mnemonicParsing="false" onAction="#handleOpenProject" text="Open Project" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit ExcelCommander" />
+                        <MenuItem visible="false" mnemonicParsing="false" onAction="#handleSaveProject" text="Save Project" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit" />
                     </items>
                 </Menu>
             <Menu mnemonicParsing="false" text="Workbook">
@@ -42,7 +43,7 @@
             </Menu>
                 <Menu mnemonicParsing="false" text="View">
                     <items>
-                        <RadioMenuItem fx:id="mainToolbarRadioButton" mnemonicParsing="false" onAction="#handleToggleMainToolbar" selected="true" text="Toolbar on/off" />
+                        <RadioMenuItem mnemonicParsing="false" onAction="#handleToggleMainToolbar" selected="true" text="Toolbar on/off" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
