@@ -49,7 +49,7 @@ public final class DialogHelper {
         dialog.show();
     }
 
-    public static void inputDialog(StackPane root, String title, String body, DialogAction action1, DialogAction action2) {
+    public static void inputDialog(StackPane root, String title, String body, DialogAction action1, DialogAction action2, DialogAction action3) {
 
         JFXDialogLayout content = new JFXDialogLayout();
         content.setHeading(new Text(title));
@@ -60,23 +60,32 @@ public final class DialogHelper {
         Stage stage = new Stage();
         stage.setScene(new Scene(root, 415, 175));
 
-        JFXButton yesButton = new JFXButton("New Project");
-        yesButton.setOnAction(event -> {
+        JFXButton newProject = new JFXButton("New Project");
+        newProject.setOnAction(event -> {
             dialog.close();
             action1.onAction();
             stage.close();
 
         });
-        content.setActions(yesButton);
+        content.setActions(newProject);
 
-        JFXButton noButton = new JFXButton("Open Project");
-        noButton.setOnAction(event -> {
+        JFXButton openProject = new JFXButton("Open Project");
+        openProject.setOnAction(event -> {
             dialog.close();
             action2.onAction();
             stage.close();
 
         });
-        content.setActions(noButton, yesButton);
+
+        JFXButton standaloneMode = new JFXButton("Run Standalone MODE");
+        standaloneMode.setOnAction(event -> {
+            dialog.close();
+            action3.onAction();
+            stage.close();
+
+        });
+
+        content.setActions(standaloneMode, newProject, openProject);
 
         stage.show();
         dialog.show();

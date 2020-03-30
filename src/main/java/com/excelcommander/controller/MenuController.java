@@ -43,9 +43,10 @@ import java.util.List;
  */
 @Controller
 public class MenuController extends ParentController {
-
+    public static final String MENU_CONTROLLER_MESSAGE = "open.stage.project.modality";
     public static final String ROOT_FXML = "/fxml/Root_View.fxml";
     private static final String PROJECT_SEARCH = "/fxml/FileSysNavWindow.fxml";
+
 
     Logger logger = LoggerFactory.getLogger(MenuController.class);
     private static ConfigurableApplicationContext ctx;

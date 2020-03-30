@@ -1,5 +1,7 @@
 package com.excelcommander;
 
+import static com.excelcommander.controller.MenuController.*;
+
 import com.excelcommander.controller.MenuController;
 import com.excelcommander.model.Project;
 import com.excelcommander.service.ProjectService;
@@ -10,15 +12,18 @@ import javafx.application.HostServices;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
 
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author HGDIV
+ */
 @SpringBootApplication
 public class ExcelCommanderApplication extends Application {
 
@@ -45,7 +50,7 @@ public class ExcelCommanderApplication extends Application {
 
         stackPane = new StackPane();
         DialogHelper.inputDialog(stackPane, "Welcome to ExcelCommander", "Would you like to create a new project?\n or open and existing one?",
-                () -> {
+                /*New Project*/ () -> {
                     String projectName = DialogHelper.showInputPrompt("Create A New Project", "Please enter a name for the project you would like to create", "New Project");
                     if (!projectName.isEmpty()) {
                         project = new Project(projectName);
@@ -53,9 +58,11 @@ public class ExcelCommanderApplication extends Application {
                             projectService.save(project, e -> {
                                 project = (Project) e.getSource().getValue();
                             }, null);
+                            HashMap<String,Object> params = new HashMap<>();
+                            params.put(MENU_CONTROLLER_MESSAGE,"NEW_PROJECT");
 
                             try {
-                                WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
+                                WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), params);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -64,14 +71,18 @@ public class ExcelCommanderApplication extends Application {
                         }
 
                     }
+                    /*Open Project*/
                 }, () -> {
                     String nameOfProject = DialogHelper.showInputPrompt("Open Project", "Please enter the name for the project you would like to open", "Welcome back to ExcelCommander");
                     if (!nameOfProject.isEmpty()) {
                         try {
                             projectService.findByProjectName(nameOfProject, e -> {
                                 project = (Project) e.getSource().getValue();
+                                HashMap<String,Object> params = new HashMap<>();
+                                params.put(MENU_CONTROLLER_MESSAGE,"OPEN_PROJECT");
+
                                 try {
-                                    WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), null);
+                                    WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), params);
                                 } catch (Exception ex) {
                                     DialogHelper.showSimpleAlert("Sorry I couldn't find your project in the database," +
                                             "Perhaps try a altering the name, and try again, or create a new project ;)", Alert.AlertType.ERROR);
@@ -84,6 +95,19 @@ public class ExcelCommanderApplication extends Application {
 
 
                     }
+                    /*Run as Standalone*/
+                }, () -> {
+                    HashMap<String,Object> params = new HashMap<>();
+                    params.put(MENU_CONTROLLER_MESSAGE,"STAND_ALONE");
+
+                    try {
+                        WindowUtils.open(primaryStage, MenuController.ROOT_FXML, "StandAlone MODE", params);
+                    } catch (Exception ex) {
+                        DialogHelper.showSimpleAlert("Sorry I couldn't find your project in the database," +
+                                "Perhaps try a altering the name, and try again, or create a new project ;)", Alert.AlertType.ERROR);
+                    }
+
+
                 });
     }
 
