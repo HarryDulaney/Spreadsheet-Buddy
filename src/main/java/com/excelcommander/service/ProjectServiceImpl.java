@@ -23,7 +23,6 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
 
     private ProjectRepository repository;
     private Project activeProject;
-    private static final String STAND_ALONE_MODE = "STAND_ALONE_MODE";
 
 
     @Autowired

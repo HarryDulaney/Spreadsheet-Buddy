@@ -15,11 +15,15 @@ import org.springframework.stereotype.Controller;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.excelcommander.controller.MenuController.MESSAGE;
 import static com.excelcommander.controller.MenuController.ROOT_FXML;
 
 
 @Controller
 public class PopupController extends ParentController {
+    public static final String TOGGLE_PROJECT = "p";
+    public static final String TOGGLE_WORKBOOK = "w";
+    public static final String TOGGLE_ALL = "pw";
 
     private ProjectService projectService;
     List<Project> projectList;
@@ -79,11 +83,13 @@ public class PopupController extends ParentController {
                             break;
                         }
                     }
+                    HashMap<String,String> params = new HashMap<>();
+                    params.put(MESSAGE,TOGGLE_PROJECT);
                     projectService.activeProject().setOpen(false);
                     projectService.setActiveProject(tempProject);
                     menuController.getStage().close();
                     try {
-                        WindowUtils.open(stage,ROOT_FXML,tempProject.getProjectName(),null);
+                        WindowUtils.open(stage,ROOT_FXML,tempProject.getProjectName(),params);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

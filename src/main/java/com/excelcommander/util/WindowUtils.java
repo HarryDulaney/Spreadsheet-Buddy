@@ -5,9 +5,11 @@ import com.excelcommander.controller.ParentController;
 import com.excelcommander.model.WorkbookModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventTarget;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -114,7 +116,8 @@ public class WindowUtils {
     }
 
     /**
-     * Creates new Grid model and set it to the live SpreadsheetView
+     * Creates new Grid model and fills it with parsed cell data
+     * to pass to setVIew on SpreadsheetView
      *
      * @param workbookModel WorkbookModel Object
      */
@@ -159,4 +162,19 @@ public class WindowUtils {
     }
 
 
+    public static void toggleMenuItem(MenuItem menuItem) {
+        if (menuItem.isDisable()) {
+            menuItem.setDisable(false);
+        } else {
+            menuItem.setDisable(true);
+
+        }
+        if (!menuItem.isVisible()) {
+            menuItem.setVisible(true);
+        } else {
+            menuItem.setVisible(false);
+
+        }
+
+    }
 }

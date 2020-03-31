@@ -3,16 +3,17 @@ package com.excelcommander.controller;
 import com.excelcommander.model.Project;
 import com.excelcommander.model.WorkbookModel;
 import com.excelcommander.service.ProjectService;
-import com.excelcommander.service.SheetService;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.SpreadSheetUtils;
 import com.excelcommander.util.WindowUtils;
 import com.jfoenix.controls.JFXToolbar;
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.ZoomEvent;
@@ -36,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.excelcommander.controller.PopupController.*;
+
 
 /**
  * @author HGDIV
@@ -47,34 +50,25 @@ import java.util.Map;
 @Controller
 public class MenuController extends ParentController {
 
-    public static final String MENU_CONTROLLER_MESSAGE = "open.stage.project.modality";
+    public static final String MESSAGE = "open.stage.project.mode";
     public static final String ROOT_FXML = "/fxml/Root_View.fxml";
     private static final String PROJECT_SEARCH = "/fxml/FileSysNavWindow.fxml";
+    public static final String START_MESSAGE = "open.stage.project.mode";
 
 
     private Logger logger = LoggerFactory.getLogger(MenuController.class);
     private static ConfigurableApplicationContext ctx;
     private HostServices hostServices;
     ProjectService projectService;
-    SheetService sheetService;
 
-
-    @FXML
-    private SpreadsheetView ssView;
-    @FXML
-    private Tab tab1;
-    @FXML
-    protected AnchorPane fillPane;
-
-    @FXML
-    private TabPane tabPane;
-
-    @FXML
-    private JFXToolbar jfxToolbar;
-
-    @FXML
-    protected PlusMinusSlider zoomSlider;
-
+    @FXML private SpreadsheetView ssView;
+    @FXML private Tab tab1;
+    @FXML protected AnchorPane fillPane;
+    @FXML private TabPane tabPane;
+    @FXML private JFXToolbar jfxToolbar;
+    @FXML protected PlusMinusSlider zoomSlider;
+    @FXML private MenuItem saveWorkbookButton;
+    @FXML private MenuItem saveProjectButton;
 
     @Override
     public <T> void init(Stage stage, HashMap<String, T> parameters) {
@@ -85,12 +79,24 @@ public class MenuController extends ParentController {
 
     private <T> void readParams(Map<String, T> parameters) {
         if (parameters != null) {
-            switch ((String) parameters.get(MENU_CONTROLLER_MESSAGE)) {
+            switch ((String) parameters.get(START_MESSAGE)) {
                 case "NEW_PROJECT":
                     break;
                 case "OPEN_PROJECT":
                     break;
                 case "STAND_ALONE":
+                    break;
+            }
+            switch((String)parameters.get(MESSAGE)){
+                case TOGGLE_PROJECT:
+                    WindowUtils.toggleMenuItem(saveProjectButton);
+                    break;
+                case TOGGLE_WORKBOOK:
+                    WindowUtils.toggleMenuItem(saveWorkbookButton);
+                    break;
+                case TOGGLE_ALL:
+                    WindowUtils.toggleMenuItem(saveWorkbookButton);
+                    WindowUtils.toggleMenuItem(saveProjectButton);
                     break;
             }
 
@@ -155,9 +161,12 @@ public class MenuController extends ParentController {
 
         try {
             Workbook workbook = SpreadSheetUtils.loadFromFile(excelFile);
-            project.setFileResource(new FileResource(excelFile));
             WorkbookModel workbookModel = new WorkbookModel(workbook, tab1, ssView);
+            workbookModel.setFileResource(new FileResource(excelFile));
+            project.setWorkbookModel(workbookModel);
+
             WindowUtils.parseToRender(workbookModel);
+            WindowUtils.toggleMenuItem(saveWorkbookButton);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -173,6 +182,11 @@ public class MenuController extends ParentController {
 
     @FXML
     private void handleSaveWorkbook(ActionEvent event) {
+        try {
+            SpreadSheetUtils.saveWorkbook(projectService.activeProject());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -183,10 +197,11 @@ public class MenuController extends ParentController {
         FileResource fileResource = new FileResource(filePath);
         try {
             SpreadSheetUtils.createBlankWorkbook(fileResource);
-            projectService.activeProject().setFileResource(fileResource);
+           projectService.activeProject().getWorkbookModel().setFileResource(fileResource);
             DialogHelper.showSimpleAlert("You created a new Workbook and added it to your project", AlertType.CONFIRMATION);
 
             tab1.setText("New Sheet");
+         WindowUtils.toggleMenuItem(saveWorkbookButton);
 
         } catch (Exception e) {
             DialogHelper.showSimpleAlert("A file with this name may already exist", AlertType.ERROR);
@@ -273,12 +288,6 @@ public class MenuController extends ParentController {
     private void setProjectService(ProjectService projectService) {
         this.projectService = projectService;
     }
-
-    @Autowired
-    private void setSheetService(SheetService sheetService) {
-        this.sheetService = sheetService;
-    }
-
 
     @Autowired
     private void setAppCtx(ConfigurableApplicationContext ctx) {

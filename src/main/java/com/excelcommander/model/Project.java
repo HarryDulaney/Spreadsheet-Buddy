@@ -1,6 +1,8 @@
 package com.excelcommander.model;
 
 import org.apache.metamodel.util.FileResource;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,12 +21,9 @@ public class Project {
     private String projectName;
     private boolean open;
 
-    /**
-     * The most recently loaded FileResource /
-     * most important to have quickly available
-     */
-    @Column(name = "file_resource")
-    private FileResource fileResource;
+    @Embedded
+    private WorkbookModel workbookModel;
+
 
 
     public Project() {
@@ -46,14 +45,6 @@ public class Project {
         this.projectName = projectName;
     }
 
-    public FileResource getFileResource() {
-        return fileResource;
-    }
-
-    public void setFileResource(FileResource fileResource) {
-        this.fileResource = fileResource;
-    }
-
     public boolean isOpen() {
         return open;
     }
@@ -61,6 +52,15 @@ public class Project {
     public void setOpen(boolean open) {
         this.open = open;
     }
+
+    public WorkbookModel getWorkbookModel() {
+        return workbookModel;
+    }
+
+    public void setWorkbookModel(WorkbookModel workbookModel) {
+        this.workbookModel = workbookModel;
+    }
+
 
 
 

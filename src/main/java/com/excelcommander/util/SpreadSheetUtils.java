@@ -1,5 +1,6 @@
 package com.excelcommander.util;
 
+import com.excelcommander.model.Project;
 import com.excelcommander.model.WorkbookModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,9 +12,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +35,7 @@ public class SpreadSheetUtils {
         try (FileOutputStream fOs = new FileOutputStream(fr.getFile())) {
             wb.createSheet("New Sheet");
             wb.write(fOs);
-
+            wb.close();
             DialogHelper.showInfoAlert("Successful Operation", "You created a new workbook with one spreadsheet", "New Sheet", false);
 
         } catch (Exception ex) {
@@ -48,6 +47,15 @@ public class SpreadSheetUtils {
 
     }
 
+    public static void saveWorkbook(Project project) throws IOException {
+        Workbook wb = project.getWorkbookModel().getWorkbook();
+
+        try (OutputStream fileOut = new FileOutputStream(project.getWorkbookModel().getFileResource().getFile())) {
+            wb.write(fileOut);
+        }
+        wb.close();
+
+    }
 
 
     public static Workbook loadFromFile(File file) throws IOException, InvalidFormatException {

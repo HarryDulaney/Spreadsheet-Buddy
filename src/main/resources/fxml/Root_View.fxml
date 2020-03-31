@@ -26,7 +26,7 @@
                     <items>
                   <MenuItem mnemonicParsing="false" onAction="#handleNewProject" text="New Project" />
                   <MenuItem mnemonicParsing="false" onAction="#handleOpenProject" text="Open Project" />
-                        <MenuItem visible="false" mnemonicParsing="false" onAction="#handleSaveProject" text="Save Project" />
+                        <MenuItem fx:id="saveProjectButton" disable="true" mnemonicParsing="false" onAction="#handleSaveProject" text="Save Project" />
                         <MenuItem mnemonicParsing="false" onAction="#handleExitCommander" text="Exit" />
                     </items>
                 </Menu>
@@ -38,7 +38,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="Excel Source" />
                      </items>
                   </Menu>
-                  <MenuItem mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
+                  <MenuItem fx:id="saveWorkbookButton" disable="true" mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
                </items>
             </Menu>
                 <Menu mnemonicParsing="false" text="View">

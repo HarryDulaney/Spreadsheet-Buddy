@@ -5,7 +5,6 @@ import static com.excelcommander.controller.MenuController.*;
 import com.excelcommander.controller.MenuController;
 import com.excelcommander.model.Project;
 import com.excelcommander.service.ProjectService;
-import com.excelcommander.service.SheetService;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.WindowUtils;
 import javafx.application.Application;
@@ -13,7 +12,6 @@ import javafx.application.HostServices;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -21,7 +19,6 @@ import org.springframework.context.annotation.Bean;
 
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author HGDIV
@@ -32,7 +29,6 @@ public class ExcelCommanderApplication extends Application {
     private static Project project;
     private static ConfigurableApplicationContext ctx;
     ProjectService projectService;
-    SheetService sheetService;
 
 
     public static void main(String[] args) {
@@ -43,7 +39,6 @@ public class ExcelCommanderApplication extends Application {
     public void init() {
         ctx = SpringApplication.run(ExcelCommanderApplication.class);
         projectService = ctx.getBean(ProjectService.class);
-        sheetService = ctx.getBean(SheetService.class);
     }
 
     @Override
@@ -60,7 +55,7 @@ public class ExcelCommanderApplication extends Application {
                                 project = (Project) e.getSource().getValue();
                             }, null);
                             HashMap<String,Object> params = new HashMap<>();
-                            params.put(MENU_CONTROLLER_MESSAGE,"NEW_PROJECT");
+                            params.put(MESSAGE,"NEW_PROJECT");
 
                             try {
                                 WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), params);
@@ -80,7 +75,7 @@ public class ExcelCommanderApplication extends Application {
                             projectService.findByProjectName(nameOfProject, e -> {
                                 project = (Project) e.getSource().getValue();
                                 HashMap<String,Object> params = new HashMap<>();
-                                params.put(MENU_CONTROLLER_MESSAGE,"OPEN_PROJECT");
+                                params.put(MESSAGE,"OPEN_PROJECT");
 
                                 try {
                                     WindowUtils.open(primaryStage, MenuController.ROOT_FXML, project.getProjectName(), params);
@@ -108,11 +103,11 @@ public class ExcelCommanderApplication extends Application {
                                 "Perhaps try a altering the name, and try again, or create a new project ;)", Alert.AlertType.ERROR);
                     }
                     HashMap<String,Object> params = new HashMap<>();
-                    params.put(MENU_CONTROLLER_MESSAGE,"STAND_ALONE");
+                    params.put(MESSAGE,"STAND_ALONE");
 
 
                     try {
-                        WindowUtils.open(primaryStage, MenuController.ROOT_FXML, "StandAlone MODE", params);
+                        WindowUtils.open(primaryStage, MenuController.ROOT_FXML, projectService.STAND_ALONE_MODE, params);
                     } catch (Exception ex) {
                         DialogHelper.showSimpleAlert("Sorry I couldn't find your project in the database," +
                                 "Perhaps try a altering the name, and try again, or create a new project ;)", Alert.AlertType.ERROR);
