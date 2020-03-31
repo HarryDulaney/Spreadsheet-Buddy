@@ -26,8 +26,6 @@ public class Project {
     @Column(name = "file_resource")
     private FileResource fileResource;
 
-    @ElementCollection
-    private List<FileResource> fileResourceList;
 
     public Project() {
         this.open = true;
@@ -53,9 +51,6 @@ public class Project {
     }
 
     public void setFileResource(FileResource fileResource) {
-        if (this.fileResource.getFile() != null) {
-            fileResourceList.add(fileResource);
-        }
         this.fileResource = fileResource;
     }
 

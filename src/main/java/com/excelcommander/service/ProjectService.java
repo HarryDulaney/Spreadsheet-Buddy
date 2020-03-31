@@ -15,7 +15,7 @@ public interface ProjectService extends IBaseService<Project> {
 
     Service<Project> findByProjectName(String projectName, EventHandler<WorkerStateEvent> onSuccess,
                                        EventHandler<WorkerStateEvent> beforeStart) throws Exception;
-    Service<Void> standAloneMode(EventHandler<WorkerStateEvent> onSuccess,
+    Service<Boolean> standAloneMode(EventHandler<WorkerStateEvent> onSuccess,
                                        EventHandler<WorkerStateEvent> beforeStart) throws Exception;
 
     Project activeProject();

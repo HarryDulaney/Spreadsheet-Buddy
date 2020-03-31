@@ -5,6 +5,7 @@ import static com.excelcommander.controller.MenuController.*;
 import com.excelcommander.controller.MenuController;
 import com.excelcommander.model.Project;
 import com.excelcommander.service.ProjectService;
+import com.excelcommander.service.SheetService;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.WindowUtils;
 import javafx.application.Application;
@@ -12,6 +13,7 @@ import javafx.application.HostServices;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -30,8 +32,7 @@ public class ExcelCommanderApplication extends Application {
     private static Project project;
     private static ConfigurableApplicationContext ctx;
     ProjectService projectService;
-    private StackPane stackPane;
-
+    SheetService sheetService;
 
 
     public static void main(String[] args) {
@@ -42,13 +43,13 @@ public class ExcelCommanderApplication extends Application {
     public void init() {
         ctx = SpringApplication.run(ExcelCommanderApplication.class);
         projectService = ctx.getBean(ProjectService.class);
-
+        sheetService = ctx.getBean(SheetService.class);
     }
 
     @Override
     public void start(Stage primaryStage) {
 
-        stackPane = new StackPane();
+        StackPane stackPane = new StackPane();
         DialogHelper.inputDialog(stackPane, "Welcome to ExcelCommander", "Would you like to create a new project?\n or open and existing one?",
                 /*New Project*/ () -> {
                     String projectName = DialogHelper.showInputPrompt("Create A New Project", "Please enter a name for the project you would like to create", "New Project");
@@ -98,9 +99,13 @@ public class ExcelCommanderApplication extends Application {
                     /*Run as Standalone*/
                 }, () -> {
                     try {
-                        projectService.standAloneMode(null,null);
+                        projectService.standAloneMode(event -> {
+
+                        },null);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        DialogHelper.showSimpleAlert("Sorry I couldn't find your project in the database," +
+                                "Perhaps try a altering the name, and try again, or create a new project ;)", Alert.AlertType.ERROR);
                     }
                     HashMap<String,Object> params = new HashMap<>();
                     params.put(MENU_CONTROLLER_MESSAGE,"STAND_ALONE");

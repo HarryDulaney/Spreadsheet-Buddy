@@ -85,7 +85,6 @@ public class PopupController extends ParentController {
                     try {
                         WindowUtils.open(stage,ROOT_FXML,tempProject.getProjectName(),null);
                     } catch (Exception ex) {
-                        System.out.println("PopupController ->> line 88");
                         ex.printStackTrace();
                     }
 

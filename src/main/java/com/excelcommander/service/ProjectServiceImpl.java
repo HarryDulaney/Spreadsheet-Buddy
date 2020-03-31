@@ -32,11 +32,6 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
         this.setRepository(repository);
     }
 
-    public ProjectRepository getRepository() {
-        return repository;
-    }
-
-
     public void setRepository(ProjectRepository repository) {
         this.repository = repository;
     }
@@ -86,13 +81,20 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
     }
 
     @Override
-    public javafx.concurrent.Service<Void> standAloneMode(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) throws Exception {
-        return createService(new Task<Void>() {
-            protected Void call() throws Exception {
+    public javafx.concurrent.Service<Boolean> standAloneMode(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> beforeStart) throws Exception {
+        return createService(new Task<Boolean>() {
+            protected Boolean call() throws Exception {
+                boolean success = false;
+                try {
+                    setActiveProject(repository.findByProjectName(STAND_ALONE_MODE));
+                    activeProject.setOpen(true);
+                    success = true;
+                } catch (Exception e) {
+                   throw new Exception("Failed: Instantiate Stand Alone Mode");
 
-                setActiveProject(repository.findByProjectName(STAND_ALONE_MODE));
-                activeProject.setOpen(true);
-                return null;
+                }
+
+                return success;
             }
         }, onSuccess, beforeStart);
     }
@@ -139,6 +141,10 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
     @Override
     public void setActiveProject(Project activeProject) {
         this.activeProject = activeProject;
+    }
+
+    public void onClose() {
+        activeProject.setOpen(false);
     }
 
 

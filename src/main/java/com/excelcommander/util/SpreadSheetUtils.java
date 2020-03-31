@@ -1,19 +1,20 @@
 package com.excelcommander.util;
 
+import com.excelcommander.model.WorkbookModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Tab;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.controlsfx.control.spreadsheet.GridBase;
-import org.controlsfx.control.spreadsheet.SpreadsheetView;
+import org.controlsfx.control.spreadsheet.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,12 @@ import java.util.List;
 /**
  * @author HG Dulaney IV
  */
+
+
 public class SpreadSheetUtils {
+
+    private SpreadsheetCellEditor ssEditor;
+    private SpreadsheetColumn ssColumn;
 
 
     public static void createBlankWorkbook(FileResource fr) {
@@ -41,6 +47,8 @@ public class SpreadSheetUtils {
 
 
     }
+
+
 
     public static Workbook loadFromFile(File file) throws IOException, InvalidFormatException {
 
@@ -63,7 +71,7 @@ public class SpreadSheetUtils {
             Row row = sheet.getRow(r);
             List<Cell> rowList = new ArrayList<>();
             Iterator<Cell> cellIterator = row.cellIterator();
-            while(cellIterator.hasNext()){
+            while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
                 rowList.add(cell);
             }
@@ -83,13 +91,8 @@ public class SpreadSheetUtils {
         return new SpreadsheetView(gridBase);
     }
 
-    /**
-     * @param  The Workbook to map to a list
-     * @return returns a triple nested List of Cells which hold the content of the Workbook
-     */
-/*    public static List<List<List<Cell>>> mapWorkbook(Workbook wb) {
-         workbookCE = new WorkbookCE(wb);
 
+    public static List<List<List<Cell>>> mapWorkbook(Workbook wb) {
         int numberOfSheets = wb.getNumberOfSheets();
         List<List<List<Cell>>> workbookAsList = new ArrayList<>();
 
@@ -100,7 +103,7 @@ public class SpreadSheetUtils {
         return workbookAsList;
 
 
-    }*/
+    }
 
 
 }

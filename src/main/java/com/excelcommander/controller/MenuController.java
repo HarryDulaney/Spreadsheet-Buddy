@@ -1,7 +1,9 @@
 package com.excelcommander.controller;
 
 import com.excelcommander.model.Project;
+import com.excelcommander.model.WorkbookModel;
 import com.excelcommander.service.ProjectService;
+import com.excelcommander.service.SheetService;
 import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.SpreadSheetUtils;
 import com.excelcommander.util.WindowUtils;
@@ -29,6 +31,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +52,11 @@ public class MenuController extends ParentController {
     private static final String PROJECT_SEARCH = "/fxml/FileSysNavWindow.fxml";
 
 
-    Logger logger = LoggerFactory.getLogger(MenuController.class);
+    private Logger logger = LoggerFactory.getLogger(MenuController.class);
     private static ConfigurableApplicationContext ctx;
     private HostServices hostServices;
     ProjectService projectService;
+    SheetService sheetService;
 
 
     @FXML
@@ -86,13 +90,14 @@ public class MenuController extends ParentController {
                     break;
                 case "OPEN_PROJECT":
                     break;
-                case "STANDALONE":
+                case "STAND_ALONE":
                     break;
             }
 
         }
 
     }
+
 
     /**************************************************************
      *                                                            *
@@ -117,9 +122,11 @@ public class MenuController extends ParentController {
      **************************************************************/
 
     public void handleZoomEvent(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
+
     }
 
     public void handleOnZoom(ZoomEvent zoomEvent) {
+
     }
 
     public void handleZoomEnd(ZoomEvent zoomEvent) {
@@ -147,12 +154,18 @@ public class MenuController extends ParentController {
         File excelFile = DialogHelper.showFilePrompt("Import from Excel workbook: ", ".xlsx");
 
         try {
-            Workbook wb = SpreadSheetUtils.loadFromFile(excelFile);
-            WindowUtils.renderNewSheet(ssView, wb, tab1);
+            Workbook workbook = SpreadSheetUtils.loadFromFile(excelFile);
             project.setFileResource(new FileResource(excelFile));
+            WorkbookModel workbookModel = new WorkbookModel(workbook, tab1, ssView);
+            WindowUtils.parseToRender(workbookModel);
 
-        } catch (Exception e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("prob load file", e.getCause());
             System.out.println("Problem loading from file");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Prob Render ssView", e.getCause());
         }
 
     }
@@ -235,13 +248,19 @@ public class MenuController extends ParentController {
     @FXML
     protected void handleExitCommander(ActionEvent event) {
 
-        Platform.exit();
+        onClose();
     }
 
     @Override
     protected void onClose() {
+        projectService.activeProject().setOpen(false);
+        try {
+            projectService.save(null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         projectService.onClose();
-
+        Platform.exit();
     }
 
     /**************************************************************
@@ -251,13 +270,18 @@ public class MenuController extends ParentController {
      **************************************************************/
 
     @Autowired
-    public void setProjectService(ProjectService projectService) {
+    private void setProjectService(ProjectService projectService) {
         this.projectService = projectService;
     }
 
     @Autowired
-    public void setAppCtx(ConfigurableApplicationContext ctx) {
+    private void setSheetService(SheetService sheetService) {
+        this.sheetService = sheetService;
+    }
 
+
+    @Autowired
+    private void setAppCtx(ConfigurableApplicationContext ctx) {
         MenuController.ctx = ctx;
     }
 
@@ -266,6 +290,5 @@ public class MenuController extends ParentController {
     private void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
-
 
 }

@@ -2,8 +2,7 @@ package com.excelcommander.util;
 
 import com.excelcommander.ExcelCommanderApplication;
 import com.excelcommander.controller.ParentController;
-import com.jfoenix.controls.JFXListView;
-import impl.org.controlsfx.skin.GridCellSkin;
+import com.excelcommander.model.WorkbookModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -14,13 +13,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.controlsfx.control.spreadsheet.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.Format;
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -90,16 +90,40 @@ public class WindowUtils {
         }
     }
 
+
+    public static void setView(ObservableList<ObservableList<SpreadsheetCell>> observableSheet,
+                               SpreadsheetView ssView, Grid grid, Tab tab, String sheetName) {
+
+        tab.setText(sheetName);
+        grid.setRows(observableSheet);
+        ssView.setGrid(grid);
+        ssView.autosize();
+
+    }
+
+    public static void watchEvents(SpreadsheetView view, WatchListener listener) {
+        view.focusedProperty().addListener((o, oldValue, newValue) -> {
+            listener.watch(newValue);
+        });
+    }
+
+    public static <T> void watchEvents(ComboBox<T> comboBox, WatchListener listener) {
+        comboBox.focusedProperty().addListener((o, oldValue, newValue) -> {
+            listener.watch(newValue);
+        });
+    }
+
     /**
      * Creates new Grid model and set it to the live SpreadsheetView
      *
-     * @param currentView The SpreadsheetView from the current window
-     * @param workbook    XSSFWorkbook loaded from an file
+     * @param workbookModel WorkbookModel Object
      */
-    public static void renderNewSheet(SpreadsheetView currentView, Workbook workbook, Tab currentTab) {
+    public static void parseToRender(WorkbookModel workbookModel) {
+        Workbook workbook = workbookModel.getWorkbook();
+        SpreadsheetView currentView = workbookModel.getSpreadsheetView();
+        Tab currentTab = workbookModel.getTab();
 
         Grid grid = new GridBase(currentView.getGrid().getRowCount(), currentView.getGrid().getColumnCount());
-
         Sheet sheet = workbook.getSheetAt(0);
         ObservableList<ObservableList<SpreadsheetCell>> observableSheet = FXCollections.observableArrayList();
 
@@ -120,66 +144,18 @@ public class WindowUtils {
                 }
 
                 if (cell != null) {
+                    DataFormatter formatter = new DataFormatter();
+                    String cellAsString = formatter.formatCellValue(cell);
+                    observableRow.add(SpreadsheetCellType.STRING.createCell(curRow, cellNum, 1, 1, cellAsString));
 
-                    String temp = BuiltinFormats.getBuiltinFormat(cell.getCellStyle().getDataFormat());
-
-                    if (temp.equals(BuiltinFormats.getBuiltinFormat(0xe)) ||
-                            temp.equals(BuiltinFormats.getBuiltinFormat(0xf)) ||
-                            temp.equals(BuiltinFormats.getBuiltinFormat(0x10)) ||
-                            temp.equals(BuiltinFormats.getBuiltinFormat(0x11))) {
-
-                        observableRow.add(SpreadsheetCellType.DATE.createCell(curRow, cellNum, 1, 1,
-                                LocalDate.from(cell.getLocalDateTimeCellValue())));
-
-                    } else {
-                        switch (cell.getCellType()) {
-                            case STRING:
-                                observableRow.add(SpreadsheetCellType.STRING.createCell(curRow, cellNum, 1, 1, cell.getStringCellValue().trim()));
-                                break;
-                            case NUMERIC:
-                                observableRow.add(SpreadsheetCellType.DOUBLE.createCell(curRow, cellNum, 1, 1, cell.getNumericCellValue()));
-                                break;
-                            case FORMULA:
-                                observableRow.add(SpreadsheetCellType.STRING.createCell(curRow, cellNum, 1, 1, cell.getCellFormula()));
-                                break;
-                            case ERROR:
-                                observableRow.add(SpreadsheetCellType.STRING.createCell(curRow, cellNum, 1, 1, String.valueOf(cell.getErrorCellValue())));
-                                break;
-                            case BLANK:
-                                observableRow.add(SpreadsheetCellType.STRING.createCell(curRow, cellNum, 1, 1, " "));
-                                break;
-                            default:
-                                observableRow.add(SpreadsheetCellType.STRING.createCell(curRow, cellNum, 1,
-                                        1, String.valueOf(cell.getRichStringCellValue())));
-
-                        }
-
-                    }
                 } else {
                     observableRow.add(SpreadsheetCellType.STRING.createCell(curRow, cellNum, 1, 1, " ")); //Write a Blank cell to model Workbook's Blank cell
 
                 }
-
             }
             observableSheet.add(observableRow);
         }
-        currentTab.setText(String.valueOf(workbook.getSheetName(0)));
-        grid.setRows(observableSheet);
-        currentView.setGrid(grid); //Set new gridbase Grid model to the current Spreadsheetview
-        currentView.autosize();
-
-    }
-
-    public static void watchEvents(SpreadsheetView view, WatchListener listener) {
-        view.focusedProperty().addListener((o, oldValue, newValue) -> {
-            listener.watch(newValue);
-        });
-    }
-
-    public static <T> void watchEvents(ComboBox<T> comboBox, WatchListener listener) {
-        comboBox.focusedProperty().addListener((o, oldValue, newValue) -> {
-            listener.watch(newValue);
-        });
+        setView(observableSheet, currentView, grid, currentTab, sheet.getSheetName());
     }
 
 
