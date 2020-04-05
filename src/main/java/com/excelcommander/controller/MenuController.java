@@ -7,7 +7,6 @@ import com.excelcommander.util.DialogHelper;
 import com.excelcommander.util.SpreadSheetUtils;
 import com.excelcommander.util.WindowUtils;
 import com.jfoenix.controls.JFXToolbar;
-import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -245,7 +244,7 @@ public class MenuController extends ParentController {
     @FXML
     private void handleSaveProject(ActionEvent event) {
         try {
-            projectService.save(null, null, null);
+            projectService.save(projectService.activeProject(), null, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -280,7 +279,7 @@ public class MenuController extends ParentController {
 
     /**************************************************************
      *                                                            *
-     * Autowired Injected Beans                                   *
+     * Autowired Beans                                            *
      *                                                            *
      **************************************************************/
 
