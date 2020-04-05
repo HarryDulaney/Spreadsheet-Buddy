@@ -32,7 +32,8 @@
                 </Menu>
             <Menu mnemonicParsing="false" text="Workbook">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook (Blank)" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook (Blank)" />\
+                  <MenuItem mnemonicParsing="false" onAction="#handleDuplicateCheck" text="Check For Duplicates" />
                   <Menu mnemonicParsing="false" text="Import">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="Excel Source" />

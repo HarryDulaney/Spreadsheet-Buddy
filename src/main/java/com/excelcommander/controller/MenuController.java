@@ -178,6 +178,11 @@ public class MenuController extends ParentController {
 
     }
 
+    @FXML
+    private void handleDuplicateCheck(ActionEvent event) {
+
+    }
+
 
     @FXML
     private void handleSaveWorkbook(ActionEvent event) {
