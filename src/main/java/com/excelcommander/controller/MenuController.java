@@ -272,7 +272,7 @@ public class MenuController extends ParentController {
 
     @Override
     protected void onClose() {
-        projectService.activeProject().setOpen(false);
+        projectService.activeProject().setClose();
         try {
             projectService.save(null, null, null);
         } catch (Exception e) {

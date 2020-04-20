@@ -27,12 +27,10 @@ public class Project {
 
 
     public Project() {
-        this.open = true;
     }
 
     public Project(String projectName) {
         this.projectName = projectName;
-        this.open = true;
 
     }
 
@@ -49,8 +47,11 @@ public class Project {
         return open;
     }
 
-    public void setOpen(boolean open) {
-        this.open = open;
+    public void setOpen() {
+        this.open = true;
+    }
+    public void setClose(){
+        this.open = false;
     }
 
     public WorkbookModel getWorkbookModel() {
@@ -60,8 +61,5 @@ public class Project {
     public void setWorkbookModel(WorkbookModel workbookModel) {
         this.workbookModel = workbookModel;
     }
-
-
-
 
 }

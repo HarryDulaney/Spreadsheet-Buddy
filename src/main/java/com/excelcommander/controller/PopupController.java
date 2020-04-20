@@ -85,7 +85,7 @@ public class PopupController extends ParentController {
                     }
                     HashMap<String,String> params = new HashMap<>();
                     params.put(MESSAGE,TOGGLE_PROJECT);
-                    projectService.activeProject().setOpen(false);
+                    projectService.activeProject().setClose();
                     projectService.setActiveProject(tempProject);
                     menuController.getStage().close();
                     try {

@@ -56,7 +56,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
             protected Project call() throws Exception {
                 if (project != null) {
                     setActiveProject(repository.save(project));
-                    activeProject.setOpen(true);
+                    activeProject.setOpen();
                     return activeProject;
                 } else {
                     return repository.save(activeProject);
@@ -72,7 +72,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
             protected Project call() throws Exception {
 
                 setActiveProject(repository.findByProjectName(projectName));
-                activeProject.setOpen(true);
+                activeProject.setOpen();
 
                 return activeProject;
             }
@@ -86,7 +86,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
                 boolean success = false;
                 try {
                     setActiveProject(repository.findByProjectName(STAND_ALONE_MODE));
-                    activeProject.setOpen(true);
+                    activeProject.setOpen();
                     success = true;
                 } catch (Exception e) {
                    throw new Exception("Failed: Instantiate Stand Alone Mode");
@@ -143,7 +143,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, ProjectRepo
     }
 
     public void onClose() {
-        activeProject.setOpen(false);
+        activeProject.setClose();
     }
 
 

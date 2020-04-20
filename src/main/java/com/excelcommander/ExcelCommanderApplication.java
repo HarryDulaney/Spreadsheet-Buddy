@@ -12,6 +12,8 @@ import javafx.application.HostServices;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -25,6 +27,8 @@ import java.util.HashMap;
  */
 @SpringBootApplication
 public class ExcelCommanderApplication extends Application {
+
+    Logger log = LoggerFactory.getLogger(ExcelCommanderApplication.class);
 
     private static Project project;
     private static ConfigurableApplicationContext ctx;
@@ -43,6 +47,11 @@ public class ExcelCommanderApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        try {
+            initStandAlone();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         StackPane stackPane = new StackPane();
         DialogHelper.inputDialog(stackPane, "Welcome to ExcelCommander", "Would you like to create a new project?\n or open and existing one?",
@@ -53,6 +62,7 @@ public class ExcelCommanderApplication extends Application {
                         try {
                             projectService.save(project, e -> {
                                 project = (Project) e.getSource().getValue();
+                                project.setOpen();
                             }, null);
                             HashMap<String,Object> params = new HashMap<>();
                             params.put(MESSAGE,"NEW_PROJECT");
@@ -74,6 +84,7 @@ public class ExcelCommanderApplication extends Application {
                         try {
                             projectService.findByProjectName(nameOfProject, e -> {
                                 project = (Project) e.getSource().getValue();
+                                project.setOpen();
                                 HashMap<String,Object> params = new HashMap<>();
                                 params.put(MESSAGE,"OPEN_PROJECT");
 
@@ -115,6 +126,14 @@ public class ExcelCommanderApplication extends Application {
 
 
                 });
+    }
+
+    private void initStandAlone() throws Exception {
+        Project project = new Project("STAND_ALONE_MODE");
+        projectService.save(project,e ->{
+            log.info(((Project)(e.getSource().getValue())).getProjectName() + " initialized for use.");
+        },null);
+
     }
 
 
