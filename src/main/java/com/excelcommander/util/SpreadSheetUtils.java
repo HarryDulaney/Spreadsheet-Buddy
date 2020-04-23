@@ -1,11 +1,7 @@
 package com.excelcommander.util;
 
 import com.excelcommander.model.Project;
-import com.excelcommander.model.WorkbookModel;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Tab;
 import org.apache.metamodel.util.FileResource;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -13,7 +9,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.*;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,7 +64,7 @@ public class SpreadSheetUtils {
      * @param sheetNum the current sheet to be mapped
      * @return a the sheet mapped to a nested List format
      */
-    public static List<List<Cell>> mapSheet(Workbook workbook, int sheetNum) {
+    public static List<List<Cell>> mapSheetFromXlsx(Workbook workbook, int sheetNum) {
         List<List<Cell>> sheetList = new ArrayList<>();
         Sheet sheet = workbook.getSheetAt(sheetNum);
 
@@ -106,7 +101,7 @@ public class SpreadSheetUtils {
 
         for (int curSheet = 0; curSheet < numberOfSheets; curSheet++) {
 
-            workbookAsList.add(mapSheet(wb, curSheet));
+            workbookAsList.add(mapSheetFromXlsx(wb, curSheet));
         }
         return workbookAsList;
 
@@ -114,4 +109,7 @@ public class SpreadSheetUtils {
     }
 
 
+    public static void checkDuplicates(SpreadsheetView ssView) {
+
+    }
 }

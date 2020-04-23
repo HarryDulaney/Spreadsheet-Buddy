@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXToolbar;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
@@ -65,7 +66,6 @@ public class MenuController extends ParentController {
     @FXML protected AnchorPane fillPane;
     @FXML private TabPane tabPane;
     @FXML private JFXToolbar jfxToolbar;
-    @FXML protected PlusMinusSlider zoomSlider;
     @FXML private MenuItem saveWorkbookButton;
     @FXML private MenuItem saveProjectButton;
 
@@ -120,26 +120,6 @@ public class MenuController extends ParentController {
         }
     }
 
-    /**************************************************************
-     *                                                            *
-     * Zoom Slider                                                *
-     *                                                            *
-     **************************************************************/
-
-    public void handleZoomEvent(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
-
-    }
-
-    public void handleOnZoom(ZoomEvent zoomEvent) {
-
-    }
-
-    public void handleZoomEnd(ZoomEvent zoomEvent) {
-    }
-
-    public void handleZoomStart(ZoomEvent zoomEvent) {
-    }
-
     public void handleNewProject(ActionEvent event) {
     }
 
@@ -180,6 +160,8 @@ public class MenuController extends ParentController {
 
     @FXML
     private void handleDuplicateCheck(ActionEvent event) {
+
+        SpreadSheetUtils.checkDuplicates(ssView);
 
     }
 
@@ -302,6 +284,14 @@ public class MenuController extends ParentController {
     @Autowired
     private void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
+    }
+
+    public SpreadsheetView getSsView() {
+        return ssView;
+    }
+
+    public void setSsView(SpreadsheetView ssView) {
+        this.ssView = ssView;
     }
 
 }

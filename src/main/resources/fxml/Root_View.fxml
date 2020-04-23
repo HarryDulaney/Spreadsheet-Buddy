@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXToolbar?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -15,7 +16,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
-<?import org.controlsfx.control.PlusMinusSlider?>
 <?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excelcommander.controller.MenuController">
@@ -32,21 +32,25 @@
                 </Menu>
             <Menu mnemonicParsing="false" text="Workbook">
                <items>
+                      <Menu mnemonicParsing="false" text="View">
+                          <items>
+                              <RadioMenuItem mnemonicParsing="false" onAction="#handleToggleMainToolbar" selected="true" text="Toolbar on/off" />
+                          </items>
+                      </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#handleNewWorkbook" text="New Workbook (Blank)" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleDuplicateCheck" text="Check For Duplicates" />
                   <Menu mnemonicParsing="false" text="Import">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleImportFromExcel" text="Excel Source" />
                      </items>
                   </Menu>
-                  <MenuItem fx:id="saveWorkbookButton" disable="true" mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
+                  <MenuItem fx:id="saveWorkbookButton"  mnemonicParsing="false" onAction="#handleSaveWorkbook" text="Save Workbook" />
+                  <Menu mnemonicParsing="false" text="Built-In Functions">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleDuplicateCheck" text="Check Duplicates" />
+                     </items>
+                  </Menu>
                </items>
             </Menu>
-                <Menu mnemonicParsing="false" text="View">
-                    <items>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#handleToggleMainToolbar" selected="true" text="Toolbar on/off" />
-                    </items>
-                </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleAboutSuperCommander" text="About SuperCommander" />
@@ -59,7 +63,7 @@
         </MenuBar>
       <JFXToolbar fx:id="jfxToolbar">
          <right>
-            <PlusMinusSlider fx:id="zoomSlider" disable="true" onValueChanged="#handleZoomEvent" onZoom="#handleOnZoom" onZoomFinished="#handleZoomEnd" onZoomStarted="#handleZoomStart" BorderPane.alignment="CENTER" />
+            <Label text="Zoom In: CRTL+ | Zoom Out CTRL- " BorderPane.alignment="CENTER" />
          </right>
          <top>
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -74,7 +78,7 @@
                         </LinearGradient>
                      </ripplerFill></JFXButton>
                   <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" onAction="#handleOpenProject" ripplerFill="#791a1a" text="Open Project" />
-                  <JFXButton buttonType="RAISED" layoutX="80.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+            <!--      <JFXButton buttonType="RAISED" layoutX="80.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                   <JFXButton buttonType="RAISED" layoutX="150.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                   <JFXButton buttonType="RAISED" layoutX="220.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                   <JFXButton buttonType="RAISED" layoutX="290.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
@@ -83,7 +87,7 @@
                   <JFXButton buttonType="RAISED" layoutX="500.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                   <JFXButton buttonType="RAISED" layoutX="570.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
                   <JFXButton buttonType="RAISED" layoutX="640.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
-                  <JFXButton buttonType="RAISED" layoutX="850.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" />
+                  <JFXButton buttonType="RAISED" layoutX="850.0" layoutY="10.0" ripplerFill="BLACK" text="TODO" /> -->
                </items>
             </ToolBar>
          </top></JFXToolbar>

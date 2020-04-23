@@ -103,7 +103,7 @@ public class PopupController extends ParentController {
 
     @Override
     protected void onClose() {
-
+        projectService.onClose();
 
     }
 

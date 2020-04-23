@@ -158,18 +158,8 @@ public class WindowUtils {
 
 
     public static void toggleMenuItem(MenuItem menuItem) {
-        if (menuItem.isDisable()) {
-            menuItem.setDisable(false);
-        } else {
-            menuItem.setDisable(true);
-
-        }
-        if (!menuItem.isVisible()) {
-            menuItem.setVisible(true);
-        } else {
-            menuItem.setVisible(false);
-
-        }
+        menuItem.setDisable(!menuItem.isDisable());
+        menuItem.setVisible(!menuItem.isVisible());
 
     }
 }
