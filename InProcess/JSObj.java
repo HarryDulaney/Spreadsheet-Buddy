@@ -1,4 +1,4 @@
-package com.excelcommander.model;
+package com.spreadsheetbuddy.model;
 
 import java.io.File;
 import java.io.IOException;

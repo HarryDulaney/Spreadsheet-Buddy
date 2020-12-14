@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?><?import javafx.scene.layout.VBox?><?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
+
+<?import javafx.scene.layout.HBox?>
+<VBox fx:id="rootNode" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+    fx:controller="com.spreadsheetbuddy.controller.ViewController" prefHeight="800.0" prefWidth="1200.0">
+    <HBox fx:id="menuHBox">
+        <fx:include source="menu.fxml" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" prefWidth="1200.0" />
+    </HBox>
+    <fx:include source="ssheet.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
+</VBox>
