@@ -1,9 +1,20 @@
- # Commander_Excel
-  _This is an implementation of Apache POI Java libraries to operate on Excel workbooks and spreadsheets. It's basically a spreadsheet editor.
-  I also implemented controls.fx SpreadsheetView libraries for the UI._
- ____
- Commander_Excel is part of a series of projects, here's a link to the sister application:
-  
- ## _[SuperCommander]( https://github.com/HarryDulaney/SuperCommanderV2)_
-
+ # - Spreadsheet Buddy -
 ____
+Spreadsheet Buddy is a JavaFX and Spring Boot Starter that I built using
+[FXWeaver](https://github.com/rgielen/javafx-weaver) 
+with an integrated [SpreadsheetView](https://github.com/controlsfx/controlsfx). 
+It's super fast and easy to configure for creating Java based spreadsheet editors. 
+____
+
+## How to use Spreadsheet Buddy
++ To build your Java spreadsheet editor fork this repo 
+ and clone to your development environment 
+ + Start Building! 
+
+## Contribute
++ Fork this repo, be sure to name the new branch something meaningful 
+related to the feature you would like to add. 
++ Clone to your machine and build out your feature
++ Test the feature ;),
++ Update your remote and make a pull request to have it integrated
+into Spreadsheet Buddy!

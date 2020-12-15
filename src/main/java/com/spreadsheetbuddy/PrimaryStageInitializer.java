@@ -16,6 +16,9 @@ public class PrimaryStageInitializer implements ApplicationListener<StageReadyEv
     private final int startHeight;
     private final int startWidth;
 
+    @Value("${spring.application.title}")
+    String title;
+
     @Autowired
     public PrimaryStageInitializer(@Value("${sheetbuddy.start.height}") String height,
                                    @Value("${sheetbuddy.start.width}") String width,
@@ -28,6 +31,7 @@ public class PrimaryStageInitializer implements ApplicationListener<StageReadyEv
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
         Stage stage = event.stage;
+        stage.setTitle(title);
         Scene scene = new Scene(fxWeaver.loadView(ViewController.class), startWidth, startHeight);
         stage.setScene(scene);
         stage.show();

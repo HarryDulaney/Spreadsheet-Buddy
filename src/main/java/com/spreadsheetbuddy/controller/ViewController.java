@@ -5,12 +5,13 @@ import com.spreadsheetbuddy.util.DialogHelper;
 import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.VBox;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import net.rgielen.fxweaver.core.FxControllerAndView;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +23,12 @@ import java.io.File;
 @Component
 @FxmlView("/fxml/main.fxml")
 public class ViewController {
+    Logger logger = LoggerFactory.getLogger(ViewController.class);
 
     private final FxWeaver fxWeaver;
 
     private final String aboutPageUri;
+
     @Autowired
     private FileService fileService;
 
@@ -88,8 +91,7 @@ public class ViewController {
     @FXML
     protected void openWorkBook(ActionEvent event) {
         File wbFile = DialogHelper.showFilePrompt("Choose the workbook to open", ".xlsx");
-
-
+        logger.info(wbFile.getAbsolutePath());
     }
 
 }

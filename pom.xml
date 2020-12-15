@@ -13,7 +13,7 @@
     <artifactId>spreadsheet-buddy</artifactId>
     <version>0.0.2-SNAPSHOT</version>
     <name>Spreadsheet-Buddy</name>
-    <description>An open-source editing and automation tool for spreadsheets</description>
+    <description>Starter for a Java/Springboot based spreadsheet editing application</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -54,20 +54,6 @@
             <artifactId>poi-excelant</artifactId>
             <version>${apache.poi.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.metamodel</groupId>-->
-        <!--            <artifactId>MetaModel-core</artifactId>-->
-        <!--            <version>${apache.metamodel.version}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.metamodel</groupId>-->
-        <!--            <artifactId>MetaModel-excel</artifactId>-->
-        <!--            <version>${apache.metamodel.version}</version>-->
-        <!--        </dependency>-->
-        <!--            <dependency>-->
-        <!--                <groupId>mysql</groupId>-->
-        <!--                <artifactId>mysql-connector-java</artifactId>-->
-        <!--            </dependency>-->
         <dependency>
             <groupId>com.jfoenix</groupId>
             <artifactId>jfoenix</artifactId>
@@ -98,6 +84,11 @@
 
     </dependencies>
 
+    <developers>
+        <developer>
+            <url>harrydulaney.github.io</url>
+        </developer>
+    </developers>
 
     <build>
         <plugins>
