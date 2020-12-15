@@ -1,6 +1,8 @@
 package com.spreadsheetbuddy;
 
-class MainTests {
+import org.springframework.boot.test.context.SpringBootTest;
+
+public class MainTests {
 
 	void contextLoads() {
 

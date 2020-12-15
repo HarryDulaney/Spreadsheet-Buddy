@@ -4,4 +4,5 @@ import java.io.File;
 
 public interface FileService {
     File getTempFile();
+    File getFileByUserChoice();
 }

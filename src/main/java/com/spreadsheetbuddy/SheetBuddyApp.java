@@ -1,37 +1,38 @@
 package com.spreadsheetbuddy;
 
-import com.spreadsheetbuddy.view.MainView;
-import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
-import javafx.application.Platform;
-import javafx.stage.Stage;
+import com.spreadsheetbuddy.service.FileService;
+import javafx.application.Application;
+import javafx.scene.Node;
+import net.rgielen.fxweaver.core.FxControllerAndView;
+import net.rgielen.fxweaver.core.FxWeaver;
+import net.rgielen.fxweaver.spring.InjectionPointLazyFxControllerAndViewResolver;
+import net.rgielen.fxweaver.spring.SpringFxWeaver;
+import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.Arrays;
-import java.util.Collection;
-
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 
 @SpringBootApplication
-public class SheetBuddyApp extends AbstractJavaFxApplicationSupport {
+public class SheetBuddyApp {
+
     public static void main(String[] args) {
-        launch(SheetBuddyApp.class, MainView.class, args);
+        Application.launch(JavaFxSpringApplication.class, args);
+    }
 
+    @Bean
+    public FxWeaver fxWeaver(ConfigurableApplicationContext applicationContext) {
+        return new SpringFxWeaver(applicationContext);
     }
 
 
-    @Override
-    public Collection<javafx.scene.image.Image> loadDefaultIcons() {
-        return Arrays.asList(new javafx.scene.image.Image(getClass().getResource("/img/XLSX-ICON.png").toExternalForm()),
-                new javafx.scene.image.Image(getClass().getResource("/img/XLSX-ICON.png").toExternalForm()));
-//                new javafx.scene.image.Image(getClass().getResource("/icons/gear_36x36.png").toExternalForm()),
-//                new javafx.scene.image.Image(getClass().getResource("/icons/gear_42x42.png").toExternalForm()),
-//                new Image(getClass().getResource("/icons/gear_64x64.png").toExternalForm()));
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public <C, V extends Node> FxControllerAndView<C, V> controllerAndView(FxWeaver fxWeaver,
+                                                                           InjectionPoint injectionPoint) {
+        return new InjectionPointLazyFxControllerAndViewResolver(fxWeaver)
+                .resolve(injectionPoint);
     }
-
-//
-//    @Override
-//    public void beforeInitialView(final Stage stage, final ConfigurableApplicationContext ctx) {
-//    }
 
 }
