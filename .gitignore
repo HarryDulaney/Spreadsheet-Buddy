@@ -6,9 +6,7 @@
 /.classpath
 /.project
 /ExcelCommander.iml
-/InProcess/
 /.idea/
 Excel-Commander.iml
 Spreadsheet-Buddy.iml
-img/
 src/main/java/com/spreadsheetbuddy/repository/
