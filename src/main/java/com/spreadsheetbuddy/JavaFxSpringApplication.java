@@ -1,7 +1,5 @@
 package com.spreadsheetbuddy;
 
-import com.spreadsheetbuddy.service.FileService;
-import com.spreadsheetbuddy.service.FileServiceImpl;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.application.Platform;

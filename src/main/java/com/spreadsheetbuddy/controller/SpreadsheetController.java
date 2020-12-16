@@ -1,11 +1,12 @@
 package com.spreadsheetbuddy.controller;
 
+import com.spreadsheetbuddy.util.BackingListUtil;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.controlsfx.control.spreadsheet.Grid;
+import org.controlsfx.control.spreadsheet.GridChange;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
-import org.springframework.boot.context.event.ApplicationPreparedEvent;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,8 +21,16 @@ public class SpreadsheetController {
     @FXML
     SpreadsheetView ssView;
 
-//    @FXML
-//    public void initialize() {}
+    EventHandler<GridChange> ssChangeEvent;
+    Grid ssGrid;
 
+
+    @FXML
+    public void initialize() {
+        ssGrid = ssView.getGrid();
+        ssGrid.setRows(BackingListUtil.getBlankSheet());
+        ssView.setGrid(ssGrid);
 
     }
+
+}

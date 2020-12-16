@@ -1,5 +1,6 @@
 package com.spreadsheetbuddy.controller;
 
+import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.util.DialogHelper;
 import javafx.application.HostServices;
@@ -16,25 +17,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import net.rgielen.fxweaver.core.FxControllerAndView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 
 @Component
 @FxmlView("/fxml/main.fxml")
 public class ViewController {
+//    @FXML
+//    public SpreadsheetView ssheet;
     Logger logger = LoggerFactory.getLogger(ViewController.class);
 
     private final FxWeaver fxWeaver;
-
     private final String aboutPageUri;
+    private static Project project;
 
     @Autowired
     private FileService fileService;
 
     @FXML
     protected VBox rootNode;
-
 
     @FXML
     MenuBar mainMenu;
@@ -54,6 +55,8 @@ public class ViewController {
 
     @FXML
     public void initialize() {
+        project = new Project();
+
 //        helloButton.setOnAction(
 //                actionEvent -> this.label.setText(greeting)
 //        );
@@ -91,7 +94,9 @@ public class ViewController {
     @FXML
     protected void openWorkBook(ActionEvent event) {
         File wbFile = DialogHelper.showFilePrompt("Choose the workbook to open", ".xlsx");
-        logger.info(wbFile.getAbsolutePath());
+        logger.info(".xlsx file picked to open -> " + wbFile.getName());
+//        sheetControlandView.getView()
+
     }
 
 }

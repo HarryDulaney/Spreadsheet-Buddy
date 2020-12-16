@@ -16,7 +16,7 @@ public class PrimaryStageInitializer implements ApplicationListener<StageReadyEv
     private final int startHeight;
     private final int startWidth;
 
-    @Value("${spring.application.title}")
+    @Value("${sheetbuddy.start.title}")
     String title;
 
     @Autowired

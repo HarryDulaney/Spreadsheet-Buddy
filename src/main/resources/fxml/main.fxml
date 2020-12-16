@@ -4,40 +4,37 @@
 
 <VBox fx:id="rootNode" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
     fx:controller="com.spreadsheetbuddy.controller.ViewController" prefHeight="800.0" prefWidth="1200.0">
-    <HBox>
-        <MenuBar id="mainMenu" fx:id="mainMenu" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
-            xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1">
-            <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" text="New Workbook" />
-                <MenuItem onAction="#openWorkBook" mnemonicParsing="false" text="Open Workbook" />
-                <Menu mnemonicParsing="false" text="Open Recent" />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" text="Close" />
-                <MenuItem mnemonicParsing="false" text="Save" />
-                <MenuItem mnemonicParsing="false" text="Save As" />
-                <MenuItem mnemonicParsing="false" text="Revert" />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" text="Preferences…" />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" text="Exit" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-                <MenuItem mnemonicParsing="false" text="Undo" />
-                <MenuItem mnemonicParsing="false" text="Redo" />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" text="Cut" />
-                <MenuItem mnemonicParsing="false" text="Copy" />
-                <MenuItem mnemonicParsing="false" text="Paste" />
-                <MenuItem mnemonicParsing="false" text="Delete" />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem mnemonicParsing="false" text="Select All" />
-                <MenuItem mnemonicParsing="false" text="Unselect All" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-                <MenuItem onAction="#openAboutPage" mnemonicParsing="false" text="About Spreadsheet Buddy" />
-            </Menu>
-        </MenuBar>
-    </HBox>
-    <fx:include source="ssheet.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
+    <MenuBar id="mainMenu" fx:id="mainMenu" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
+        xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" text="New Workbook" />
+            <MenuItem onAction="#openWorkBook" mnemonicParsing="false" text="Open Workbook" />
+            <Menu mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As" />
+            <MenuItem mnemonicParsing="false" text="Revert" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Exit" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+            <MenuItem onAction="#openAboutPage" mnemonicParsing="false" text="About Spreadsheet Buddy" />
+        </Menu>
+    </MenuBar>
+    <fx:include fx:id="ssheet" source="ssheet.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
 </VBox>

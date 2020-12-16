@@ -10,3 +10,6 @@
 Excel-Commander.iml
 Spreadsheet-Buddy.iml
 src/main/java/com/spreadsheetbuddy/repository/
+/InProcess/
+InProcess/
+/src/main/resources/application.properties

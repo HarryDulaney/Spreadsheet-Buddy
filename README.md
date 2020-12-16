@@ -5,7 +5,7 @@ Spreadsheet Buddy is a JavaFX and Spring Boot spreadsheet editing application wi
 [FXWeaver](https://github.com/rgielen/javafx-weaver). 
 ____
 
-## Contribute
+## How to Contribute
 + Fork this repo, be sure to name the new branch something meaningful 
 related to the feature you would like to add. 
 + Clone to your machine and build out your feature
