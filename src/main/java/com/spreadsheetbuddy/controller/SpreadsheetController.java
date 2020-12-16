@@ -28,7 +28,7 @@ public class SpreadsheetController {
     @FXML
     public void initialize() {
         ssGrid = ssView.getGrid();
-        ssGrid.setRows(BackingListUtil.getBlankSheet());
+        ssGrid.setRows(BackingListUtil.createAndGetStarterSheet());
         ssView.setGrid(ssGrid);
 
     }

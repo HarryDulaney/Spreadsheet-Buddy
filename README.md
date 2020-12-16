@@ -1,11 +1,20 @@
  # - Spreadsheet Buddy -
 ____
-Spreadsheet Buddy is a JavaFX and Spring Boot spreadsheet editing application with a 
-[SpreadsheetView](https://github.com/controlsfx/controlsfx) and file menu, built using
-[FXWeaver](https://github.com/rgielen/javafx-weaver). <br>
-Pull requests are very welcome! <br> 
-Please join us and help create a Java based open source 
-version of MSExcel!
+Spreadsheet Buddy is a [JavaFX](https://www.oracle.com/java/technologies/javase/javafx-docs.html) and [Spring
+](https://spring.io/projects/spring-boot) spreadsheet editor, built using a 
+[SpreadsheetView](https://github.com/controlsfx/controlsfx/wiki/ControlsFX-Features#spreadsheetview) for displaying
+spreadsheets and 
+[FXWeaver](https://github.com/rgielen/javafx-weaver) for integrating JavaFx and Spring. <br>
+ <br> 
+ 
+ _Do you have mad awesome Java programming skills? Or are you a wizard at making reactive UI's with
+ JavaFx?_
+ 
+_Would you like to help create a Java based open source 
+program that can handle workbooks just like MSExcel?_    
+__Join us!__
+
+Pull requests are very welcome!
 ____
 
 ## How to Contribute
