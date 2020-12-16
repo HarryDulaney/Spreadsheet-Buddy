@@ -1,8 +1,9 @@
  # - Spreadsheet Buddy -
 ____
-Spreadsheet Buddy is a JavaFX and Spring Boot Starter that I built using
+Spreadsheet Buddy is a JavaFX and Spring Boot Starter with a 
+[SpreadsheetView](https://github.com/controlsfx/controlsfx) and full file menu, built using
 [FXWeaver](https://github.com/rgielen/javafx-weaver) 
-with an integrated [SpreadsheetView](https://github.com/controlsfx/controlsfx). 
+. 
 It's super fast and easy to configure for creating Java based spreadsheet editors. 
 ____
 
