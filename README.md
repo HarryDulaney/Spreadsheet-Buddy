@@ -10,7 +10,7 @@ spreadsheets and
  _Do you have mad awesome Java programming skills? Or are you a wizard at making reactive UI's with
  JavaFx?_
  
-_Would you like to help developers create Java based spreadsheet utilities? 
+_Would you like to help developers create Java based spreadsheet utilities?_ 
 __Contribute to Spreadsheet-Buddy!__
 
 Pull requests are very welcome!
