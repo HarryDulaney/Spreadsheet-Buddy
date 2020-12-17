@@ -6,6 +6,12 @@ Spreadsheet Buddy is a [JavaFX](https://www.oracle.com/java/technologies/javase/
 spreadsheets and 
 [FXWeaver](https://github.com/rgielen/javafx-weaver) for integrating JavaFx and Spring. <br>
  <br> 
+ <html>
+ <body>
+ <a href="https://github.com/HarryDulaney/Spreadsheet-Buddy/tree/master/src/main/resources/img/ssBuddyScreenShot.png"></a>
+ </body>
+ </html>
+ <br>
      Spreadsheet-Buddy comes configured to launch with an embedded SpreadsheetView and
      File Menu(classic toolbar) which comes already bootstrapped to the controller methods for you
      to define however you wish.
