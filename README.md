@@ -10,9 +10,8 @@ spreadsheets and
  _Do you have mad awesome Java programming skills? Or are you a wizard at making reactive UI's with
  JavaFx?_
  
-_Would you like to help create a Java based open source 
-program that can handle workbooks just like MSExcel?_    
-__Join us!__
+_Would you like to help developers create Java based spreadsheet utilities? 
+__Contribute to Spreadsheet-Buddy!__
 
 Pull requests are very welcome!
 ____
