@@ -3,14 +3,19 @@ package com.spreadsheetbuddy.controller;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.util.DialogHelper;
+import com.spreadsheetbuddy.util.RecentFilesUtil;
+import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.VBox;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
+import org.controlsfx.control.spreadsheet.;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +28,14 @@ import java.io.File;
 @Component
 @FxmlView("/fxml/main.fxml")
 public class ViewController {
-//    @FXML
-//    public SpreadsheetView ssheet;
     Logger logger = LoggerFactory.getLogger(ViewController.class);
 
+    @FXML
+    protected Menu recentFilesMenu;
+
     private final FxWeaver fxWeaver;
-    private final String aboutPageUri;
+    private final String aboutPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy";
+    private final String issuesPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy/issues";
     private static Project project;
 
     @Autowired
@@ -44,10 +51,9 @@ public class ViewController {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    public ViewController(@Value("${sheetbuddy.aboutpage}") String aboutPageUri,
-                          FxWeaver fxWeaver,
-                          FxControllerAndView<SpreadsheetController, SpreadsheetView> sheetControlandView) {
-        this.aboutPageUri = aboutPageUri;
+    public ViewController(
+            FxWeaver fxWeaver,
+            FxControllerAndView<SpreadsheetController, SpreadsheetView> sheetControlandView) {
         this.fxWeaver = fxWeaver;
         this.sheetControlandView = sheetControlandView;
     }
@@ -55,7 +61,10 @@ public class ViewController {
 
     @FXML
     public void initialize() {
-        project = new Project();
+        project = new Project(System.getProperties().getProperty("user.name"));
+
+        //Get recent files from persistent memory and create an ObservableList<>
+        recentFilesMenu = RecentFilesUtil.initRecentFileMenu(recentFilesMenu);
 
 //        helloButton.setOnAction(
 //                actionEvent -> this.label.setText(greeting)
@@ -85,7 +94,7 @@ public class ViewController {
 //        );
     }
 
-    /********************************************* UI Events ***********************************************/
+    /*************************************** UI ActionEvent Handling *****************************************/
     @FXML
     protected void openAboutPage(ActionEvent actionEvent) {
         fxWeaver.getBean(HostServices.class).showDocument(aboutPageUri);
@@ -93,10 +102,49 @@ public class ViewController {
 
     @FXML
     protected void openWorkBook(ActionEvent event) {
+
         File wbFile = DialogHelper.showFilePrompt("Choose the workbook to open", ".xlsx");
+        assert wbFile != null;
         logger.info(".xlsx file picked to open -> " + wbFile.getName());
 //        sheetControlandView.getView()
 
     }
 
+    @FXML
+    protected void exitRequested(ActionEvent actionEvent) {
+        try {
+            fxWeaver.getBean(Application.class).stop();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error("Error exiting when calling JavaFxApplication.stop() method");
+            DialogHelper.showAlert("Something went wrong: " + ex.getLocalizedMessage(), "Background Process " +
+                            "Running Error",
+                    "Alert!", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    protected void openIssuesPage(ActionEvent actionEvent) {
+        fxWeaver.getBean(HostServices.class).showDocument(issuesPageUri);
+    }
+
+    @FXML
+    protected void createNewWorkbook(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    protected void closeWorkbook(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    protected void saveWorkbook(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    protected void saveWorkbookAs(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    protected void openPreferences(ActionEvent actionEvent) {
+    }
 }

@@ -12,18 +12,14 @@ public class BackingListUtil {
     private final static int default_rows = 100;
     private final static int default_columns = 46;
     private final static int default_span = 1;
-    private final static String blank_cell = " ";
-    /**
-     * The List holding references to the currently displayed SpreadsheetView
-     */
-    private static ObservableList<ObservableList<SpreadsheetCell>> backingList;
+    private final static String blank_cell = "   ";
 
     /**
      * @return starter ObservableList<ObservableList<SpreadsheetCell>>
      * filled with blank SpreadsheetCells for default project startup.
      */
-    public static ObservableList<ObservableList<SpreadsheetCell>> createAndGetStarterSheet() {
-
+    public static ObservableList<ObservableList<SpreadsheetCell>> createAndGetStarterSheet(ObservableList<ObservableList<SpreadsheetCell>> backingList) {
+        backingList = null;
         backingList = FXCollections.observableArrayList();
 
         for (int r = 0; r < default_rows; r++) {

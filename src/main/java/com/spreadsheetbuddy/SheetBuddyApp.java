@@ -1,6 +1,5 @@
 package com.spreadsheetbuddy;
 
-import com.spreadsheetbuddy.service.FileService;
 import javafx.application.Application;
 import javafx.scene.Node;
 import net.rgielen.fxweaver.core.FxControllerAndView;
@@ -10,9 +9,13 @@ import net.rgielen.fxweaver.spring.SpringFxWeaver;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+
+import javax.sql.DataSource;
+import java.util.prefs.Preferences;
 
 @SpringBootApplication
 public class SheetBuddyApp {
@@ -35,4 +38,8 @@ public class SheetBuddyApp {
                 .resolve(injectionPoint);
     }
 
+    @Bean
+    public Preferences preferences() {
+        return Preferences.userNodeForPackage(this.getClass());
+    }
 }

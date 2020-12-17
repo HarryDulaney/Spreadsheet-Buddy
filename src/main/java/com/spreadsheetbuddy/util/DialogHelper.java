@@ -7,7 +7,7 @@ import java.io.StringWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-
+import com.jfoenix.utils.JFXUtilities
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -24,7 +24,6 @@ import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 /**
  * This is a class of static methods to utilize for Alerts, Pop-ups and UI
  * Dialogs.

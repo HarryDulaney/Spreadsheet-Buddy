@@ -1,5 +1,6 @@
 package com.spreadsheetbuddy;
 
+import com.sun.javafx.css.Stylesheet;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -7,8 +8,11 @@ import javafx.stage.Stage;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.GenericApplicationContext;
 
+import java.util.prefs.Preferences;
+import java.util.prefs.PreferencesFactory;
 public class JavaFxSpringApplication extends Application {
 
     private ConfigurableApplicationContext context;
@@ -20,7 +24,7 @@ public class JavaFxSpringApplication extends Application {
                     context.registerBean(Application.class, () -> JavaFxSpringApplication.this);
                     context.registerBean(Parameters.class, this::getParameters);
                     context.registerBean(HostServices.class, this::getHostServices);
-
+                    context.registerBean(Stylesheet.class, getUserAgentStylesheet());
                 };
         this.context = new SpringApplicationBuilder()
                 .sources(SheetBuddyApp.class)
