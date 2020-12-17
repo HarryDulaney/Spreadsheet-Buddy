@@ -25,7 +25,7 @@ related to the feature you would like to add.
 + Update your remote and make a pull request to have it integrated
 into Spreadsheet Buddy!
 ____
-##How To Use 
+## How To Use 
 + Clone or fork this repo into your development environment
 + Start building your spreadsheet application!
   
