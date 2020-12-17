@@ -31,10 +31,6 @@
             <MenuItem mnemonicParsing="false" text="Select All" />
         </Menu>
         <Menu mnemonicParsing="false" text="Tools">
-            <MenuItem mnemonicParsing="false" text="Macro Recorder" />
-            <MenuItem mnemonicParsing="false" text="Formulas" />
-            <MenuItem mnemonicParsing="false" text="Duplicate Finder" />
-            <MenuItem mnemonicParsing="false" text="Filter" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Export" />
             <MenuItem mnemonicParsing="false" text="Import" />
@@ -43,11 +39,12 @@
             <MenuItem mnemonicParsing="false" text="Unselect All" />
         </Menu>
         <Menu mnemonicParsing="false" text="View">
-            <Menu mnemonicParsing="false" text="Toolbars">
-                <MenuItem mnemonicParsing="false" text="Macro Recorder"/>
-                <MenuItem mnemonicParsing="false" text="Formulas"/>
-                <MenuItem mnemonicParsing="false" text="Duplicate Finder"/>
-                <MenuItem mnemonicParsing="false" text="Filter"/>
+            <Menu mnemonicParsing="false" text="ViewOptions">
+                <MenuItem mnemonicParsing="false" text="Some View 1"/>
+                <MenuItem mnemonicParsing="false" text="Some View 2"/>
+                <MenuItem mnemonicParsing="false" text="Some View 3"/>
+                <MenuItem mnemonicParsing="false" text="Some View 4"/>
+                <MenuItem mnemonicParsing="false" text="Some View 5"/>
             </Menu>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">

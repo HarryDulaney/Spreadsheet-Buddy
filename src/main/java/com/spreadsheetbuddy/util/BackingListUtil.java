@@ -5,9 +5,6 @@ import javafx.collections.ObservableList;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BackingListUtil {
     private final static int default_rows = 100;
     private final static int default_columns = 46;

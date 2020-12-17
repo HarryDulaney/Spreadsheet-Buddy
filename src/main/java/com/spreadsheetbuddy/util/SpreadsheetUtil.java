@@ -13,10 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author HG Dulaney IV
+ * SpreadsheetUtility Methods can be defined here TODO: Define
  */
-
-
 public class SpreadsheetUtil {
 
 //    private SpreadsheetCellEditor ssEditor;
@@ -63,6 +61,7 @@ public class SpreadsheetUtil {
      * @param workbook poi workbook
      * @param sheetNum the current sheet to be mapped
      * @return a the sheet mapped to a nested List format
+     * TODO: Customize for your needs
      */
     public static List<List<Cell>> mapSheetFromXlsx(Workbook workbook, int sheetNum) {
         List<List<Cell>> sheetList = new ArrayList<>();

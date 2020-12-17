@@ -22,7 +22,7 @@
         <apache.poi.version>4.1.2</apache.poi.version>
         <apache.metamodel.version>5.3.2</apache.metamodel.version>
         <javafx.weaver.version>1.3.0</javafx.weaver.version>
-        <spring.version>4.1.6.RELEASE</spring.version>
+        <spring.version>5.3.2</spring.version>
     </properties>
 
     <dependencies>
@@ -30,14 +30,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+        <!-- Bootstrap your database access -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-jpa</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>net.rgielen</groupId>
             <artifactId>javafx-weaver-spring</artifactId>
@@ -90,11 +91,18 @@
             <version>2.3.1.RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.6.3</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
     <developers>
         <developer>
+            <name>Harry Dulaney</name>
             <url>harrydulaney.github.io</url>
         </developer>
     </developers>

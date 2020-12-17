@@ -1,22 +1,22 @@
 package com.spreadsheetbuddy.model;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import javax.persistence.Transient;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+//import javax.persistence.Transient;
+//import javax.persistence.Entity;
+//import javax.persistence.Id;
 
 /**
  * Project model holds references to a user and any dependencies and resources
  * they interact with through the course of running this application.
  */
-@Entity
+//@Entity
 public class Project {
-    @Id
+
     private String ownerId;
 
     private String currentWorkbookFile;
 
-    @Transient
+//    @Transient
     private Workbook workbook;
 
 
@@ -50,7 +50,7 @@ public class Project {
         this.ownerId = ownerId;
     }
 
-    @Id
+//    @Id
     public String getOwnerId() {
         return ownerId;
     }

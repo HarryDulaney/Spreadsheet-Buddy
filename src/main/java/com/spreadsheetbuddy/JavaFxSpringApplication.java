@@ -8,11 +8,8 @@ import javafx.stage.Stage;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.GenericApplicationContext;
 
-import java.util.prefs.Preferences;
-import java.util.prefs.PreferencesFactory;
 public class JavaFxSpringApplication extends Application {
 
     private ConfigurableApplicationContext context;

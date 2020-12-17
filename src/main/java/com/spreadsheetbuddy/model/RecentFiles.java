@@ -1,13 +1,13 @@
 package com.spreadsheetbuddy.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+//import javax.persistence.Entity;
+//import javax.persistence.Id;
 import java.io.File;
 
 /**
  * The type Recent files.
  */
-@Entity
+//@Entity
 public class RecentFiles {
 
     private String ownerId;
@@ -18,7 +18,7 @@ public class RecentFiles {
         this.ownerId = ownerId;
     }
 
-    @Id
+//    @Id
     public String getOwnerId() {
         return ownerId;
     }

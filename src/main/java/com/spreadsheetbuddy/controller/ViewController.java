@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
-import org.controlsfx.control.spreadsheet.;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +33,8 @@ public class ViewController {
     protected Menu recentFilesMenu;
 
     private final FxWeaver fxWeaver;
-    private final String aboutPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy";
-    private final String issuesPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy/issues";
+    private final String aboutPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy"; //TODO: Replace
+    private final String issuesPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy/issues"; //TODO: Replace
     private static Project project;
 
     @Autowired
@@ -66,6 +65,7 @@ public class ViewController {
         //Get recent files from persistent memory and create an ObservableList<>
         recentFilesMenu = RecentFilesUtil.initRecentFileMenu(recentFilesMenu);
 
+/************************* FXWeaver examples of runtime event definition *************************/
 //        helloButton.setOnAction(
 //                actionEvent -> this.label.setText(greeting)
 //        );
@@ -106,7 +106,7 @@ public class ViewController {
         File wbFile = DialogHelper.showFilePrompt("Choose the workbook to open", ".xlsx");
         assert wbFile != null;
         logger.info(".xlsx file picked to open -> " + wbFile.getName());
-//        sheetControlandView.getView()
+//        sheetControlandView.getView() //TODO: This is how you get the SpreadsheetView
 
     }
 
@@ -123,28 +123,41 @@ public class ViewController {
         }
     }
 
+    /**
+     * Example of using FxWeaver to get a registered JavaFx Bean
+     * @param actionEvent fire event from MenuItem
+     */
     @FXML
     protected void openIssuesPage(ActionEvent actionEvent) {
         fxWeaver.getBean(HostServices.class).showDocument(issuesPageUri);
+
     }
 
     @FXML
     protected void createNewWorkbook(ActionEvent actionEvent) {
+        // TODO: Define
     }
 
     @FXML
     protected void closeWorkbook(ActionEvent actionEvent) {
+        // TODO: Define
+
     }
 
     @FXML
     protected void saveWorkbook(ActionEvent actionEvent) {
+        // TODO: Define
     }
 
     @FXML
     protected void saveWorkbookAs(ActionEvent actionEvent) {
+        // TODO: Define
+
     }
 
     @FXML
     protected void openPreferences(ActionEvent actionEvent) {
+        // TODO: Define
+
     }
 }
