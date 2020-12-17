@@ -11,9 +11,8 @@ spreadsheets and
  JavaFx?_
  
 _Would you like to help developers create Java based spreadsheet utilities?_ 
-__Contribute to Spreadsheet-Buddy!__
 
-Pull requests are very welcome!
+__Contribute to Spreadsheet-Buddy!__
 ____
 
 ## How to Contribute
