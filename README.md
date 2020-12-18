@@ -1,4 +1,5 @@
  # - Spreadsheet Buddy -
+ ![Code Triage](https://www.codetriage.com/harrydulaney/spreadsheet-buddy/badges/users.svg)
 ____
 Spreadsheet Buddy is a [JavaFX](https://www.oracle.com/java/technologies/javase/javafx-docs.html) and [Spring
 ](https://spring.io/projects/spring-boot) spreadsheet editor, built using a 
@@ -27,7 +28,6 @@ related to the feature you would like to add.
 + Update your remote and make a pull request to have it integrated
 into Spreadsheet Buddy!
 
-![Code Triage](https://www.codetriage.com/harrydulaney/spreadsheet-buddy/badges/users.svg)
 ____
 ## How To Use 
 + Clone or fork this repo into your development environment
