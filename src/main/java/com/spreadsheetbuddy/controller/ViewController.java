@@ -2,53 +2,69 @@ package com.spreadsheetbuddy.controller;
 
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
+import com.spreadsheetbuddy.service.ProjectService;
 import com.spreadsheetbuddy.util.CellFormatUtil;
 import com.spreadsheetbuddy.util.DialogHelper;
 import com.spreadsheetbuddy.util.RecentFilesUtil;
+import com.spreadsheetbuddy.util.WbUtil;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.StageStyle;
+import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import net.rgielen.fxweaver.core.FxControllerAndView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * <p>
+ * {@code ViewController.class } acts as the primary controller for application during runtime.
+ * </p>
+ * <p>
+ * It is responsible for handling ActionEvents from the Main Menu and delegates events to the current SpreadSheetView
+ * through a FXControllerView wrapped reference to the {@code WorkbookController.class }.
+ * </p>
+ *
+ * @author Harry Dulaney
+ */
 @Component
 @FxmlView("/fxml/main.fxml")
 public class ViewController {
 
-    Logger logger = LoggerFactory.getLogger(ViewController.class);
+    private final Logger logger = LoggerFactory.getLogger(ViewController.class);
+    private final FxWeaver fxWeaver;
+    private static Project project;
+
+    private ProjectService projectService;
+    private FileService fileService;
 
     @FXML
     protected Spinner<String> cellTypeSpinner;
-    @FXML
-    protected TabPane tabPane;
-    @FXML
-    protected Tab startTab;
+
     @FXML
     protected Menu recentFilesMenu;
 
 
-    private final FxWeaver fxWeaver;
-    private final String aboutPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy";
-    private final String issuesPageUri = "https://github.com/HarryDulaney/Spreadsheet-Buddy/issues";
-    private static Project project;
+    @Value("${sheet-buddy.about.page}")
+    private String aboutPageUri;
 
-    @Autowired
-    private FileService fileService;
+    @Value("${sheet-buddy.issues.page}")
+    private String issuesPageUri;
+
 
     @FXML
     protected VBox rootNode;
@@ -56,55 +72,35 @@ public class ViewController {
     @FXML
     MenuBar mainMenu;
 
-    private final FxControllerAndView<SpreadsheetController, SpreadsheetView> sheetControlandView;
+    private final FxControllerAndView<WorkbookController, TabPane> workbookControlView;
 
     @Autowired
     public ViewController(FxWeaver fxWeaver,
-                          @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<SpreadsheetController,
-                                  SpreadsheetView> sheetControlView) {
+                          @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<WorkbookController,
+                                  TabPane> workbookControlView) {
         this.fxWeaver = fxWeaver;
-        this.sheetControlandView = sheetControlView;
+        this.workbookControlView = workbookControlView;
     }
 
 
     @FXML
     public void initialize() {
-        project = new Project(System.getProperties().getProperty("user.name"));
+        /* Initialize the Project */
+        project = new Project();
+        if (projectService.exists(project.getProjectId())) {
+            project = projectService.getProject(project.getProjectId());
+        } else {
+            projectService.save(project);
+        }
+        workbookControlView.getController().setProject(project);
 
-        //Get recent files from persistent memory and create an ObservableList<>
-        recentFilesMenu = RecentFilesUtil.initRecentFileMenu(recentFilesMenu);
+        /* Initialize recent files */
+        recentFilesMenu = RecentFilesUtil.initRecentFileMenu(recentFilesMenu); //TODO: Recentfiles configuration
 
         SpinnerValueFactory.ListSpinnerValueFactory<String> spinnerValueFactory =
                 new SpinnerValueFactory.ListSpinnerValueFactory<>(CellFormatUtil.getCellTypes());
         cellTypeSpinner.setValueFactory(spinnerValueFactory);
 
-/************************* FXWeaver examples of runtime event definition *************************/
-//        helloButton.setOnAction(
-//                actionEvent -> this.label.setText(greeting)
-//        );
-///*
-//        openSimpleDialogButton.setOnAction(
-//                actionEvent -> fxWeaver.loadController(DialogController.class).show()
-//        );
-//*/
-//        openSimpleDialogButton.setOnAction(
-//                actionEvent -> dialog.getController().show()
-//        );
-//
-//        openTiledDialogButton.setOnAction(
-//                actionEvent -> {
-//                    FxControllerAndView<TiledDialogController, VBox> tiledDialog =
-//                            fxWeaver.load(TiledDialogController.class);
-//                    tiledDialog.getView().ifPresent(
-//                            v -> {
-//                                Label label = new Label();
-//                                label.setText("Dynamically added Label");
-//                                v.getChildren().add(label);
-//                            }
-//                    );
-//                    tiledDialog.getController().show();
-//                }
-//        );
     }
 
     /*************************************** UI ActionEvent Handling *****************************************/
@@ -115,19 +111,29 @@ public class ViewController {
 
     @FXML
     protected void openWorkBook(ActionEvent event) {
-
         File wbFile = DialogHelper.showFilePrompt("Choose the workbook to open", ".xlsx");
+
         if (Objects.nonNull(wbFile)) {
             logger.info(".xlsx file picked to open -> " + wbFile.getName());
-            project.setWorkbook(new XSSFWorkbook(w));
 
-//        sheetControlandView.getView()
+            try {
+                XSSFWorkbook workbook = WbUtil.loadFromFile(wbFile);
+                workbookControlView.getController().setPoiWorkbook(workbook);
+                project.setOpenFile(wbFile.getAbsolutePath());
+            } catch (Exception e) {
+                logger.error("Error opening the Excel WorkBook from file: " + wbFile.getName() + " with possible " +
+                        "cause: " + e.getCause());
+                DialogHelper.showSimpleAlert("Error opening the Excel WorkBook from file: " + wbFile.getName(), Alert.AlertType.ERROR);
+            }
         }
+
 
     }
 
     @FXML
     protected void exitRequested(ActionEvent actionEvent) {
+        projectService.save(project);
+
         try {
             fxWeaver.getBean(Application.class).stop();
         } catch (Exception ex) {
@@ -152,7 +158,14 @@ public class ViewController {
 
     @FXML
     protected void createNewWorkbook(ActionEvent actionEvent) {
-        // TODO: Define
+        File f = DialogHelper.showSaveFilePrompt("Create New Workbook", ".xlsx", "New_Workbook", StageStyle.UTILITY);
+        try {
+            Workbook wb = WbUtil.createBlankWorkbook(f);
+            project.setOpenFile(f.getAbsolutePath());
+        } catch (Exception exc) {
+            exc.printStackTrace();
+            DialogHelper.showSimpleAlert(exc.getLocalizedMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
@@ -180,5 +193,20 @@ public class ViewController {
 
     @FXML
     protected void newSpreadsheet(ActionEvent actionEvent) {
+       workbookControlView.getController().addSpreadsheet();
+
     }
+
+    @Autowired
+    public void setProjectService(ProjectService projectService) {
+        this.projectService = projectService;
+    }
+
+
+    @Autowired
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
+
+
 }

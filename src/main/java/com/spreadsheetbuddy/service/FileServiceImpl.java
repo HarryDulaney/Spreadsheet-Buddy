@@ -1,10 +1,12 @@
 package com.spreadsheetbuddy.service;
 
 
-import javafx.concurrent.Task;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 @Service("fileService")
 public class FileServiceImpl implements FileService {
@@ -16,8 +18,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File getFileByUserChoice() {
+    public List<File> getRecentFiles(String id) {
         return null;
     }
+
 }
 

@@ -66,9 +66,5 @@
             <JFXSlider BorderPane.alignment="CENTER" />
         </right>
     </JFXToolbar>
-    <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-        <Tab fx:id="startTab" text="Untitled ">
-            <fx:include source="ssheet.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
-        </Tab>
-    </TabPane>
+    <fx:include source="workbookview.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
 </VBox>

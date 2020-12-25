@@ -1,8 +1,11 @@
 package com.spreadsheetbuddy.service;
 
+import org.apache.poi.ss.usermodel.Workbook;
+
 import java.io.File;
+import java.util.List;
 
 public interface FileService {
     File getTempFile();
-    File getFileByUserChoice();
+    List<File> getRecentFiles(String id);
 }

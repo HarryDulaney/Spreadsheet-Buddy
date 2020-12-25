@@ -1,23 +1,21 @@
 package com.spreadsheetbuddy.controller;
 
-import com.spreadsheetbuddy.util.BackingListUtil;
-import com.spreadsheetbuddy.util.SpreadsheetUtil;
-import com.sun.deploy.uitoolkit.impl.fx.FXWindow;
-import javafx.beans.property.ListProperty;
+import com.spreadsheetbuddy.util.SsUtil;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.Grid;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import static org.controlsfx.control.spreadsheet.GridChange.GRID_CHANGE_EVENT;
 
 /**
  * <p>
@@ -27,40 +25,39 @@ import static org.controlsfx.control.spreadsheet.GridChange.GRID_CHANGE_EVENT;
 @Component
 @FxmlView("/fxml/ssheet.fxml")
 public class SpreadsheetController {
+    private final Logger logger = LoggerFactory.getLogger(SpreadsheetController.class);
 
-    public static Integer openSheets;
     private final FxWeaver fxWeaver;
+    protected int sheetNumber;
+    private static ObservableList<ObservableList<SpreadsheetCell>> backingList;
+
 
     @FXML
-    SpreadsheetView ssView;
+    protected SpreadsheetView ssView;
 
     Grid ssGrid;
-    Workbook workbook;
+
     /**
      * The List holding references to the currently displayed SpreadsheetView
      */
-    private static ObservableList<ObservableList<SpreadsheetCell>> backingList;
-    private final FxControllerAndView<ViewController, TabPane> tabPaneControlView;
 
 
-    public SpreadsheetController(FxWeaver fxWeaver,
-                                 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") FxControllerAndView<ViewController, TabPane> tabPaneControlView) {
-        this.tabPaneControlView = tabPaneControlView;
+    public SpreadsheetController(FxWeaver fxWeaver) {
         this.fxWeaver = fxWeaver;
-
     }
 
 
     @FXML
     public void initialize() {
-        ssView.addEventHandler(GRID_CHANGE_EVENT, event -> {
 
-        });
+        /* Initialize blank Untitled spreadsheet tab */
         ssGrid = ssView.getGrid();
-        backingList = SpreadsheetUtil.createAndGetStarterSheet(backingList);
+        backingList = SsUtil.initSheet(backingList);
         ssGrid.setRows(backingList);
         ssView.setGrid(ssGrid);
-
+        ssView.setEditable(true);
+        ContextMenu contextMenu = SsUtil.createContextMenu(ssView.getSpreadsheetViewContextMenu());
+        ssView.setContextMenu(contextMenu);
     }
 
 }
