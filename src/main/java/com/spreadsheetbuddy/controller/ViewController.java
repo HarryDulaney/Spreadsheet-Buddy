@@ -1,5 +1,6 @@
 package com.spreadsheetbuddy.controller;
 
+import com.spreadsheetbuddy.model.InternalSettings;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.service.ProjectService;
@@ -17,9 +18,9 @@ import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.controlsfx.control.spreadsheet.SpreadsheetCellBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class ViewController {
 
 
     @FXML
-    protected VBox rootNode;
+    VBox rootNode;
 
     @FXML
     MenuBar mainMenu;
@@ -80,6 +81,8 @@ public class ViewController {
                                   TabPane> workbookControlView) {
         this.fxWeaver = fxWeaver;
         this.workbookControlView = workbookControlView;
+
+
     }
 
 
@@ -87,18 +90,22 @@ public class ViewController {
     public void initialize() {
         /* Initialize the Project */
         project = new Project();
+
         if (projectService.exists(project.getProjectId())) {
             project = projectService.getProject(project.getProjectId());
+//            InternalSettings.INSTANCE.setTurnOffDefaultSpreadsheet(true);
         } else {
             projectService.save(project);
+            InternalSettings.INSTANCE.setTurnOffDefaultSpreadsheet(false);
         }
         workbookControlView.getController().setProject(project);
+        workbookControlView.getController().rootNode = this.rootNode;
 
         /* Initialize recent files */
         recentFilesMenu = RecentFilesUtil.initRecentFileMenu(recentFilesMenu); //TODO: Recentfiles configuration
 
         SpinnerValueFactory.ListSpinnerValueFactory<String> spinnerValueFactory =
-                new SpinnerValueFactory.ListSpinnerValueFactory<>(CellFormatUtil.getCellTypes());
+                new SpinnerValueFactory.ListSpinnerValueFactory<>(CellFormatUtil.getSupportedCellFormats());
         cellTypeSpinner.setValueFactory(spinnerValueFactory);
 
     }
@@ -118,11 +125,13 @@ public class ViewController {
 
             try {
                 XSSFWorkbook workbook = WbUtil.loadFromFile(wbFile);
-                workbookControlView.getController().setPoiWorkbook(workbook);
+                workbookControlView.getController().updateWorkbookView(workbook);
+
                 project.setOpenFile(wbFile.getAbsolutePath());
             } catch (Exception e) {
-                logger.error("Error opening the Excel WorkBook from file: " + wbFile.getName() + " with possible " +
-                        "cause: " + e.getCause());
+                e.printStackTrace();
+                logger.error("Error opening the Excel WorkBook from file: " + wbFile.getName() + " Exception is " +
+                        "instanceOf: " + e.toString());
                 DialogHelper.showSimpleAlert("Error opening the Excel WorkBook from file: " + wbFile.getName(), Alert.AlertType.ERROR);
             }
         }
@@ -132,6 +141,12 @@ public class ViewController {
 
     @FXML
     protected void exitRequested(ActionEvent actionEvent) {
+        try {
+            workbookControlView.getController().close();
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
         projectService.save(project);
 
         try {
@@ -158,13 +173,16 @@ public class ViewController {
 
     @FXML
     protected void createNewWorkbook(ActionEvent actionEvent) {
-        File f = DialogHelper.showSaveFilePrompt("Create New Workbook", ".xlsx", "New_Workbook", StageStyle.UTILITY);
-        try {
-            Workbook wb = WbUtil.createBlankWorkbook(f);
-            project.setOpenFile(f.getAbsolutePath());
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            DialogHelper.showSimpleAlert(exc.getLocalizedMessage(), Alert.AlertType.ERROR);
+        File f = DialogHelper.showSaveFilePrompt("Create New Workbook", ".xlsx", "Untitled_Workbook",
+                StageStyle.UTILITY);
+        if (Objects.nonNull(f)) {
+            try {
+                Workbook wb = WbUtil.createBlankWorkbook(f);
+                project.setOpenFile(f.getAbsolutePath());
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                DialogHelper.showSimpleAlert(exc.getLocalizedMessage(), Alert.AlertType.ERROR);
+            }
         }
     }
 
@@ -193,7 +211,8 @@ public class ViewController {
 
     @FXML
     protected void newSpreadsheet(ActionEvent actionEvent) {
-       workbookControlView.getController().addSpreadsheet();
+        System.out.println("adding new ssView");
+        workbookControlView.getController().addSpreadsheet(rootNode);
 
     }
 

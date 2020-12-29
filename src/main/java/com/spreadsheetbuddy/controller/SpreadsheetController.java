@@ -4,17 +4,15 @@ import com.spreadsheetbuddy.util.SsUtil;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.Grid;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,19 +25,16 @@ import org.springframework.stereotype.Component;
 public class SpreadsheetController {
     private final Logger logger = LoggerFactory.getLogger(SpreadsheetController.class);
 
-    private final FxWeaver fxWeaver;
     protected int sheetNumber;
-    private static ObservableList<ObservableList<SpreadsheetCell>> backingList;
+    protected XSSFSheet poiSheet;
+    public static boolean turnOffDefaultInit;
+    private final FxWeaver fxWeaver;
 
+    private ObservableList<ObservableList<SpreadsheetCell>> backingList;
+    Grid ssGrid;
 
     @FXML
     protected SpreadsheetView ssView;
-
-    Grid ssGrid;
-
-    /**
-     * The List holding references to the currently displayed SpreadsheetView
-     */
 
 
     public SpreadsheetController(FxWeaver fxWeaver) {
@@ -49,15 +44,48 @@ public class SpreadsheetController {
 
     @FXML
     public void initialize() {
-
-        /* Initialize blank Untitled spreadsheet tab */
-        ssGrid = ssView.getGrid();
-        backingList = SsUtil.initSheet(backingList);
-        ssGrid.setRows(backingList);
-        ssView.setGrid(ssGrid);
-        ssView.setEditable(true);
-        ContextMenu contextMenu = SsUtil.createContextMenu(ssView.getSpreadsheetViewContextMenu());
-        ssView.setContextMenu(contextMenu);
+        /* Default initialize spreadsheetView */
+        if (!turnOffDefaultInit) {
+            ssGrid = ssView.getGrid();
+            backingList = SsUtil.initSheet(backingList);
+            ssGrid.setRows(backingList);
+            ssView.setGrid(ssGrid);
+            ssView.setEditable(true);
+            ContextMenu contextMenu = SsUtil.createContextMenu(ssView.getSpreadsheetViewContextMenu());
+            ssView.setContextMenu(contextMenu);
+        }
     }
 
+
+    protected SpreadsheetView setSsGrid(Grid ssGrid) {
+        this.ssGrid = ssGrid;
+        ssView.setGrid(ssGrid);
+        ssView.setEditable(true);
+        return ssView;
+
+    }
+
+    public ObservableList<ObservableList<SpreadsheetCell>> getBackingList() {
+        return backingList;
+    }
+
+    public Grid getSsGrid() {
+        return ssGrid;
+    }
+
+    public SpreadsheetView getSsView() {
+        return ssView;
+    }
+
+    public void setSsView(SpreadsheetView ssView) {
+        this.ssView = ssView;
+    }
+
+    public void setBackingList(ObservableList<ObservableList<SpreadsheetCell>> backingList) {
+        this.backingList = backingList;
+    }
+
+    void close() {
+
+    }
 }

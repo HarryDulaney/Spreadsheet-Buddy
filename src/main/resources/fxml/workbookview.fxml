@@ -5,7 +5,7 @@
 <TabPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.spreadsheetbuddy.controller.WorkbookController" fx:id="tabPane" prefHeight="200.0"
     prefWidth="200.0" tabClosingPolicy="ALL_TABS" VBox.vgrow="ALWAYS">
-    <Tab fx:id="tab1" text="Untitled ">
+    <Tab fx:id="tab1" text="Untitled">
         <fx:include source="ssheet.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
     </Tab>
 </TabPane>

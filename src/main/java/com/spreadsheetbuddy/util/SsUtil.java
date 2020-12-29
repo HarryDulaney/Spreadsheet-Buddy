@@ -7,6 +7,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.controlsfx.control.spreadsheet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +22,7 @@ import java.util.LinkedList;
  */
 public class SsUtil {
     static Logger logger = LoggerFactory.getLogger(SsUtil.class);
-    //    private SpreadsheetCellEditor ssEditor;
-//    private SpreadsheetColumn ssColumn;
-//
-//
+
     private final static int default_rows = 100;
     private final static int default_columns = 46;
     private final static int default_span = 1;
@@ -74,6 +73,52 @@ public class SsUtil {
         }
         return backingList;
 
+    }
+
+    /**
+     * @param xssfSheet Sheet to map into ObservableList -> GridBase
+     * @param evaluator FormulaEvaluator from getCreationHelper()
+     * @return GridBase populated with the xssfSheet data (Including blank cells)
+     */
+    protected static GridBase mapSheetToGrid(XSSFSheet xssfSheet, FormulaEvaluator evaluator) {
+        int[] size = sheetSize(xssfSheet);
+        GridBase grid = new GridBase(size[0], size[1]);
+        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+        Row poiRow;
+        Cell cell;
+        String value;
+        for (int row = 0; row < grid.getRowCount(); ++row) {
+            final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
+            poiRow = xssfSheet.getRow(row);
+            DataFormatter formatter = new DataFormatter();
+            for (int column = 0; column < grid.getColumnCount(); ++column) {
+                cell = poiRow.getCell(column);
+                value = formatter.formatCellValue(cell, evaluator);
+                list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1, value));
+            }
+            rows.add(list);
+        }
+        grid.setRows(rows);
+        return grid;
+
+    }
+
+    /**
+     * @param sheet to evaluate
+     * @return array with the sheets highest row number and highest column number
+     */
+    protected static int[] sheetSize(XSSFSheet sheet) {
+        int rows = sheet.getLastRowNum();
+        int columns = Integer.MIN_VALUE;
+
+        for (int i = 0; i < rows; i++) {
+            XSSFRow row = sheet.getRow(i);
+            int testColumn = row.getLastCellNum();
+            columns = Math.max(columns, testColumn);
+
+        }
+
+        return new int[]{rows, columns};
     }
 
     public static ContextMenu createContextMenu(ContextMenu contextMenu) {
