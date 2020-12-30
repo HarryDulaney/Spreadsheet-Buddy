@@ -2,6 +2,7 @@ package com.spreadsheetbuddy.util;
 
 import com.spreadsheetbuddy.controller.WorkbookController;
 import com.spreadsheetbuddy.model.Project;
+import com.spreadsheetbuddy.service.FileService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -13,6 +14,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,12 +25,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+@Component
 public class WbUtil {
 
-
-    public static XSSFWorkbook loadFromFile(File file) throws IOException, InvalidFormatException {
-        return new XSSFWorkbook(file);
-    }
 
     public static void saveWorkbook(Workbook wb, Project project) throws IOException {
 

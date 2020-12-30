@@ -79,7 +79,7 @@ public class Project {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Project { ");
         sb.append("id=").append(projectId);
-        sb.append("lastWorkbookFile=").append(FilenameUtils.getName(openFile));
+        sb.append("openFile(most recent known)=").append(FilenameUtils.getName(openFile));
         sb.append(" }");
         return sb.toString();
     }

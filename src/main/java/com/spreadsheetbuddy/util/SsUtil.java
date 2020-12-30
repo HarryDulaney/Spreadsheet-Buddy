@@ -3,10 +3,12 @@ package com.spreadsheetbuddy.util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.controlsfx.control.spreadsheet.*;
@@ -14,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * SpreadsheetUtility Methods can be defined here TODO: Define
@@ -26,8 +30,10 @@ public class SsUtil {
     private final static int default_rows = 100;
     private final static int default_columns = 46;
     private final static int default_span = 1;
-    private final static String blank_cell = "   ";
+    private final static String BLANK_CELL = "   ";
 
+
+    private static Map<CellAddress, XSSFComment> cellComments;
 
     public static LinkedList<LinkedList<String>> getAllCellValues(Sheet sheet) {
 
@@ -66,7 +72,7 @@ public class SsUtil {
         for (int r = 0; r < default_rows; r++) {
             ObservableList<SpreadsheetCell> observableRow = FXCollections.observableArrayList();
             for (int c = 0; c < default_columns; c++) {
-                SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(r, c, default_span, default_span, blank_cell);
+                SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(r, c, default_span, default_span, BLANK_CELL);
                 observableRow.add(cell);
             }
             backingList.add(observableRow);
@@ -74,55 +80,71 @@ public class SsUtil {
         return backingList;
 
     }
+//
+//    /**
+//     * @param xssfSheet Sheet to map into ObservableList -> GridBase
+//     * @param evaluator FormulaEvaluator from getCreationHelper()
+//     * @return GridBase populated with the xssfSheet data (Including blank cells)
+//     */
+//    protected static GridBase mapSheetToGrid(XSSFSheet xssfSheet, FormulaEvaluator evaluator) {
+//        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+//        GridBase grid = new GridBase(100, longestColIndex);
+//        int start = xssfSheet.getFirstRowNum();
+//        int end = xssfSheet.getLastRowNum();
+////        cellComments = xssfSheet.getCellComments();
+//        for (int rowIdx = start; rowIdx < end; rowIdx++) {
+//            ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
+//            XSSFRow row = xssfSheet.getRow(rowIdx);
+//            DataFormatter formatter = new DataFormatter();
+//            for (int col = 0; col < longestColIndex; col++) {
+//                if (Objects.nonNull(row)) {
+//                    XSSFCell cell = row.getCell(col);
+//                    String value = formatter.formatCellValue(cell, evaluator);
+//                    rowList.add(SpreadsheetCellType.STRING.createCell(rowIdx, col, 1, 1, value));
+//                } else {
+//                    rowList.add(SpreadsheetCellType.STRING.createCell(rowIdx, col, 1, 1, BLANK_CELL));
+//
+//                }
+//            }
+//            rows.add(rowList);
+//        }
+//        grid.setRows(rows);
+//        return grid;
+//
+//    }
 
-    /**
-     * @param xssfSheet Sheet to map into ObservableList -> GridBase
-     * @param evaluator FormulaEvaluator from getCreationHelper()
-     * @return GridBase populated with the xssfSheet data (Including blank cells)
-     */
     protected static GridBase mapSheetToGrid(XSSFSheet xssfSheet, FormulaEvaluator evaluator) {
-        int[] size = sheetSize(xssfSheet);
-        GridBase grid = new GridBase(size[0], size[1]);
         ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-        Row poiRow;
-        Cell cell;
-        String value;
-        for (int row = 0; row < grid.getRowCount(); ++row) {
-            final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-            poiRow = xssfSheet.getRow(row);
+        GridBase grid = new GridBase(1000, 1000);
+//        int start = xssfSheet.getFirstRowNum();
+        int end = xssfSheet.getLastRowNum();
+//        cellComments = xssfSheet.getCellComments();
+        for (int i = 0; i < grid.getRowCount(); i++) {
+            ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
+            XSSFRow row = xssfSheet.getRow(i);
             DataFormatter formatter = new DataFormatter();
-            for (int column = 0; column < grid.getColumnCount(); ++column) {
-                cell = poiRow.getCell(column);
-                value = formatter.formatCellValue(cell, evaluator);
-                list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1, value));
+            for (int col = 0; col < grid.getColumnCount(); col++) {
+                if (Objects.nonNull(row)) {
+                    XSSFCell cell = row.getCell(col);
+                    String value = formatter.formatCellValue(cell, evaluator);
+                    rowList.add(SpreadsheetCellType.STRING.createCell(i, col, 1, 1, value));
+                } else {
+                    rowList.add(SpreadsheetCellType.STRING.createCell(i, col, 1, 1, BLANK_CELL));
+                }
             }
-            rows.add(list);
+            rows.add(rowList);
         }
         grid.setRows(rows);
         return grid;
-
-    }
-
-    /**
-     * @param sheet to evaluate
-     * @return array with the sheets highest row number and highest column number
-     */
-    protected static int[] sheetSize(XSSFSheet sheet) {
-        int rows = sheet.getLastRowNum();
-        int columns = Integer.MIN_VALUE;
-
-        for (int i = 0; i < rows; i++) {
-            XSSFRow row = sheet.getRow(i);
-            int testColumn = row.getLastCellNum();
-            columns = Math.max(columns, testColumn);
-
-        }
-
-        return new int[]{rows, columns};
     }
 
     public static ContextMenu createContextMenu(ContextMenu contextMenu) {
         contextMenu.getItems().addAll(new MenuItem("Format Cell"), new MenuItem("Insert"), new MenuItem("Style Cell"));
         return contextMenu;
     }
+
+    public static Map<CellAddress, XSSFComment> getCellComments() {
+        return cellComments;
+    }
+
 }

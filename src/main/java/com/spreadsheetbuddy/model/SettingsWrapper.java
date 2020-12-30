@@ -1,16 +1,16 @@
 package com.spreadsheetbuddy.model;
 
-public class InternalSettings {
+public class SettingsWrapper {
 
     static {
-        INSTANCE = new InternalSettings();
+        INSTANCE = new SettingsWrapper();
     }
 
     private boolean turnOffDefaultSpreadsheet;
 
-    public static InternalSettings INSTANCE;
+    public static SettingsWrapper INSTANCE;
 
-    private InternalSettings() {}
+    private SettingsWrapper() {}
 
     public boolean isTurnOffDefaultSpreadsheet() {
         return turnOffDefaultSpreadsheet;

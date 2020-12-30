@@ -3,13 +3,13 @@ package com.spreadsheetbuddy.controller;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.util.WbUtil;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
 import org.controlsfx.control.spreadsheet.GridBase;
@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -38,8 +38,6 @@ public class WorkbookController {
     protected int numSheets;
     private final Logger logger = LoggerFactory.getLogger(WorkbookController.class);
     private final FxWeaver fxWeaver;
-
-    private static Project project;
     private XSSFWorkbook currentWorkbook;
 
     /* References the default sheetview */
@@ -70,20 +68,6 @@ public class WorkbookController {
         currentWorkbook = XSSFWorkbookFactory.createWorkbook();
         sheetControlView.getController().poiSheet = currentWorkbook.createSheet(tab1.getText());
         sheetControlView.getController().sheetNumber = 1;
-
-    }
-
-
-    /**
-     * Sets the reference for the current workbook to operate on and reads it / binds it
-     * into the view.
-     *
-     * @param currentWorkbook The XSSFWorkbook to use to display in the view.
-     */
-    public void setCurrentWorkbook(XSSFWorkbook currentWorkbook) {
-        this.currentWorkbook = currentWorkbook;
-        logger.info("Setting backing workbook to newly opened XSSFWorkbook");
-
     }
 
     protected void updateWorkbookView(XSSFWorkbook workbook) {
@@ -100,15 +84,15 @@ public class WorkbookController {
                 Tab tab = new Tab(currentWorkbook.getSheetName(i));
                 SpreadsheetController.turnOffDefaultInit = true;
 
-                FxControllerAndView<SpreadsheetController, SpreadsheetView> sCv =
+                FxControllerAndView<SpreadsheetController, SpreadsheetView> sheetControllerView =
                         fxWeaver.load(SpreadsheetController.class);
 
-                sheetControls.add(sCv);
+                sheetControls.add(sheetControllerView);
                 int finalI = i;
-                sCv.getView().ifPresent(ss -> {
+                sheetControllerView.getView().ifPresent(ss -> {
                     ss.setGrid(contents.get(finalI));
                 });
-                tab.setContent(sCv.getController().ssView);
+                tab.setContent(sheetControllerView.getController().ssView);
                 this.tabPane.getTabs().add(tab);
 
             }
@@ -126,10 +110,6 @@ public class WorkbookController {
 
     protected XSSFWorkbook getCurrentWorkbook() {
         return currentWorkbook;
-    }
-
-    void setProject(Project project) {
-        WorkbookController.project = project;
     }
 
     /**

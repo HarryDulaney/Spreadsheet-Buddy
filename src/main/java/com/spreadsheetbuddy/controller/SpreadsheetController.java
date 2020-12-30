@@ -27,6 +27,7 @@ public class SpreadsheetController {
 
     protected int sheetNumber;
     protected XSSFSheet poiSheet;
+
     public static boolean turnOffDefaultInit;
     private final FxWeaver fxWeaver;
 
@@ -50,10 +51,11 @@ public class SpreadsheetController {
             backingList = SsUtil.initSheet(backingList);
             ssGrid.setRows(backingList);
             ssView.setGrid(ssGrid);
-            ssView.setEditable(true);
-            ContextMenu contextMenu = SsUtil.createContextMenu(ssView.getSpreadsheetViewContextMenu());
-            ssView.setContextMenu(contextMenu);
         }
+        ContextMenu contextMenu = SsUtil.createContextMenu(ssView.getSpreadsheetViewContextMenu());
+        ssView.setContextMenu(contextMenu);
+        ssView.setEditable(true);
+
     }
 
 

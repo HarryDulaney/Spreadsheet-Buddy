@@ -1,7 +1,6 @@
 package com.spreadsheetbuddy.controller;
 
-import com.jfoenix.controls.JFXDialog;
-import com.spreadsheetbuddy.model.InternalSettings;
+import com.spreadsheetbuddy.model.SettingsWrapper;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.service.ProjectService;
@@ -15,7 +14,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxControllerAndView;
@@ -24,8 +22,6 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.controlsfx.control.PlusMinusSlider;
-import org.controlsfx.control.PropertySheet;
-import org.controlsfx.control.spreadsheet.SpreadsheetCellBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +51,13 @@ public class ViewController {
     private final FxWeaver fxWeaver;
     private static Project project;
 
-    private ProjectService projectService;
+    @Autowired
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
+
     private FileService fileService;
+    private ProjectService projectService;
 
     @FXML
     protected Spinner<String> cellTypeSpinner;
@@ -97,12 +98,11 @@ public class ViewController {
 
         if (projectService.exists(project.getProjectId())) {
             project = projectService.getProject(project.getProjectId());
-//            InternalSettings.INSTANCE.setTurnOffDefaultSpreadsheet(true);
+//            SettingsWrapper.INSTANCE.setTurnOffDefaultSpreadsheet(true);
         } else {
             projectService.save(project);
-            InternalSettings.INSTANCE.setTurnOffDefaultSpreadsheet(false);
+            SettingsWrapper.INSTANCE.setTurnOffDefaultSpreadsheet(false);
         }
-        workbookControlView.getController().setProject(project);
         workbookControlView.getController().rootNode = this.rootNode;
 
         /* Initialize recent files */
@@ -128,10 +128,11 @@ public class ViewController {
             logger.info(".xlsx file picked to open -> " + wbFile.getName());
 
             try {
-                XSSFWorkbook workbook = WbUtil.loadFromFile(wbFile);
+                XSSFWorkbook workbook = fileService.getWorkbook(wbFile);
                 workbookControlView.getController().updateWorkbookView(workbook);
 
                 project.setOpenFile(wbFile.getAbsolutePath());
+
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("Error opening the Excel WorkBook from file: " + wbFile.getName() + " Exception is " +
@@ -139,8 +140,6 @@ public class ViewController {
                 DialogHelper.showSimpleAlert("Error opening the Excel WorkBook from file: " + wbFile.getName(), Alert.AlertType.ERROR);
             }
         }
-
-
     }
 
     @FXML
@@ -172,12 +171,11 @@ public class ViewController {
     @FXML
     protected void openIssuesPage(ActionEvent actionEvent) {
         fxWeaver.getBean(HostServices.class).showDocument(issuesPageUri);
-
     }
 
     @FXML
     protected void createNewWorkbook(ActionEvent actionEvent) {
-        File f = DialogHelper.showSaveFilePrompt("Create New Workbook", ".xlsx", "Untitled_Workbook",
+        File f = DialogHelper.showSaveFilePrompt("Create New Workbook", ".xlsx", "",
                 StageStyle.UTILITY);
         if (Objects.nonNull(f)) {
             try {
@@ -230,11 +228,4 @@ public class ViewController {
     public void setProjectService(ProjectService projectService) {
         this.projectService = projectService;
     }
-
-
-    @Autowired
-    public void setFileService(FileService fileService) {
-        this.fileService = fileService;
-    }
-
 }
