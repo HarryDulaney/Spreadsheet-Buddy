@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.spreadsheetbuddy.controller.SettingsController">
+    <VBox layoutX="14.0" layoutY="61.0" prefHeight="3.0" prefWidth="300.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0">
+        <CheckBox alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="18.0" prefWidth="144.0" text="NameOfProperty1">
+            <VBox.margin>
+                <Insets left="15.0" top="25.0" />
+            </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </CheckBox>
+        <CheckBox alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="18.0" prefWidth="144.0" text="NameOfProperty2">
+            <VBox.margin>
+                <Insets left="15.0" />
+            </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </CheckBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="308.0">
+            <VBox.margin>
+                <Insets left="15.0" />
+            </VBox.margin>
+            <Label prefHeight="26.0" prefWidth="116.0" text="Property3ChoiceList">
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding></Label>
+            <ChoiceBox prefHeight="26.0" prefWidth="0.0">
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </ChoiceBox>
+        </HBox>
+        <Separator prefHeight="0.0" prefWidth="300.0" valignment="BOTTOM" />
+    </VBox>
+    <VBox layoutY="189.0" prefHeight="144.0" prefWidth="300.0" spacing="15.0">
+        <CheckBox alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="18.0" prefWidth="144.0" text="NameOfProperty4">
+            <VBox.margin>
+                <Insets left="15.0" top="25.0" />
+            </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </CheckBox>
+        <CheckBox alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="18.0" prefWidth="144.0" text="NameOfProperty5">
+            <VBox.margin>
+                <Insets left="15.0" />
+            </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </CheckBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="308.0">
+            <VBox.margin>
+                <Insets left="15.0" right="5.0" />
+            </VBox.margin>
+            <Label prefHeight="26.0" prefWidth="116.0" text="Property6ChoiceList" />
+            <ChoiceBox prefHeight="26.0" prefWidth="0.0">
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </ChoiceBox>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </HBox>
+        <Separator prefHeight="0.0" prefWidth="300.0" valignment="BOTTOM" VBox.vgrow="ALWAYS" />
+    </VBox>
+    <VBox alignment="CENTER" layoutY="351.0" prefHeight="95.0" prefWidth="300.0" spacing="15.0" AnchorPane.bottomAnchor="154.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="351.0">
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="0.0" prefWidth="300.0" text="radBtnPropGroup1">
+            <VBox.margin>
+                <Insets top="15.0" />
+            </VBox.margin>
+        </Label>
+        <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="308.0">
+            <VBox.margin>
+                <Insets left="15.0" right="15.0" />
+            </VBox.margin>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+            <JFXRadioButton selected="true" text="R1choice">
+                <toggleGroup>
+                    <ToggleGroup fx:id="radBtnPropGroup1" />
+                </toggleGroup>
+                <HBox.margin>
+                    <Insets right="15.0" />
+                </HBox.margin>
+            </JFXRadioButton>
+            <JFXRadioButton contentDisplay="CENTER" layoutX="10.0" layoutY="14.0" text="R2choice" toggleGroup="$radBtnPropGroup1">
+                <HBox.margin>
+                    <Insets right="15.0" />
+                </HBox.margin>
+            </JFXRadioButton>
+            <JFXRadioButton layoutX="88.0" layoutY="14.0" prefHeight="18.0" prefWidth="80.0" text="R3choice" toggleGroup="$radBtnPropGroup1" />
+        </HBox>
+        <Separator prefHeight="0.0" prefWidth="300.0" valignment="BOTTOM" VBox.vgrow="ALWAYS" />
+      <padding>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </padding>
+    </VBox>
+    <VBox layoutY="445.0" prefHeight="155.0" prefWidth="300.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="445.0">
+        <HBox fx:id="colorPck1" alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="308.0">
+            <VBox.margin>
+                <Insets left="5.0" right="5.0" top="10.0" />
+            </VBox.margin>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+            <Label nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="114.0" text="SomeColor" />
+            <ColorPicker prefHeight="26.0" prefWidth="40.0" />
+        </HBox>
+        <CheckBox alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="18.0" prefWidth="144.0" text="NameOfProperty7">
+            <VBox.margin>
+                <Insets left="15.0" top="15.0" />
+            </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </CheckBox>
+        <CheckBox alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="18.0" prefWidth="144.0" text="NameOfProperty8">
+            <VBox.margin>
+                <Insets left="15.0" />
+            </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+        </CheckBox>
+    </VBox>
+   <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="300.0" AnchorPane.bottomAnchor="560.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+         <Button mnemonicParsing="false" onAction="#closeSettingsWindow" text="CLOSE" />
+      </items>
+   </ToolBar>
+</AnchorPane>

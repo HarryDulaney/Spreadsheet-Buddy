@@ -1,5 +1,6 @@
 package com.spreadsheetbuddy.controller;
 
+import com.jfoenix.controls.JFXDialog;
 import com.spreadsheetbuddy.model.InternalSettings;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
@@ -13,6 +14,8 @@ import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxControllerAndView;
@@ -20,6 +23,8 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.controlsfx.control.PlusMinusSlider;
+import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +86,6 @@ public class ViewController {
                                   TabPane> workbookControlView) {
         this.fxWeaver = fxWeaver;
         this.workbookControlView = workbookControlView;
-
 
     }
 
@@ -193,6 +197,10 @@ public class ViewController {
     }
 
     @FXML
+    protected void handleZoomSlider(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
+    }
+
+    @FXML
     protected void saveWorkbook(ActionEvent actionEvent) {
         // TODO: Define
     }
@@ -205,7 +213,9 @@ public class ViewController {
 
     @FXML
     protected void openPreferences(ActionEvent actionEvent) {
-        // TODO: Define
+        FxControllerAndView<SettingsController, AnchorPane> settingsControlView =
+                fxWeaver.load(SettingsController.class);
+        settingsControlView.getController().show();
 
     }
 
@@ -226,6 +236,5 @@ public class ViewController {
     public void setFileService(FileService fileService) {
         this.fileService = fileService;
     }
-
 
 }
