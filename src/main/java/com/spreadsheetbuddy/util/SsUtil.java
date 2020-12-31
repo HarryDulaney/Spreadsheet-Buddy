@@ -15,9 +15,7 @@ import org.controlsfx.control.spreadsheet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * SpreadsheetUtility Methods can be defined here TODO: Define
@@ -27,13 +25,15 @@ import java.util.Objects;
 public class SsUtil {
     static Logger logger = LoggerFactory.getLogger(SsUtil.class);
 
-    private final static int default_rows = 100;
-    private final static int default_columns = 46;
-    private final static int default_span = 1;
+    private final static int DEFAULT_ROWS = 100;
+    private final static int DEFAULT_COLUMNS = 100;
+    private final static int DEFAULT_SPAN = 1;
     private final static String BLANK_CELL = "   ";
+    private static DataFormatter dataFormatter;
 
 
     private static Map<CellAddress, XSSFComment> cellComments;
+    protected static List<Map<CellAddress, XSSFComment>> commentsMap;
 
     public static LinkedList<LinkedList<String>> getAllCellValues(Sheet sheet) {
 
@@ -69,10 +69,10 @@ public class SsUtil {
     public static ObservableList<ObservableList<SpreadsheetCell>> initSheet(ObservableList<ObservableList<SpreadsheetCell>> backingList) {
         backingList = FXCollections.observableArrayList();
 
-        for (int r = 0; r < default_rows; r++) {
+        for (int r = 0; r < DEFAULT_ROWS; r++) {
             ObservableList<SpreadsheetCell> observableRow = FXCollections.observableArrayList();
-            for (int c = 0; c < default_columns; c++) {
-                SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(r, c, default_span, default_span, BLANK_CELL);
+            for (int c = 0; c < DEFAULT_COLUMNS; c++) {
+                SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(r, c, DEFAULT_SPAN, DEFAULT_SPAN, BLANK_CELL);
                 observableRow.add(cell);
             }
             backingList.add(observableRow);
@@ -80,12 +80,7 @@ public class SsUtil {
         return backingList;
 
     }
-//
-//    /**
-//     * @param xssfSheet Sheet to map into ObservableList -> GridBase
-//     * @param evaluator FormulaEvaluator from getCreationHelper()
-//     * @return GridBase populated with the xssfSheet data (Including blank cells)
-//     */
+
 //    protected static GridBase mapSheetToGrid(XSSFSheet xssfSheet, FormulaEvaluator evaluator) {
 //        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
 //        GridBase grid = new GridBase(100, longestColIndex);
@@ -113,29 +108,44 @@ public class SsUtil {
 //
 //    }
 
+
+    /**
+     * Maps a .xlsx spreadsheet to a GridBase object using Apache POI.
+     *
+     * @param xssfSheet Sheet to map into ObservableList -> GridBase
+     * @param evaluator FormulaEvaluator from getCreationHelper()
+     * @return GridBase populated with the xssfSheet data (Including blank cells)
+     */
     protected static GridBase mapSheetToGrid(XSSFSheet xssfSheet, FormulaEvaluator evaluator) {
+        commentsMap = new ArrayList<>();
+        int rowCount = 0, columnCount = 0;
+        dataFormatter = new DataFormatter();
+        cellComments = xssfSheet.getCellComments();
+        commentsMap.add(cellComments);
+
         ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-        GridBase grid = new GridBase(1000, 1000);
-//        int start = xssfSheet.getFirstRowNum();
-        int end = xssfSheet.getLastRowNum();
-//        cellComments = xssfSheet.getCellComments();
-        for (int i = 0; i < grid.getRowCount(); i++) {
+        for (int i = 0; i < xssfSheet.getLastRowNum() || i < DEFAULT_ROWS; i++) {
+            rowCount++;
             ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
             XSSFRow row = xssfSheet.getRow(i);
-            DataFormatter formatter = new DataFormatter();
-            for (int col = 0; col < grid.getColumnCount(); col++) {
-                if (Objects.nonNull(row)) {
+            if (Objects.nonNull(row)) {
+                for (int col = 0; col < row.getLastCellNum() || col < DEFAULT_COLUMNS; col++) {
+                    columnCount++;
                     XSSFCell cell = row.getCell(col);
-                    String value = formatter.formatCellValue(cell, evaluator);
+                    String value = dataFormatter.formatCellValue(cell, evaluator);
                     rowList.add(SpreadsheetCellType.STRING.createCell(i, col, 1, 1, value));
-                } else {
+                }
+            } else {
+                for (int col = 0; col < DEFAULT_COLUMNS; col++) {
+                    columnCount++;
                     rowList.add(SpreadsheetCellType.STRING.createCell(i, col, 1, 1, BLANK_CELL));
                 }
             }
             rows.add(rowList);
         }
-        grid.setRows(rows);
-        return grid;
+        GridBase gridBase = new GridBase(rowCount, columnCount);
+        gridBase.setRows(rows);
+        return gridBase;
     }
 
     public static ContextMenu createContextMenu(ContextMenu contextMenu) {
@@ -143,8 +153,9 @@ public class SsUtil {
         return contextMenu;
     }
 
-    public static Map<CellAddress, XSSFComment> getCellComments() {
-        return cellComments;
+
+    public static List<Map<CellAddress, XSSFComment>> getCellComments() {
+        return commentsMap;
     }
 
 }
