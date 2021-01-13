@@ -27,7 +27,7 @@ public class Project {
 //    private List<RecentFile> recentFiles;
 
     public Project() {
-        projectId = System.getProperty("user.name");
+        projectId = "SSbuddy.id." + System.getProperty("user.name");
     }
 
     public Project(String projectId, String openFile) {

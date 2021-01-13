@@ -9,8 +9,19 @@
         xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#createNewWorkbook" text="New Workbook" />
-            <MenuItem mnemonicParsing="false" onAction="#openWorkBook" text="Open Workbook" />
+            <MenuItem mnemonicParsing="false" onAction="#openWorkBook" text="Open Excel Workbook" />
             <Menu fx:id="recentFilesMenu" mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <Menu mnemonicParsing="false" text="Import">
+                <MenuItem mnemonicParsing="false" text="From XLSX" />
+                <MenuItem mnemonicParsing="false" text="From CSV" />
+                <MenuItem mnemonicParsing="false" text="From XLSM" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Export" >
+                <MenuItem mnemonicParsing="false" text="As XLSX" />
+                <MenuItem mnemonicParsing="false" text="As CSV" />
+                <MenuItem mnemonicParsing="false" text="From XLSM" />
+            </Menu>
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#newSpreadsheet" text="Add New Spreadsheet" />
             <SeparatorMenuItem mnemonicParsing="false" />
@@ -33,11 +44,7 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Select All" />
         </Menu>
-        <Menu mnemonicParsing="false" text="Tools">
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Export" />
-            <MenuItem mnemonicParsing="false" text="Import" />
-        </Menu>
+        <Menu mnemonicParsing="false" text="Tools"></Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" onAction="#openAboutPage" text="About Spreadsheet Buddy" />
             <MenuItem mnemonicParsing="false" onAction="#openIssuesPage" text="Resolve Issues" />

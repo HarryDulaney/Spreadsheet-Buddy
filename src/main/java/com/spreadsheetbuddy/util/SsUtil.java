@@ -81,34 +81,6 @@ public class SsUtil {
 
     }
 
-//    protected static GridBase mapSheetToGrid(XSSFSheet xssfSheet, FormulaEvaluator evaluator) {
-//        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-//        GridBase grid = new GridBase(100, longestColIndex);
-//        int start = xssfSheet.getFirstRowNum();
-//        int end = xssfSheet.getLastRowNum();
-////        cellComments = xssfSheet.getCellComments();
-//        for (int rowIdx = start; rowIdx < end; rowIdx++) {
-//            ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
-//            XSSFRow row = xssfSheet.getRow(rowIdx);
-//            DataFormatter formatter = new DataFormatter();
-//            for (int col = 0; col < longestColIndex; col++) {
-//                if (Objects.nonNull(row)) {
-//                    XSSFCell cell = row.getCell(col);
-//                    String value = formatter.formatCellValue(cell, evaluator);
-//                    rowList.add(SpreadsheetCellType.STRING.createCell(rowIdx, col, 1, 1, value));
-//                } else {
-//                    rowList.add(SpreadsheetCellType.STRING.createCell(rowIdx, col, 1, 1, BLANK_CELL));
-//
-//                }
-//            }
-//            rows.add(rowList);
-//        }
-//        grid.setRows(rows);
-//        return grid;
-//
-//    }
-
-
     /**
      * Maps a .xlsx spreadsheet to a GridBase object using Apache POI.
      *

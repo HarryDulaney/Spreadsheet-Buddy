@@ -1,34 +1,23 @@
  # - Spreadsheet Buddy -
 ____
-Spreadsheet Buddy is a [JavaFX](https://www.oracle.com/java/technologies/javase/javafx-docs.html) and [Spring
-](https://spring.io/projects/spring-boot) spreadsheet editor, built using a 
-[SpreadsheetView](https://github.com/controlsfx/controlsfx/wiki/ControlsFX-Features#spreadsheetview) for displaying
-spreadsheets and 
-[FXWeaver](https://github.com/rgielen/javafx-weaver) for integrating JavaFx and Spring. <br>
- <br> 
- ![Screen-Shot-Spreadsheet-Buddy](/src/main/resources/img/ssBuddyScreenShot.png)
- <br>
-     Spreadsheet-Buddy comes configured to launch with an embedded SpreadsheetView and
-     File Menu(classic toolbar) which comes already bootstrapped to the controller methods for you
-     to define however you wish.
- 
- _Do you have mad awesome Java programming skills? Or are you a wizard at making reactive UI's with
- JavaFx?_
- 
-_Would you like to help developers create Java based spreadsheet utility applications?_ 
+Spreadsheet Buddy is a cross platform desktop application for editing Excel spreadsheets. Core technologies are 
+[JavaFX](https://www.oracle.com/java/technologies/javase/javafx-docs.html),
+ [Spring](https://spring.io/projects/spring-boot), [FXWeaver](https://github.com/rgielen/javafx-weaver), and 
+[SpreadsheetView](https://github.com/controlsfx/controlsfx/wiki/ControlsFX-Features#spreadsheetview) from the
+ ControlsFx. 
 
-__Contribute to Spreadsheet-Buddy!__
+ ![Screen-Shot-Spreadsheet-Buddy](/src/main/resources/img/ssBuddyScreenShot.png)
+
 ____
-## How to Contribute
-+ Fork this repo, be sure to name the new branch something meaningful 
-related to the feature you would like to add. 
-+ Clone to your machine and build out your feature
-+ Test the feature ;),
-+ Update your remote and make a pull request to have it integrated
-into Spreadsheet Buddy!
-____
-## How To Use 
-+ Clone or fork this repo into your development environment
+__Want to create your own Java based Spreadsheet Application??__
+## How To Use SpreadSheet Buddy Starter
++ Clone or fork the Starter repo into your development environment
 + Start building your spreadsheet application!
+ <br>
+ 
+ Spreadsheet-Buddy App Starter has been configured to launch with an embedded SpreadsheetView and
+ File Menu(classic toolbar) which comes already bootstrapped to the controller methods for you
+ to define however you wish.
+ 
   
 ____

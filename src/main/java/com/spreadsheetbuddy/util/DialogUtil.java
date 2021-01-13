@@ -24,12 +24,12 @@ import java.io.File;
  * @author Harry Dulaney
  */
 @Component
-public final class DialogHelper {
+public final class DialogUtil {
 
     private final FxWeaver fxWeaver;
 
     @Autowired
-    public DialogHelper(FxWeaver fxWeaver) {
+    public DialogUtil(FxWeaver fxWeaver) {
         this.fxWeaver = fxWeaver;
     }
 

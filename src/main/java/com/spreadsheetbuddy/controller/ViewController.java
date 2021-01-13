@@ -5,7 +5,7 @@ import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.service.ProjectService;
 import com.spreadsheetbuddy.util.CellFormatUtil;
-import com.spreadsheetbuddy.util.DialogHelper;
+import com.spreadsheetbuddy.util.DialogUtil;
 import com.spreadsheetbuddy.util.RecentFilesUtil;
 import com.spreadsheetbuddy.util.WbUtil;
 import javafx.application.Application;
@@ -122,7 +122,7 @@ public class ViewController {
 
     @FXML
     protected void openWorkBook(ActionEvent event) {
-        File wbFile = DialogHelper.showFilePrompt("Choose the workbook to open", ".xlsx");
+        File wbFile = DialogUtil.showFilePrompt("Choose the workbook to open", ".xlsx");
 
         if (Objects.nonNull(wbFile)) {
             logger.info(".xlsx file picked to open -> " + wbFile.getName());
@@ -137,7 +137,7 @@ public class ViewController {
                 e.printStackTrace();
                 logger.error("Error opening the Excel WorkBook from file: " + wbFile.getName() + " Exception is " +
                         "instanceOf: " + e.toString());
-                DialogHelper.showSimpleAlert("Error opening the Excel WorkBook from file: " + wbFile.getName(), Alert.AlertType.ERROR);
+                DialogUtil.showSimpleAlert("Error opening the Excel WorkBook from file: " + wbFile.getName(), Alert.AlertType.ERROR);
             }
         }
     }
@@ -157,7 +157,7 @@ public class ViewController {
         } catch (Exception ex) {
             ex.printStackTrace();
             logger.error("Error exiting when calling JavaFxApplication.stop() method");
-            DialogHelper.showAlert("Something went wrong: " + ex.getLocalizedMessage(), "Background Process " +
+            DialogUtil.showAlert("Something went wrong: " + ex.getLocalizedMessage(), "Background Process " +
                             "Running Error",
                     "Alert!", Alert.AlertType.ERROR);
         }
@@ -175,7 +175,7 @@ public class ViewController {
 
     @FXML
     protected void createNewWorkbook(ActionEvent actionEvent) {
-        File f = DialogHelper.showSaveFilePrompt("Create New Workbook", ".xlsx", "",
+        File f = DialogUtil.showSaveFilePrompt("Create New Workbook", ".xlsx", "",
                 StageStyle.UTILITY);
         if (Objects.nonNull(f)) {
             try {
@@ -183,7 +183,7 @@ public class ViewController {
                 project.setOpenFile(f.getAbsolutePath());
             } catch (Exception exc) {
                 exc.printStackTrace();
-                DialogHelper.showSimpleAlert(exc.getLocalizedMessage(), Alert.AlertType.ERROR);
+                DialogUtil.showSimpleAlert(exc.getLocalizedMessage(), Alert.AlertType.ERROR);
             }
         }
     }
