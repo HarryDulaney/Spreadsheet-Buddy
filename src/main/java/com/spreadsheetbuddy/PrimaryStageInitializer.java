@@ -16,12 +16,12 @@ public class PrimaryStageInitializer implements ApplicationListener<StageReadyEv
     private final int startHeight;
     private final int startWidth;
 
-    @Value("${sheetbuddy.start.title}")
+    @Value("${sheet-buddy.start.title}")
     String title;
 
     @Autowired
-    public PrimaryStageInitializer(@Value("${sheetbuddy.start.height}") String height,
-                                   @Value("${sheetbuddy.start.width}") String width,
+    public PrimaryStageInitializer(@Value("${sheet-buddy.start.height}") String height,
+                                   @Value("${sheet-buddy.start.width}") String width,
                                    FxWeaver fxWeaver) {
         this.fxWeaver = fxWeaver;
         this.startHeight = Integer.parseInt(height);

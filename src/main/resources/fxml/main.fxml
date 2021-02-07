@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXSlider?><?import com.jfoenix.controls.JFXToolbar?><?import javafx.scene.control.Menu?><?import javafx.scene.control.MenuBar?><?import javafx.scene.control.MenuItem?><?import javafx.scene.control.SeparatorMenuItem?><?import javafx.scene.control.Spinner?><?import javafx.scene.control.Tab?><?import javafx.scene.control.TabPane?><?import javafx.scene.control.Tooltip?><?import javafx.scene.layout.AnchorPane?><?import javafx.scene.layout.BorderPane?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.VBox?>
 
+<?import com.jfoenix.controls.JFXTextField?><?import javafx.scene.text.TextFlow?><?import org.controlsfx.control.textfield.CustomTextField?><?import org.controlsfx.control.PlusMinusSlider?>
 <VBox fx:id="rootNode" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.spreadsheetbuddy.controller.ViewController">
     <MenuBar id="mainMenu" fx:id="mainMenu" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
         xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#createNewWorkbook" text="New Workbook" />
-            <MenuItem mnemonicParsing="false" onAction="#openWorkBook" text="Open Workbook" />
+            <MenuItem mnemonicParsing="false" onAction="#openWorkBook" text="Open Excel Workbook" />
             <Menu fx:id="recentFilesMenu" mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem onAction="#closeWorkbook" mnemonicParsing="false" text="Close" />
-            <MenuItem onAction="#saveWorkbook" mnemonicParsing="false" text="Save" />
-            <MenuItem onAction="#saveWorkbookAs" mnemonicParsing="false" text="Save As" />
+            <Menu mnemonicParsing="false" text="Import">
+                <MenuItem mnemonicParsing="false" text="From XLSX" />
+                <MenuItem mnemonicParsing="false" text="From CSV" />
+                <MenuItem mnemonicParsing="false" text="From XLSM" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Export" >
+                <MenuItem mnemonicParsing="false" text="As XLSX" />
+                <MenuItem mnemonicParsing="false" text="As CSV" />
+                <MenuItem mnemonicParsing="false" text="From XLSM" />
+            </Menu>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem onAction="#openPreferences" mnemonicParsing="false" text="Preferences" />
+            <MenuItem mnemonicParsing="false" onAction="#newSpreadsheet" text="Add New Spreadsheet" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem onAction="#exitRequested" mnemonicParsing="false" text="Exit" />
+            <MenuItem mnemonicParsing="false" onAction="#closeWorkbook" text="Close" />
+            <MenuItem mnemonicParsing="false" onAction="#saveWorkbook" text="Save" />
+            <MenuItem mnemonicParsing="false" onAction="#saveWorkbookAs" text="Save As" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#openPreferences" text="Preferences" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#exitRequested" text="Exit" />
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
             <MenuItem mnemonicParsing="false" text="Undo" />
@@ -30,27 +44,20 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Select All" />
         </Menu>
-        <Menu mnemonicParsing="false" text="Tools">
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Export" />
-            <MenuItem mnemonicParsing="false" text="Import" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-        </Menu>
-        <Menu mnemonicParsing="false" text="View">
-            <Menu mnemonicParsing="false" text="ViewOptions">
-                <MenuItem mnemonicParsing="false" text="Some View 1"/>
-                <MenuItem mnemonicParsing="false" text="Some View 2"/>
-                <MenuItem mnemonicParsing="false" text="Some View 3"/>
-                <MenuItem mnemonicParsing="false" text="Some View 4"/>
-                <MenuItem mnemonicParsing="false" text="Some View 5"/>
-            </Menu>
-        </Menu>
+        <Menu mnemonicParsing="false" text="Tools"></Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" onAction="#openAboutPage" text="About Spreadsheet Buddy" />
             <MenuItem mnemonicParsing="false" onAction="#openIssuesPage" text="Resolve Issues" />
         </Menu>
     </MenuBar>
-        <fx:include source="ssheet.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
+    <JFXToolbar>
+        <center>
+            <Spinner fx:id="cellTypeSpinner" BorderPane.alignment="CENTER">
+                <tooltip>
+                    <Tooltip text="Cell Format Type" textAlignment="CENTER" wrapText="true" />
+                </tooltip>
+            </Spinner>
+        </center>
+    </JFXToolbar>
+    <fx:include source="workbookview.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
 </VBox>
