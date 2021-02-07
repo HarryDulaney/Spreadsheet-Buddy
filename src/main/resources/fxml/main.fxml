@@ -51,9 +51,6 @@
         </Menu>
     </MenuBar>
     <JFXToolbar>
-        <left>
-            <PlusMinusSlider onValueChanged="#handleZoomSlider" />
-        </left>
         <center>
             <Spinner fx:id="cellTypeSpinner" BorderPane.alignment="CENTER">
                 <tooltip>
@@ -61,9 +58,6 @@
                 </tooltip>
             </Spinner>
         </center>
-        <right>
-            <CustomTextField prefWidth="500" text="TESTing Text" />
-        </right>
     </JFXToolbar>
     <fx:include source="workbookview.fxml" VBox.vgrow="ALWAYS" prefWidth="1200.0" />
 </VBox>

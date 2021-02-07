@@ -195,10 +195,6 @@ public class ViewController {
     }
 
     @FXML
-    protected void handleZoomSlider(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
-    }
-
-    @FXML
     protected void saveWorkbook(ActionEvent actionEvent) {
         // TODO: Define
     }
