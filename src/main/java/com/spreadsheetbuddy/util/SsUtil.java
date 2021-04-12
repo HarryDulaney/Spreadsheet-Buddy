@@ -7,10 +7,7 @@ import javafx.scene.control.MenuItem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFComment;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.*;
 import org.controlsfx.control.spreadsheet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,38 +15,38 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * SpreadsheetUtility Methods can be defined here TODO: Define
+ * SpreadsheetUtility Methods can be defined here
+ * TODO: Define a SpreadSheetView + Apache POI XSSFSheet Object to operate on here.
  *
  * @author Harry Dulaney
  */
 public class SsUtil {
     static Logger logger = LoggerFactory.getLogger(SsUtil.class);
 
-    private final static int DEFAULT_ROWS = 100;
-    private final static int DEFAULT_COLUMNS = 100;
-    private final static int DEFAULT_SPAN = 1;
-    private final static String BLANK_CELL = "   ";
-    private static DataFormatter dataFormatter;
+    private final static int DEFAULT_COLUMN_SPAN = 1;
+    private final static int DEFAULT_ROW_SPAN = 1;
+    private final static String BLANK_CELL = "\t";
+    private final static int MIN_ROWS = 250;
+    private final static int MIN_ROW_LENGTH = 26;
 
 
-    private static Map<CellAddress, XSSFComment> cellComments;
-    protected static List<Map<CellAddress, XSSFComment>> commentsMap;
+    protected static List<Map<CellAddress, XSSFComment>> COMMENT_MAP;
 
-    public static LinkedList<LinkedList<String>> getAllCellValues(Sheet sheet) {
 
-        LinkedList<LinkedList<String>> sheetAsList = new LinkedList<>();
+    static Integer evaluateColumns(XSSFSheet sheet, int lastRowNum) {
+        int longestRow = MIN_ROW_LENGTH;
 
-        for (Row row : sheet) {
-            LinkedList<String> rowAsList = new LinkedList<>();
-            for (Cell cell : row) {
-                String cellValueText = getCellValue(cell, row);
-                rowAsList.add(cellValueText);
-            }
-            sheetAsList.add(rowAsList);
+        for (int i = 0; i < lastRowNum; i++) {
+            Row row = sheet.getRow(i);
+            if (Objects.isNull(row)) continue;
+            int currentRowLength = row.getLastCellNum();
+            longestRow = Math.max(longestRow, currentRowLength);
+            logger.info("Reading Row #" + row.getRowNum() + ", length is: " + currentRowLength + ". Longest Row is:" +
+                    " " + longestRow);
+
         }
-        return sheetAsList;
+        return longestRow;
     }
-
 
     public static String getCellValue(Cell cell, Row row) {
 
@@ -69,10 +66,10 @@ public class SsUtil {
     public static ObservableList<ObservableList<SpreadsheetCell>> initSheet(ObservableList<ObservableList<SpreadsheetCell>> backingList) {
         backingList = FXCollections.observableArrayList();
 
-        for (int r = 0; r < DEFAULT_ROWS; r++) {
+        for (int r = 0; r < MIN_ROWS; r++) {
             ObservableList<SpreadsheetCell> observableRow = FXCollections.observableArrayList();
-            for (int c = 0; c < DEFAULT_COLUMNS; c++) {
-                SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(r, c, DEFAULT_SPAN, DEFAULT_SPAN, BLANK_CELL);
+            for (int c = 0; c < MIN_ROW_LENGTH; c++) {
+                SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(r, c, DEFAULT_COLUMN_SPAN, DEFAULT_COLUMN_SPAN, BLANK_CELL);
                 observableRow.add(cell);
             }
             backingList.add(observableRow);
@@ -89,33 +86,54 @@ public class SsUtil {
      * @return GridBase populated with the xssfSheet data (Including blank cells)
      */
     protected static GridBase mapSheetToGrid(XSSFSheet xssfSheet, FormulaEvaluator evaluator) {
-        commentsMap = new ArrayList<>();
-        int rowCount = 0, columnCount = 0;
-        dataFormatter = new DataFormatter();
-        cellComments = xssfSheet.getCellComments();
-        commentsMap.add(cellComments);
 
+        int lastRow = Math.max(xssfSheet.getLastRowNum(), MIN_ROWS);
+        logger.info("Start reading sheet, last row is: " + lastRow);
+
+        int gridColumnValue = evaluateColumns(xssfSheet, lastRow);
+        GridBase gridBase = new GridBase(lastRow, gridColumnValue);
+
+        DataFormatter dataFormatter = new DataFormatter();
         ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-        for (int i = 0; i < xssfSheet.getLastRowNum() || i < DEFAULT_ROWS; i++) {
-            rowCount++;
-            ObservableList<SpreadsheetCell> rowList = FXCollections.observableArrayList();
-            XSSFRow row = xssfSheet.getRow(i);
-            if (Objects.nonNull(row)) {
-                for (int col = 0; col < row.getLastCellNum() || col < DEFAULT_COLUMNS; col++) {
-                    columnCount++;
-                    XSSFCell cell = row.getCell(col);
-                    String value = dataFormatter.formatCellValue(cell, evaluator);
-                    rowList.add(SpreadsheetCellType.STRING.createCell(i, col, 1, 1, value));
+        for (int rowIdx = 0; rowIdx < lastRow; rowIdx++) {
+            ObservableList<SpreadsheetCell> observableRow = FXCollections.observableArrayList();
+            XSSFRow row = xssfSheet.getRow(rowIdx);
+            if (row == null) {
+                int i = 0;
+                while (i < gridColumnValue) {
+                    observableRow.add(SpreadsheetCellType.STRING.createCell(rowIdx, i++, DEFAULT_ROW_SPAN, DEFAULT_COLUMN_SPAN,
+                            BLANK_CELL));
                 }
             } else {
-                for (int col = 0; col < DEFAULT_COLUMNS; col++) {
-                    columnCount++;
-                    rowList.add(SpreadsheetCellType.STRING.createCell(i, col, 1, 1, BLANK_CELL));
+                for (int colIdx = 0; colIdx < gridColumnValue; colIdx++) {
+                    XSSFCell cell = row.getCell(colIdx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    CellType cellType = cell.getCellType();
+                    String value = "";
+                    switch (cellType) {
+                        case BLANK:
+                        case _NONE:
+                            value = BLANK_CELL;
+                            break;
+                        case NUMERIC:
+                        case STRING:
+                        case ERROR:
+                        case BOOLEAN:
+                        case FORMULA:
+                            value = dataFormatter.formatCellValue(cell, evaluator);
+                    }
+
+//                    if (cell == null) {
+//                        observableRow.add(SpreadsheetCellType.STRING.createCell(rowIdx, colIdx, DEFAULT_ROW_SPAN, DEFAULT_COLUMN_SPAN,
+//                                BLANK_CELL));
+
+//                    } else {
+                    observableRow.add(SpreadsheetCellType.STRING.createCell(rowIdx, colIdx, DEFAULT_ROW_SPAN, DEFAULT_COLUMN_SPAN,
+                            value));
+//                    }
                 }
             }
-            rows.add(rowList);
+            rows.add(observableRow);
         }
-        GridBase gridBase = new GridBase(rowCount, columnCount);
         gridBase.setRows(rows);
         return gridBase;
     }
@@ -127,7 +145,7 @@ public class SsUtil {
 
 
     public static List<Map<CellAddress, XSSFComment>> getCellComments() {
-        return commentsMap;
+        return COMMENT_MAP;
     }
 
 }

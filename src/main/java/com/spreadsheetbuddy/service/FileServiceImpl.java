@@ -1,8 +1,10 @@
 package com.spreadsheetbuddy.service;
 
 
+import com.spreadsheetbuddy.dao.ProjectDao;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,6 +16,10 @@ import java.util.List;
 public class FileServiceImpl implements FileService {
 
 
+    @Autowired
+    ProjectDao projectDao;
+
+
     @Override
     public XSSFWorkbook getWorkbook(File file) throws IOException, InvalidFormatException {
         return new XSSFWorkbook(file);
@@ -21,8 +27,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<File> getRecentFiles(String id) {
-        return null;
+    public List<String> getRecentFiles(String id) {
+        return projectDao.getRecentFiles(id);
+    }
+
+    @Override
+    public void setRecentFile(String file, String id) {
+
     }
 
 }

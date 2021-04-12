@@ -34,7 +34,6 @@ public class SpreadsheetController implements EventHandler<GridChange> {
 
     @Override
     public void handle(GridChange event) {
-        Object value = event.getNewValue();
     }
 
     @FXML

@@ -1,8 +1,8 @@
 package com.spreadsheetbuddy.service;
 
 
+import com.spreadsheetbuddy.dao.ProjectDao;
 import com.spreadsheetbuddy.model.Project;
-import com.spreadsheetbuddy.dao.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,36 +11,25 @@ import java.util.List;
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService {
 
-    private final ProjectRepository repository;
-
     @Autowired
-    public ProjectServiceImpl(ProjectRepository repository) {
-        this.repository = repository;
-    }
+    ProjectDao projectDao;
+
 
     @Override
-    public Project getProject(String projectId) {
-        return repository.getProjectByProjectId(projectId);
-    }
-
-    @Override
-    public List<String> getRecentFiles(String projectId) {
-        return null;
-    }
-
-    @Override
-    public void save(Project project) {
-        repository.save(project);
-
+    public Project getProjectById(String id) {
+        return projectDao.getProjectById(id);
     }
 
     @Override
     public void delete(Project project) {
-        repository.delete(project);
+        projectDao.deleteProject(project);
     }
 
+
     @Override
-    public Boolean exists(String projectId) {
-        return repository.existsByProjectId(projectId);
+    public void insertProject(Project project) {
+        projectDao.insertProject(project);
     }
+
+
 }

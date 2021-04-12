@@ -12,10 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.spreadsheetbuddy.dao")
 public class SheetBuddyApp {
 
     public static void main(String[] args) {
@@ -35,6 +33,5 @@ public class SheetBuddyApp {
         return new InjectionPointLazyFxControllerAndViewResolver(fxWeaver)
                 .resolve(injectionPoint);
     }
-
 
 }

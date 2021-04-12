@@ -75,11 +75,11 @@ public class WorkbookController {
             currentWorkbook.close();
             currentWorkbook = workbook;
             numSheets = currentWorkbook.getNumberOfSheets();
-            List<GridBase> contents = WbUtil.mapWorkbookGrid(workbook);
+            List<GridBase> workbookGrid = WbUtil.mapWorkbookGrid(workbook);
             sheetControls.clear();
             tabPane.getTabs().clear();
 
-            for (int i = 0; i < contents.size(); i++) {
+            for (int i = 0; i < workbookGrid.size(); i++) {
 
                 Tab tab = new Tab(currentWorkbook.getSheetName(i));
                 SpreadsheetController.turnOffDefaultInit = true;
@@ -90,7 +90,7 @@ public class WorkbookController {
                 sheetControls.add(sheetControllerView);
                 int finalI = i;
                 sheetControllerView.getView().ifPresent(ss -> {
-                    ss.setGrid(contents.get(finalI));
+                    ss.setGrid(workbookGrid.get(finalI));
                 });
                 tab.setContent(sheetControllerView.getController().ssView);
                 this.tabPane.getTabs().add(tab);

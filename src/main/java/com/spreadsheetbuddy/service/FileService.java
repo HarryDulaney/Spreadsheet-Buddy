@@ -12,5 +12,7 @@ import java.util.List;
 public interface FileService {
     XSSFWorkbook getWorkbook(File file) throws IOException, InvalidFormatException;
 
-    List<File> getRecentFiles(String id);
+    List<String> getRecentFiles(String id);
+
+    void setRecentFile(String file, String id);
 }

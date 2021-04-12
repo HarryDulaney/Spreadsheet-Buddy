@@ -6,10 +6,10 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.1.RELEASE</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath /> 
     </parent>
 
-    <groupId>com.hgdiv</groupId>
+    <groupId>com.harrydulaney</groupId>
     <artifactId>spreadsheet-buddy</artifactId>
     <version>0.0.2-SNAPSHOT</version>
     <name>Spreadsheet-Buddy</name>
@@ -32,13 +32,15 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.4.0</version>
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
             <groupId>net.rgielen</groupId>
             <artifactId>javafx-weaver-spring</artifactId>
@@ -115,5 +117,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

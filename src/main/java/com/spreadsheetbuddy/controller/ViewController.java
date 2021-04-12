@@ -1,6 +1,5 @@
 package com.spreadsheetbuddy.controller;
 
-import com.spreadsheetbuddy.model.SettingsWrapper;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.service.ProjectService;
@@ -50,11 +49,6 @@ public class ViewController {
     private final FxWeaver fxWeaver;
     private static Project project;
 
-    @Autowired
-    public void setFileService(FileService fileService) {
-        this.fileService = fileService;
-    }
-
     private FileService fileService;
     private ProjectService projectService;
 
@@ -94,14 +88,9 @@ public class ViewController {
     public void initialize() {
         /* Initialize the Project */
         project = new Project();
-
-        if (projectService.exists(project.getProjectId())) {
-            project = projectService.getProject(project.getProjectId());
+        project = projectService.getProjectById(project.getProjectId());
 //            SettingsWrapper.INSTANCE.setTurnOffDefaultSpreadsheet(true);
-        } else {
-            projectService.save(project);
-            SettingsWrapper.INSTANCE.setTurnOffDefaultSpreadsheet(false);
-        }
+//        SettingsWrapper.INSTANCE.setTurnOffDefaultSpreadsheet(false);
         workbookControlView.getController().rootNode = this.rootNode;
 
         /* Initialize recent files */
@@ -130,7 +119,8 @@ public class ViewController {
                 XSSFWorkbook workbook = fileService.getWorkbook(wbFile);
                 workbookControlView.getController().updateWorkbookView(workbook);
 
-                project.setOpenFile(wbFile.getAbsolutePath());
+                project.setMostRecentFile(wbFile.getAbsolutePath());
+                fileService.setRecentFile(wbFile.getAbsolutePath(), project.getProjectId());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -149,7 +139,7 @@ public class ViewController {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        projectService.save(project);
+        projectService.insertProject(project);
 
         try {
             fxWeaver.getBean(Application.class).stop();
@@ -163,8 +153,6 @@ public class ViewController {
     }
 
     /**
-     * Example of using FxWeaver to get a registered JavaFx Bean
-     *
      * @param actionEvent fire event from MenuItem
      */
     @FXML
@@ -179,7 +167,7 @@ public class ViewController {
         if (Objects.nonNull(f)) {
             try {
                 Workbook wb = WbUtil.createBlankWorkbook(f);
-                project.setOpenFile(f.getAbsolutePath());
+                project.setMostRecentFile(f.getAbsolutePath());
             } catch (Exception exc) {
                 exc.printStackTrace();
                 DialogUtil.showSimpleAlert(exc.getLocalizedMessage(), Alert.AlertType.ERROR);
@@ -222,5 +210,10 @@ public class ViewController {
     @Autowired
     public void setProjectService(ProjectService projectService) {
         this.projectService = projectService;
+    }
+
+    @Autowired
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
     }
 }

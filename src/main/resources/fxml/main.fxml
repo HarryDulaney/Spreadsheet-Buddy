@@ -44,7 +44,7 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Select All" />
         </Menu>
-        <Menu mnemonicParsing="false" text="Tools"></Menu>
+        <Menu mnemonicParsing="false" text="Tools" />
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" onAction="#openAboutPage" text="About Spreadsheet Buddy" />
             <MenuItem mnemonicParsing="false" onAction="#openIssuesPage" text="Resolve Issues" />

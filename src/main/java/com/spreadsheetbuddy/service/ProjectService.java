@@ -1,15 +1,16 @@
 package com.spreadsheetbuddy.service;
-
 import com.spreadsheetbuddy.model.Project;
 
 import java.util.List;
 
 public interface ProjectService {
 
-    Project getProject(String id);
-    List<String> getRecentFiles(String id);
-    void save(Project project);
+    Project getProjectById(String id);
+
     void delete(Project project);
-    Boolean exists(String id);
+
+    void insertProject(Project project);
+
+
 
 }

@@ -22,7 +22,7 @@ public class WbUtil {
 
     public static void saveWorkbook(Workbook wb, Project project) throws IOException {
 
-        try (OutputStream fileOut = new FileOutputStream(project.getOpenFile())) {
+        try (OutputStream fileOut = new FileOutputStream(project.getMostRecentFile())) {
             wb.write(fileOut);
         }
         wb.close();
@@ -59,19 +59,20 @@ public class WbUtil {
     }
 
     /**
-     * Creates a {@link GridBase} object from the excel file located at the path
+     * Creates a {@link GridBase} object from an XSSFWorkbook
      *
      * @return List<GridBase>
      */
     public static List<GridBase> mapWorkbookGrid(XSSFWorkbook workbook) {
-        List<GridBase> workbookContents = new LinkedList<>();
+        List<GridBase> sheets = new LinkedList<>();
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-            XSSFSheet poiSheet = workbook.getSheetAt(i);
+            XSSFSheet sheet = workbook.getSheetAt(i);
             FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
-            GridBase grid = SsUtil.mapSheetToGrid(poiSheet, evaluator);
-            workbookContents.add(grid);
+
+            GridBase grid = SsUtil.mapSheetToGrid(sheet, evaluator);
+            sheets.add(grid);
         }
-        return workbookContents;
+        return sheets;
     }
 
 
