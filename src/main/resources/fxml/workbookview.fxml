@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.Tab?><?import javafx.scene.control.TabPane?><?import javafx.scene.layout.VBox?><?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
 
-<TabPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<TabPane xmlns="http://javafx.com/javafx/8.0_251" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.spreadsheetbuddy.controller.WorkbookController" fx:id="tabPane" prefHeight="200.0"
     prefWidth="200.0" tabClosingPolicy="ALL_TABS" VBox.vgrow="ALWAYS">
     <Tab fx:id="tab1" text="Untitled">

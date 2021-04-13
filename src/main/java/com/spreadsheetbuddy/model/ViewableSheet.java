@@ -1,4 +1,4 @@
-package com.spreadsheetbuddy.dao;
+package com.spreadsheetbuddy.model;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellBase;

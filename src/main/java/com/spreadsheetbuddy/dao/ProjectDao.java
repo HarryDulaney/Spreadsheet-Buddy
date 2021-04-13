@@ -13,6 +13,8 @@ public interface ProjectDao {
 
     List<String> getRecentFiles(String id);
 
-    void insertRecentFile(String file,String id);
+    void insertRecentFile(String file, String id);
+
+    Boolean projectExistsById(String id);
 
 }

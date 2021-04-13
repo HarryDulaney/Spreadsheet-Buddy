@@ -33,6 +33,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void setRecentFile(String file, String id) {
+        projectDao.insertRecentFile(file, id);
 
     }
 

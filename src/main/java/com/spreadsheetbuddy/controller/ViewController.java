@@ -1,5 +1,6 @@
 package com.spreadsheetbuddy.controller;
 
+import com.spreadsheetbuddy.model.PreferencesWrapper;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.service.ProjectService;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.prefs.Preferences;
 
 /**
  * <p>
@@ -89,8 +91,6 @@ public class ViewController {
         /* Initialize the Project */
         project = new Project();
         project = projectService.getProjectById(project.getProjectId());
-//            SettingsWrapper.INSTANCE.setTurnOffDefaultSpreadsheet(true);
-//        SettingsWrapper.INSTANCE.setTurnOffDefaultSpreadsheet(false);
         workbookControlView.getController().rootNode = this.rootNode;
 
         /* Initialize recent files */
@@ -110,10 +110,16 @@ public class ViewController {
 
     @FXML
     protected void openWorkBook(ActionEvent event) {
-        File wbFile = DialogUtil.showFilePrompt("Choose the workbook to open", ".xlsx");
+        File wbFile = DialogUtil.showFilePrompt("Choose the workbook to open", ".xlsx", project.getWorkingDirectoryPath());
 
         if (Objects.nonNull(wbFile)) {
+
             logger.info(".xlsx file picked to open -> " + wbFile.getName());
+
+            String directory = wbFile.getParent();
+            if (directory != null) {
+                project.setWorkingDirectoryPath(directory);
+            }
 
             try {
                 XSSFWorkbook workbook = fileService.getWorkbook(wbFile);
@@ -139,7 +145,9 @@ public class ViewController {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        projectService.insertProject(project);
+        if (!projectService.projectExistsById(project.getProjectId())) {
+            projectService.insertProject(project);
+        }
 
         try {
             fxWeaver.getBean(Application.class).stop();
@@ -202,7 +210,7 @@ public class ViewController {
 
     @FXML
     protected void newSpreadsheet(ActionEvent actionEvent) {
-        System.out.println("adding new ssView");
+        logger.info("adding new ssView");
         workbookControlView.getController().addSpreadsheet(rootNode);
 
     }

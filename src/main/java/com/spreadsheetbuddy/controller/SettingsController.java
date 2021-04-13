@@ -22,7 +22,6 @@ public class SettingsController {
     private final Logger logger = LoggerFactory.getLogger(SettingsController.class);
     private final FxWeaver fxWeaver;
     private Stage popUpStage;
-    private final Preferences preferences = Preferences.userNodeForPackage(getClass());
 
     @FXML
     protected AnchorPane anchorPane;

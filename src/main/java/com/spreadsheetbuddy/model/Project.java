@@ -1,7 +1,11 @@
 package com.spreadsheetbuddy.model;
 
+import javafx.scene.paint.Color;
+
 import java.util.List;
 import java.util.Objects;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 /**
  * Project model holds references to a user and any dependencies and resources
@@ -12,10 +16,36 @@ public class Project {
     private final String projectId;
     private String mostRecentFile;
     private List<String> recentFiles;
-
+    private String workingDirectoryPath;
+    private Preferences userPreferences;
 
     public Project() {
-        projectId = "SSbuddy.id." + System.getProperty("user.name");
+        projectId = "SSbuddy.id." + System.getProperty("user.name") + "." + this.hashCode();
+        loadPreferences();
+    }
+
+    /**
+     * Persist User's Preferences to memory
+     */
+    private void setPreferences() {
+        userPreferences = Preferences.userNodeForPackage(getClass());
+        userPreferences.put("DEFAULT_WORKING_DIRECTORY", workingDirectoryPath);
+
+        try {
+            userPreferences.sync();
+        } catch (BackingStoreException bse) {
+            System.console().printf(bse.toString());
+        }
+
+    }
+
+    /**
+     * Load Preferences into User (Handled internally by ParentController)
+     */
+    private void loadPreferences() {
+        userPreferences = Preferences.userNodeForPackage(getClass());
+        this.setWorkingDirectoryPath(userPreferences.get("DEFAULT_WORKING_DIRECTORY", System.getProperty("user.dir")));
+
     }
 
     public Project(String projectId) {
@@ -50,6 +80,15 @@ public class Project {
         return this;
     }
 
+    public String getWorkingDirectoryPath() {
+        return workingDirectoryPath;
+    }
+
+    public void setWorkingDirectoryPath(String workingDirectoryPath) {
+        this.workingDirectoryPath = workingDirectoryPath;
+        setPreferences();
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -63,8 +102,7 @@ public class Project {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.projectId);
-        hash = 79 * hash + Objects.hashCode(this.mostRecentFile);
+        hash = 7779 * hash + Objects.hashCode(this.projectId);
         return hash;
     }
 

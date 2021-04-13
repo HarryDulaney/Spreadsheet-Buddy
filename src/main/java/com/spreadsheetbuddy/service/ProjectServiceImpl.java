@@ -31,5 +31,10 @@ public class ProjectServiceImpl implements ProjectService {
         projectDao.insertProject(project);
     }
 
+    @Override
+    public Boolean projectExistsById(String id) {
+        return projectDao.projectExistsById(id);
+    }
+
 
 }

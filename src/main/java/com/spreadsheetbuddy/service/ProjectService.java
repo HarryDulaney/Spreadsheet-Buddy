@@ -1,4 +1,5 @@
 package com.spreadsheetbuddy.service;
+
 import com.spreadsheetbuddy.model.Project;
 
 import java.util.List;
@@ -11,6 +12,6 @@ public interface ProjectService {
 
     void insertProject(Project project);
 
-
+    Boolean projectExistsById(String id);
 
 }

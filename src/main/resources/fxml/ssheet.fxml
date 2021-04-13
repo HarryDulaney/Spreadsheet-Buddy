@@ -5,5 +5,5 @@
 
 <?import org.controlsfx.control.spreadsheet.SpreadsheetView?>
 
-<SpreadsheetView fx:id="ssView" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<SpreadsheetView fx:id="ssView" xmlns="http://javafx.com/javafx/8.0_251" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.spreadsheetbuddy.controller.SpreadsheetController" />

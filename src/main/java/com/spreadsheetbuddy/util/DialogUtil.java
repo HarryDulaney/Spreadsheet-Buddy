@@ -21,6 +21,7 @@ import java.io.File;
 /**
  * This is a class of static methods to utilize for Alerts, Pop-ups and UI
  * Dialogs.
+ *
  * @author Harry Dulaney
  */
 @Component
@@ -139,9 +140,10 @@ public final class DialogUtil {
         return fchooser.showSaveDialog(new Stage(stageStyle));
     }
 
-    public static File showFilePrompt(String title, String fileExtension) {
+    public static File showFilePrompt(String title, String fileExtension, String workingDirectory) {
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(workingDirectory));
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters()
                 .addAll(new FileChooser.ExtensionFilter(fileExtension, "*".concat(fileExtension)));
