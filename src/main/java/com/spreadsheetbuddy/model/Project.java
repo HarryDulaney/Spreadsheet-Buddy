@@ -24,6 +24,10 @@ public class Project {
         loadPreferences();
     }
 
+    public Project(String projectId) {
+        this.projectId = projectId;
+    }
+    
     /**
      * Persist User's Preferences to memory
      */
@@ -48,15 +52,10 @@ public class Project {
 
     }
 
-    public Project(String projectId) {
-        this.projectId = projectId;
+    public void persistPreferences() {
+        setPreferences();
     }
 
-    public Project(String projectId, String recentFile) {
-        this.projectId = projectId;
-        this.mostRecentFile = recentFile;
-
-    }
 
     public String getMostRecentFile() {
         return mostRecentFile;
@@ -65,6 +64,7 @@ public class Project {
 
     public void setMostRecentFile(String openWorkbookFilePath) {
         this.mostRecentFile = openWorkbookFilePath;
+        recentFiles.add(mostRecentFile);
     }
 
     public String getProjectId() {
@@ -75,9 +75,8 @@ public class Project {
         return recentFiles;
     }
 
-    public Project setRecentFiles(List<String> recentFiles) {
+    public void setRecentFiles(List<String> recentFiles) {
         this.recentFiles = recentFiles;
-        return this;
     }
 
     public String getWorkingDirectoryPath() {

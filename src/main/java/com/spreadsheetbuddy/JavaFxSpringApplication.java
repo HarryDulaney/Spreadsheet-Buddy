@@ -1,5 +1,6 @@
 package com.spreadsheetbuddy;
 
+import com.spreadsheetbuddy.event.StageReadyEvent;
 import com.sun.javafx.css.Stylesheet;
 import javafx.application.Application;
 import javafx.application.HostServices;

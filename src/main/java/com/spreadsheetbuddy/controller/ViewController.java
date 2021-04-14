@@ -1,12 +1,11 @@
 package com.spreadsheetbuddy.controller;
 
-import com.spreadsheetbuddy.model.PreferencesWrapper;
 import com.spreadsheetbuddy.model.Project;
 import com.spreadsheetbuddy.service.FileService;
 import com.spreadsheetbuddy.service.ProjectService;
 import com.spreadsheetbuddy.util.CellFormatUtil;
 import com.spreadsheetbuddy.util.DialogUtil;
-import com.spreadsheetbuddy.util.RecentFilesUtil;
+import com.spreadsheetbuddy.util.MenuUtil;
 import com.spreadsheetbuddy.util.WbUtil;
 import javafx.application.Application;
 import javafx.application.HostServices;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.prefs.Preferences;
 
 /**
  * <p>
@@ -93,8 +91,8 @@ public class ViewController {
         project = projectService.getProjectById(project.getProjectId());
         workbookControlView.getController().rootNode = this.rootNode;
 
-        /* Initialize recent files */
-        recentFilesMenu = RecentFilesUtil.initRecentFileMenu(recentFilesMenu); //TODO: Recentfiles configuration
+        /* Initialize recent files menu */
+        recentFilesMenu = MenuUtil.initRecentFileMenu(recentFilesMenu, project.getRecentFiles());
 
         SpinnerValueFactory.ListSpinnerValueFactory<String> spinnerValueFactory =
                 new SpinnerValueFactory.ListSpinnerValueFactory<>(CellFormatUtil.getSupportedCellFormats());
@@ -148,6 +146,8 @@ public class ViewController {
         if (!projectService.projectExistsById(project.getProjectId())) {
             projectService.insertProject(project);
         }
+        project.persistPreferences();
+        fileService.setRecentFile(project.getMostRecentFile(), project.getProjectId());
 
         try {
             fxWeaver.getBean(Application.class).stop();

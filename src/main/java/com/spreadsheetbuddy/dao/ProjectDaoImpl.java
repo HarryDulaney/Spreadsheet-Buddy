@@ -47,7 +47,10 @@ public class ProjectDaoImpl implements ProjectDao {
             insertProject(project);
             return project;
         }
-        return new Project(String.valueOf(rowsList.get(0).get("PROJECT_ID")));
+
+        Project project = new Project(String.valueOf(rowsList.get(0).get("PROJECT_ID")));
+        project.setRecentFiles(getRecentFiles(project.getProjectId()));
+        return project;
     }
 
     @Override

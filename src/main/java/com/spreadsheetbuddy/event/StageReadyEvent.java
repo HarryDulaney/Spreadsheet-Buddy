@@ -1,4 +1,4 @@
-package com.spreadsheetbuddy;
+package com.spreadsheetbuddy.event;
 
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationEvent;

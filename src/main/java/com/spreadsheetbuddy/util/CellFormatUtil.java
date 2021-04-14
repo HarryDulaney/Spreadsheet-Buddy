@@ -22,7 +22,7 @@ public class CellFormatUtil {
      * @return the cell format types
      */
     public static ObservableList<String> getSupportedCellFormats() {
-        List<String> list = Arrays.asList("General", "Number", "Formula", "Date", "List", "Image", "Dollar", "Image");
+        List<String> list = Arrays.asList("General", "Number", "Formula", "Date", "List", "Currency", "Image");
         return FXCollections.observableArrayList(list);
 
     }

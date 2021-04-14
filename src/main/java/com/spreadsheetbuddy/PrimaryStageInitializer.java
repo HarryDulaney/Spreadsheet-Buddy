@@ -1,6 +1,7 @@
 package com.spreadsheetbuddy;
 
 import com.spreadsheetbuddy.controller.ViewController;
+import com.spreadsheetbuddy.event.StageReadyEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
