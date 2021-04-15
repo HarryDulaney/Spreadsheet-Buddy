@@ -81,14 +81,15 @@ public class ViewController {
         this.fxWeaver = fxWeaver;
         this.workbookControlView = workbookControlView;
 
-    }
 
+    }
 
     @FXML
     public void initialize() {
         /* Initialize the Project */
         project = new Project();
         project = projectService.getProjectById(project.getProjectId());
+
         workbookControlView.getController().rootNode = this.rootNode;
 
         /* Initialize recent files menu */
@@ -178,7 +179,7 @@ public class ViewController {
                 project.setMostRecentFile(f.getAbsolutePath());
             } catch (Exception exc) {
                 exc.printStackTrace();
-                DialogUtil.showSimpleAlert(exc.getLocalizedMessage(), Alert.AlertType.ERROR);
+                DialogUtil.showSimpleAlert("An error has occurred", Alert.AlertType.ERROR);
             }
         }
     }

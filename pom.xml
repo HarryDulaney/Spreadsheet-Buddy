@@ -13,7 +13,7 @@
     <artifactId>spreadsheet-buddy</artifactId>
     <version>0.0.2-SNAPSHOT</version>
     <name>Spreadsheet-Buddy</name>
-    <description>Example spreadsheet editing application</description>
+    <description>Excel-Like Spreadsheet Editor Built with Java</description>
 
     <properties>
         <java.version>8</java.version>
@@ -34,6 +34,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-jdbc</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -109,6 +113,12 @@
     </developers>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

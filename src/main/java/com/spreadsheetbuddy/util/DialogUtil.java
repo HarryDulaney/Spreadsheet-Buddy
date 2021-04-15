@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * This is a class of static methods to utilize for Alerts, Pop-ups and UI
@@ -141,9 +142,12 @@ public final class DialogUtil {
     }
 
     public static File showFilePrompt(String title, String fileExtension, String workingDirectory) {
-
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(workingDirectory));
+
+        if (workingDirectory != null) {
+            fileChooser.setInitialDirectory(new File(workingDirectory));
+
+        }
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters()
                 .addAll(new FileChooser.ExtensionFilter(fileExtension, "*".concat(fileExtension)));

@@ -17,7 +17,7 @@ public class Project {
     private String mostRecentFile;
     private List<String> recentFiles;
     private String workingDirectoryPath;
-    private Preferences userPreferences;
+    private static Preferences userPreferences;
 
     public Project() {
         projectId = "SSbuddy.id." + System.getProperty("user.name") + "." + this.hashCode();
@@ -27,7 +27,7 @@ public class Project {
     public Project(String projectId) {
         this.projectId = projectId;
     }
-    
+
     /**
      * Persist User's Preferences to memory
      */
@@ -47,8 +47,8 @@ public class Project {
      * Load Preferences into User (Handled internally by ParentController)
      */
     private void loadPreferences() {
-        userPreferences = Preferences.userNodeForPackage(getClass());
-        this.setWorkingDirectoryPath(userPreferences.get("DEFAULT_WORKING_DIRECTORY", System.getProperty("user.dir")));
+        userPreferences = Preferences.userNodeForPackage(Project.class);
+        workingDirectoryPath = userPreferences.get("DEFAULT_WORKING_DIRECTORY", System.getProperty("user.dir"));
 
     }
 
@@ -70,6 +70,8 @@ public class Project {
     public String getProjectId() {
         return this.projectId;
     }
+
+
 
     public List<String> getRecentFiles() {
         return recentFiles;
