@@ -1,6 +1,8 @@
 package com.spreadsheetbuddy.model;
 
 import javafx.scene.paint.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,30 +14,33 @@ import java.util.prefs.Preferences;
  * they interact with through the course of running this application.
  */
 public class Project {
+    Logger logger = LoggerFactory.getLogger(Project.class);
 
     private final String projectId;
     private String mostRecentFile;
     private List<String> recentFiles;
     private String workingDirectoryPath;
     private static Preferences userPreferences;
+    private static final String DEFAULT_WD = "DEFAULT_WORKING_DIRECTORY";
 
     public Project() {
         projectId = "SSbuddy.id." + System.getProperty("user.name") + "." + this.hashCode();
-        loadPreferences();
     }
 
-    public Project(String projectId) {
+    public Project(String projectId, List<String> recentFiles) {
         this.projectId = projectId;
+        this.recentFiles = recentFiles;
+        loadPreferences();
     }
 
     /**
      * Persist User's Preferences to memory
      */
     private void setPreferences() {
-        userPreferences = Preferences.userNodeForPackage(getClass());
+        userPreferences = Preferences.userNodeForPackage(Project.class);
         userPreferences.put("DEFAULT_WORKING_DIRECTORY", workingDirectoryPath);
-
         try {
+            userPreferences.flush();
             userPreferences.sync();
         } catch (BackingStoreException bse) {
             System.console().printf(bse.toString());
@@ -48,7 +53,8 @@ public class Project {
      */
     private void loadPreferences() {
         userPreferences = Preferences.userNodeForPackage(Project.class);
-        workingDirectoryPath = userPreferences.get("DEFAULT_WORKING_DIRECTORY", System.getProperty("user.dir"));
+        workingDirectoryPath = userPreferences.get(DEFAULT_WD, System.getProperty("user.home"));
+        logger.info("workingDirectoryPath set: " + workingDirectoryPath);
 
     }
 
@@ -70,7 +76,6 @@ public class Project {
     public String getProjectId() {
         return this.projectId;
     }
-
 
 
     public List<String> getRecentFiles() {

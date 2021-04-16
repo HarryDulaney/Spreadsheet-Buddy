@@ -47,7 +47,7 @@ public class ViewController {
 
     private final Logger logger = LoggerFactory.getLogger(ViewController.class);
     private final FxWeaver fxWeaver;
-    private static Project project;
+    private Project project;
 
     private FileService fileService;
     private ProjectService projectService;
@@ -88,7 +88,9 @@ public class ViewController {
     public void initialize() {
         /* Initialize the Project */
         project = new Project();
-        project = projectService.getProjectById(project.getProjectId());
+        if (projectService.projectExistsById(project.getProjectId())) {
+            project = projectService.getProjectById(project.getProjectId());
+        }
 
         workbookControlView.getController().rootNode = this.rootNode;
 

@@ -42,25 +42,20 @@ public class ProjectDaoImpl implements ProjectDao {
     public Project getProjectById(String id) {
         List<Map<String, Object>> rowsList = jdbcTemplate.queryForList("SELECT * FROM PROJECT WHERE PROJECT_ID = ?", id);
 
-        if (rowsList.size() < 1) {
-            Project project = new Project();
-            insertProject(project);
-            return project;
-        }
-
-        Project project = new Project(String.valueOf(rowsList.get(0).get("PROJECT_ID")));
-        project.setRecentFiles(getRecentFiles(project.getProjectId()));
-        return project;
+        return new Project(String.valueOf(rowsList.get(0).get("PROJECT_ID")), getRecentFiles(id));
     }
 
     @Override
     public Boolean projectExistsById(String id) {
         try {
             Map<String, Object> matchProject = jdbcTemplate.queryForMap("SELECT * FROM PROJECT WHERE PROJECT_ID = ?", id);
-            return Boolean.TRUE;
+            if (matchProject.size() > 0) {
+                return Boolean.TRUE;
+            }
         } catch (IncorrectResultSizeDataAccessException e) {
             return Boolean.FALSE;
         }
+        return Boolean.FALSE;
 
     }
 
