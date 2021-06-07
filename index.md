@@ -1,4 +1,4 @@
- # - Spreadsheet Buddy -
+ # Spreadsheet Buddy
  
 ____
 
